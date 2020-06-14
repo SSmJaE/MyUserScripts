@@ -5,6 +5,12 @@
   - 不关闭该提示窗不影响挂机
 - 设定功能请自行修改代码
   - 不会修改请百度，怎么修改请仔细阅读注释
+- loop和range的混合使用
+  - <table>
+      <tr><th></th><th>loop:true</th><th>loop:false</th></tr>
+      <tr><th>range:true</th><td>循环范围</td><td>不循环，跳转至rangeStart</td></tr>
+      <tr><th>range:false</th><td>循环所有</td><td>不循环，顺序切换</td></tr>
+    </table>
 
 # 更新记录
 - 2020-06-03 V0.1.0
