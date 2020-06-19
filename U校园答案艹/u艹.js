@@ -1,12 +1,11 @@
 // ==UserScript==
-// @name         U校园答案++(改)
+// @name         U校园答案艹
 // @namespace    http://tampermonkey.net/
-// @version      5.1.1
+// @version      5.1.2
 // @description  自动答题功能修复
 // @author       SSmJaE
 // @license      GPL-3.0
 // @compatible   Chrome
-// @compatible   Firefox
 // @match        *://ucontent.unipus.cn/_pc_default/pc.html?*
 // @grant        unsafeWindow
 // @grant        GM_setValue
