@@ -1,3 +1,6 @@
+# 关于/About
+- [github](https://github.com/SSmJaE/MyTamperMonkeyScripts/tree/master/YouTube%E5%A5%BD%E8%AF%84%E6%98%BE%E7%A4%BA)
+
 # Usage
 - Just install this, the script is adapted to any language, check the ratio every 5 seconds.
 - By default, the script will show the rating of all videos on the main page, search page, or video page. If you find the website is responding slowly, you can close this feature in user settings.
