@@ -1,3 +1,6 @@
+# 关于
+- [github](https://github.com/SSmJaE/MyTamperMonkeyScripts/tree/master/U%E6%A0%A1%E5%9B%AD%E6%97%B6%E9%95%BF%E4%B8%93%E9%97%A8)
+
 # 注意事项
 - 如果是Chrome，多开窗口，不要最小化，可以后台挂机
   - 注意窗口和标签页的区别
