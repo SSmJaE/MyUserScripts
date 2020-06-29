@@ -2,7 +2,7 @@
 // @name            显示YouTube好评/差评比例(好评占比)
 // @name:en         yet another simple YouTube video likes/dislikes ratio display
 // @namespace       http://tampermonkey.net/
-// @version         0.5.4
+// @version         0.6.0
 // @description     治好了我每次看到好评和差评时都忍不住心算一下好评占比的强迫症
 // @description:en  Show likes/dislikes ratio of YouTube video.
 // @author          SSmJaE
@@ -23,10 +23,11 @@ function sleep(ms) {
 }
 
 function calculate_ratio([upCount, downCount]) {
-    upCount = parseInt(upCount.replace(/[^0-9]/ig, ""));
-    downCount = parseInt(downCount.replace(/[^0-9]/ig, ""));
+    upCount = parseInt(upCount.replace(/[^0-9]/ig, ""), 10);
+    downCount = parseInt(downCount.replace(/[^0-9]/ig, ""), 10);
     let ratio = Math.round(upCount * 1000 / (upCount + downCount)) / 10;
-    if (upCount > 0 && !downCount) ratio = 100;
+
+    if (upCount > 0 && !downCount) ratio = 100;//正无穷
     if (isNaN(ratio)) ratio = 0; //只有0/0会为NaN
     return ratio + "%";
 }
@@ -39,7 +40,7 @@ async function handle_all() {
 
         await sleep(USER_SETTINGS.sleepInterval);
         try {
-            fetch(video.getAttribute('href')).then(response => response.text()).then(text => {
+            fetch(video.getAttribute('href'), { credentials: 'omit' }).then(response => response.text()).then(text => {
                 if (!video.classList.contains('ratio')) { //跳过已添加ratio的视频
                     let tooltip = /"INDIFFERENT","tooltip":"(.*?)"/.exec(text)[1];
                     let ratio = calculate_ratio(tooltip.split('/'));
@@ -49,7 +50,7 @@ async function handle_all() {
                     ratioDiv.textContent = ratio;
                     let color = '';
                     if (USER_SETTINGS.colorfulRatio) {
-                        if (parseInt(ratio, 10) >= 98) {
+                        if (parseInt(ratio, 10) >= 99) {
                             color = 'rgb(30,144,255)';
                         } else if (parseInt(ratio, 10) >= 90) {
                             color = 'rgb(98,198,70)';
@@ -72,6 +73,7 @@ async function handle_all() {
             });
         } catch (error) { }
     }
+    setTimeout(handle_all, USER_SETTINGS.checkInterval);
 }
 
 function handle_main() {
@@ -84,8 +86,8 @@ function handle_main() {
     } catch (e) { }
 }
 
-setInterval(() => {
-    handle_main();
-    if (USER_SETTINGS.showAllRatios)
-        handle_all();
-}, USER_SETTINGS.checkInterval);
+/*------------------------------------------------------------------------- */
+setInterval(handle_main, USER_SETTINGS.checkInterval);
+
+if (USER_SETTINGS.showAllRatios)
+    setTimeout(handle_all, USER_SETTINGS.checkInterval);
