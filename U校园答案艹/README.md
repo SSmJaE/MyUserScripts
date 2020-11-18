@@ -1,3 +1,5 @@
+# 此脚本已不再维护，已升级为[U校园网课助手](https://github.com/SSmJaE/UnipusHelper)
+
 # 关于
 - [github](https://github.com/SSmJaE/WELearnHelper)
 - Fork from [U校园答案++](https://greasyfork.org/zh-CN/scripts/397423-u%E6%A0%A1%E5%9B%AD%E7%AD%94%E6%A1%88)，已获原作者授权
