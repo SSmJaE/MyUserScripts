@@ -3,6 +3,7 @@ import path from "path";
 
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import webpack, { Configuration } from "webpack";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
 import PACKAGE_JSON from "./package.json";
 
@@ -32,10 +33,12 @@ const config: Configuration = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: [
-                    "babel-loader",
+                    // "babel-loader",
                     {
                         loader: "ts-loader",
-                        options: {},
+                        options: {
+                            transpileOnly: true,
+                        },
                     },
                 ],
             },
@@ -76,6 +79,7 @@ const config: Configuration = {
             entryOnly: true,
         }),
         new webpack.EnvironmentPlugin({}),
+        new ForkTsCheckerWebpackPlugin(),
     ],
     resolve: {
         //import的时候，可以不用写扩展名

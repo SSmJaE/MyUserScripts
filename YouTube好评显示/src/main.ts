@@ -1,4 +1,4 @@
-import "reflect-metadata";
+// import "reflect-metadata";
 
 const USER_SETTINGS = {
     // 多久检查一次是否有新的视频 (毫秒)
