@@ -1,42 +1,28 @@
 {
-  "name": "youtube_ratio",
+  "name": "youtube-ratio",
   "version": "0.7.0",
   "description": "yet another simple YouTube video likes/dislikes ratio display",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.babel.ts",
-    "build:dev": "webpack --config webpack.babel.ts --watch"
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --mode production",
+    "dev": "cross-env TS_NODE_PROJECT=\"tsconfig-webpack.json\" webpack --mode development --watch"
   },
   "author": "SSmJaE",
+  "contributors": [
+    "Andy Li <andylizi666@gmail.com>"
+  ],
   "license": "GPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-runtime": "^7.11.5",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/preset-typescript": "^7.10.4",
-    "@babel/register": "^7.11.5",
-    "@types/chrome": "0.0.126",
-    "@types/jest": "^26.0.20",
     "@types/node": "^14.10.1",
     "@types/tampermonkey": "^4.0.0",
-    "babel-jest": "^26.6.3",
-    "babel-loader": "^8.1.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.3.2",
-    "css-loader": "^4.3.0",
+    "@types/webpack": "^5.28.0",
+    "cross-env": "^7.0.3",
     "fork-ts-checker-webpack-plugin": "^6.2.5",
-    "jest": "^26.6.3",
-    "style-loader": "^1.2.1",
     "ts-loader": "^8.0.3",
     "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.2",
-    "url-loader": "^4.1.0",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-merge": "^5.1.4"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.11.2",
-    "reflect-metadata": "^0.1.13"
+    "webpack-cli": "^3.3.12"
   }
 }
