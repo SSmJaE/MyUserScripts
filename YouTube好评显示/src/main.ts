@@ -1,7 +1,3 @@
-/**
- * @param {number} ms
- * @returns {Promise<void>}
- */
 function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -46,8 +42,8 @@ function parseIntLenient(str: string): number {
  * Inserts a node before a reference node.
  * Credit: https://stackoverflow.com/a/4793630
  *
- * @param {Node} newNode
- * @param {Node} referenceNode
+ * @param newNode
+ * @param referenceNode
  */
 function insertAfter(newNode: Node, referenceNode: Node) {
     referenceNode.parentNode!.insertBefore(newNode, referenceNode.nextSibling);
@@ -62,13 +58,7 @@ async function fetchRatio(url: string): Promise<number | null> {
         return [up, down];
     }
 
-    /**
-     * Fetch & check data chunk by chunk.
-     *
-     * @param {Response} response
-     * @param {AbortController} controller
-     * @returns {Promise<number | null>} ratio
-     */
+    /** Fetch & check data chunk by chunk. */
     async function streamImpl(
         response: Response,
         controller: AbortController,
@@ -90,6 +80,9 @@ async function fetchRatio(url: string): Promise<number | null> {
             }
 
             if (done) {
+                if (buffer.includes('"videoPrimaryInfoRenderer"')) {
+                    return null; // sentimentBar disabled
+                }
                 throw new Error("Unable to locate like/dislike data from the response body");
             }
         }
@@ -99,6 +92,9 @@ async function fetchRatio(url: string): Promise<number | null> {
         const text = await response.text();
         const result = tryExtract(text);
         if (result === null) {
+            if (text.includes('"videoPrimaryInfoRenderer"')) {
+                return null; // sentimentBar disabled
+            }
             throw new Error("Unable to locate like/dislike data from the response body");
         }
         return calculateRatio(result[0], result[1]);
@@ -134,7 +130,7 @@ async function processVideos(): Promise<void> {
         if (link.closest("[hidden]") !== null) continue; // Skip hidden
 
         const line = link.closest("#dismissible")!.querySelector("#metadata-line") as HTMLElement;
-        const injectPoint = line.querySelector("span.ytd-video-meta-block:last-of-type");
+        const injectPoint = line.querySelector("span:last-of-type");
         if (injectPoint === null) continue; // Playlists have a empty metadata line
 
         const ratio = await fetchRatio(link.getAttribute("href") as string);
@@ -155,14 +151,13 @@ async function processVideos(): Promise<void> {
 
 function processMainVideo(): void {
     const buttons = document.querySelector(
-        "ytd-video-primary-info-renderer #menu #top-level-buttons",
+        "ytd-video-primary-info-renderer #menu #top-level-buttons:not(.ratio-added)"
     );
-    if (buttons === null) return;
+    if (buttons === null || buttons.closest("[hidden]") !== null) return;
 
     const texts = Array.from(buttons.children).map((e) =>
         e.querySelector("#text"),
     ) as HTMLElement[];
-
     const [up, down, share, ..._rest] = texts;
 
     const ratio = calculateRatio(
@@ -173,6 +168,7 @@ function processMainVideo(): void {
 
     if (USER_SETTINGS.hideLikeCount) up.textContent = "";
     if (USER_SETTINGS.hideDislikeCount) down.textContent = "";
+    buttons.classList.add("ratio-added");
 }
 
 (async (interval) => {
