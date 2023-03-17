@@ -1,0 +1,38 @@
+name: 同步release
+
+on: workflow_dispatch
+
+jobs:
+  welearn:
+    # 同步https://github.com/SSmJaE/WELearnHelper最新的release至release文件夹下
+    name: 同步WELearnHelper
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Checkout repo
+      #   uses: actions/checkout@v3
+
+      - name: 下载最新的release
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "SSmJaE/WELearnHelper"
+          version: "latest"
+          regex: true
+          file: ".*.user.js"
+          target: "temp/"
+
+      - name: 创建release文件夹，已存在不报错
+        run: mkdir -p release
+
+      - name: 重命名为统一的名字，方便webhook
+        run: |
+          cd temp
+          for f in *.js; do mv "$f" "temp.js"; done
+          mv temp.js release/WELearnHelper.user.js
+
+      - name: 同步至仓库
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: "自动同步WELearnHelper的release"
+          add: "release/*.user.js"
