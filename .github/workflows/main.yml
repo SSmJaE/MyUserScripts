@@ -26,9 +26,10 @@ jobs:
 
       - name: 重命名为统一的名字，方便webhook
         run: |
-          cd temp
+          ls ./temp
+          cd ./temp
           for f in *.js; do mv "$f" "temp.js"; done
-          mv temp.js release/WELearnHelper.user.js
+          mv ./temp.js ../release/WELearnHelper.user.js
 
       - name: 同步至仓库
         uses: EndBug/add-and-commit@v9
