@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.0
+// @version      1.0.1
 // @author       SSmJaE
 // @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；开放自定义设置
 // @license      GPL-3.0
@@ -18,7 +18,6 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
-// @grant        unsafeWindow
 // @run-at       document-end
 // ==/UserScript==
 
@@ -31,7 +30,7 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 (function(React$1, require$$2) {
-  var _a, _b, _c;
+  var _a, _b, _c, _d;
   "use strict";
   function _interopNamespaceDefault(e2) {
     const n2 = Object.create(null, { [Symbol.toStringTag]: { value: "Module" } });
@@ -645,7 +644,7 @@ var __publicField = (obj, key, value) => {
       }
     });
     const unsub2 = devtools2.subscribe((message) => {
-      var _a2, _b2, _c2, _d, _e2, _f;
+      var _a2, _b2, _c2, _d2, _e2, _f;
       if (message.type === "ACTION" && message.payload) {
         try {
           Object.assign(proxyObject, JSON.parse(message.payload));
@@ -665,7 +664,7 @@ var __publicField = (obj, key, value) => {
         proxyObject[DEVTOOLS] = message;
       } else if (message.type === "DISPATCH" && ((_c2 = message.payload) == null ? void 0 : _c2.type) === "COMMIT") {
         devtools2.init(snapshot(proxyObject));
-      } else if (message.type === "DISPATCH" && ((_d = message.payload) == null ? void 0 : _d.type) === "IMPORT_STATE") {
+      } else if (message.type === "DISPATCH" && ((_d2 = message.payload) == null ? void 0 : _d2.type) === "IMPORT_STATE") {
         const actions = (_e2 = message.payload.nextLiftedState) == null ? void 0 : _e2.actionsById;
         const computedStates = ((_f = message.payload.nextLiftedState) == null ? void 0 : _f.computedStates) || [];
         isTimeTraveling = true;
@@ -686,57 +685,6 @@ var __publicField = (obj, key, value) => {
       unsub2 == null ? void 0 : unsub2();
     };
   }
-  function scrollDown() {
-    setTimeout(() => {
-      var _a2;
-      (_a2 = document.querySelector("#container-messages")) == null ? void 0 : _a2.scrollBy(0, 1e3);
-    }, 10);
-  }
-  class Logger {
-    constructor(maxSize = 100, shiftOffset = 10) {
-      __publicField(this, "maxSize");
-      __publicField(this, "shiftOffset");
-      this.maxSize = maxSize;
-      this.shiftOffset = shiftOffset;
-    }
-    get logs() {
-      return store.logs;
-    }
-    addLog(log2) {
-      store.logs.push(log2);
-      if (store.userSettings.autoScrollDown) {
-        scrollDown();
-      }
-    }
-    log(option) {
-      this.addLog({
-        ...option,
-        // timestamp: dayjs().toISOString(),
-        timestamp: new Date().toISOString(),
-        id: `${Math.random()}`
-      });
-    }
-    info(content) {
-      return this.log({ type: "info", content });
-    }
-    question(content) {
-      return this.log({ type: "question", content });
-    }
-    error(content) {
-      return this.log({ type: "error", content });
-    }
-    hr() {
-      return this.log({ type: "hr", content: "" });
-    }
-    debug(...content) {
-      console.log(`[eocs-helper]`, ...content);
-    }
-  }
-  const logger = new Logger();
-  var monkeyWindow = window;
-  var GM_setValue = /* @__PURE__ */ (() => monkeyWindow.GM_setValue)();
-  var GM_xmlhttpRequest = /* @__PURE__ */ (() => monkeyWindow.GM_xmlhttpRequest)();
-  var GM_getValue = /* @__PURE__ */ (() => monkeyWindow.GM_getValue)();
   var freeGlobal$3 = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
   var _freeGlobal = freeGlobal$3;
   var freeGlobal$2 = _freeGlobal;
@@ -982,7 +930,7 @@ var __publicField = (obj, key, value) => {
     parent.documentElement.appendChild(scriptElement);
     return scriptElement;
   }
-  injectJs(chrome.runtime.getURL("index.js"));
+  injectJs((_a = chrome.runtime) == null ? void 0 : _a.getURL("index.js"));
   const EXTENSION_NAME = "eocs-helper";
   const sessions = /* @__PURE__ */ new Map();
   async function fromContentToInject(messageEvent) {
@@ -1003,15 +951,37 @@ var __publicField = (obj, key, value) => {
     }
   }
   window.addEventListener("message", fromContentToInject, false);
-  async function setValue(key, value) {
+  let hasInitializeSetValue = false;
+  let GM_setValue$1;
+  async function initializeSetValue() {
     {
-      await GM_setValue(key, JSON.stringify(value));
+      GM_setValue$1 = await Promise.resolve().then(() => index).then((module) => module.GM_setValue);
+    }
+  }
+  async function setValue(key, value) {
+    if (!hasInitializeSetValue) {
+      await initializeSetValue();
+      hasInitializeSetValue = true;
+    }
+    {
+      await GM_setValue$1(key, JSON.stringify(value));
+    }
+  }
+  let hasInitializeGetValue = false;
+  let GM_getValue$1;
+  async function initializeGetValue() {
+    {
+      GM_getValue$1 = await Promise.resolve().then(() => index).then((module) => module.GM_getValue);
     }
   }
   async function getValue(key, defaultValue) {
+    if (!hasInitializeGetValue) {
+      await initializeGetValue();
+      hasInitializeGetValue = true;
+    }
     let returnValue = void 0;
     {
-      const temp = await GM_getValue(key, defaultValue);
+      const temp = await GM_getValue$1(key, defaultValue);
       try {
         returnValue = JSON.parse(temp);
       } catch (error) {
@@ -1053,7 +1023,7 @@ var __publicField = (obj, key, value) => {
     }
     /** 因为subscribe了这个key，如果直接替换(=)，会导致subscribe失效 */
     setUserSettings(userSettings) {
-      for (const [key, value] of Object.entries(userSettings)) {
+      for (const [key, value] of Object.entries(userSettings || {})) {
         this.userSettings[key] = value;
       }
     }
@@ -1077,9 +1047,24 @@ var __publicField = (obj, key, value) => {
         }
       }
     }
-    clearLogs() {
-      this.logs = [];
+    clearLogs(remain) {
+      if (remain) {
+        this.logs = this.logs.slice(0, remain);
+      } else {
+        this.logs = [];
+      }
     }
+    getRecordById(id) {
+      return this.logs.find((record) => record.id === id);
+    }
+    // 不知道是不是因为是proxy，所以这个方法不起作用
+    // updateRecord(record: Pick<IRecord, "id"> & Partial<IRecord>) {
+    //     const index = this.logs.findIndex((log) => log.id === record.id);
+    //     if (index !== -1) {
+    //         logger.debug("in updateRecord", record)
+    //         this.logs[index] = { ...this.logs[index], ...record };
+    //     }
+    // }
   }
   const store = proxy(new Store());
   const useStore = () => useSnapshot(store);
@@ -1094,13 +1079,59 @@ var __publicField = (obj, key, value) => {
     QUERY_INTERVAL: 2e3,
     DEBUG_MODE: false
   };
+  function scrollDown() {
+    setTimeout(() => {
+      var _a2;
+      (_a2 = document.querySelector("#container-messages")) == null ? void 0 : _a2.scrollBy(0, 1e3);
+    }, 10);
+  }
+  class Logger {
+    constructor(maxSize = 100, shiftOffset = 10) {
+      __publicField(this, "maxSize");
+      __publicField(this, "shiftOffset");
+      this.maxSize = maxSize;
+      this.shiftOffset = shiftOffset;
+    }
+    get logs() {
+      return store.logs;
+    }
+    addLog(log2) {
+      store.logs.push(log2);
+      if (store.userSettings.autoScrollDown) {
+        scrollDown();
+      }
+    }
+    log(option) {
+      this.addLog({
+        ...option,
+        timestamp: new Date().toISOString(),
+        id: option.id ?? `${Math.random()}`
+      });
+    }
+    info({ id, content, extra, action }) {
+      return this.log({ type: "info", id, content, extra, action });
+    }
+    question({ id, content, extra, action }) {
+      return this.log({ type: "question", id, content, extra, action });
+    }
+    error({ id, content, extra, action }) {
+      return this.log({ type: "error", id, content, extra, action });
+    }
+    hr() {
+      return this.log({ type: "hr", content: "" });
+    }
+    debug(...content) {
+      console.log(`[eocs-helper]`, ...content);
+    }
+  }
+  const logger = new Logger();
   const apiServer = "http://47.100.166.53/api";
   const homepage = "https://www.github.com/SSmJaE/";
   const projects = {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.0",
+      version: "1.0.1",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
@@ -1132,28 +1163,24 @@ var __publicField = (obj, key, value) => {
     homepage,
     projects
   };
-  function errorMessageFactory(error, message = "请求异常，稍后再试", mode = "message") {
-    let toDisplay = "";
-    switch (mode) {
-      case "message":
-        toDisplay += message;
-        break;
-      case "originError":
-        toDisplay += `${error.message}`;
-        break;
-      case "both":
-        toDisplay += message + `<br />${error.message}`;
-        break;
-    }
-    logger.error(`${toDisplay}`);
+  function backendErrorToString(errorDetail) {
+    return errorDetail ? `异常id : ${errorDetail.id}
+具体信息 : ${errorDetail.message}` : void 0;
   }
-  function requestErrorHandler(message = "请求异常，稍后再试", mode = "message") {
+  function requestErrorHandler(message = "请求异常，稍后再试") {
     return function(target, propertyKey, descriptor) {
       const originalMethod = descriptor.value;
       descriptor.value = function(...args) {
         const result = originalMethod.apply(this, args);
         result.catch((error) => {
-          errorMessageFactory(error, message, mode);
+          logger.error(
+            {
+              content: {
+                message
+              },
+              extra: error.message
+            }
+          );
         });
         return result;
       };
@@ -1419,18 +1446,18 @@ var __publicField = (obj, key, value) => {
       case "comma":
       case "separator": {
         return (key, value, accumulator) => {
-          const isArray2 = typeof value === "string" && value.includes(options.arrayFormatSeparator);
-          const isEncodedArray = typeof value === "string" && !isArray2 && decode(value, options).includes(options.arrayFormatSeparator);
+          const isArray = typeof value === "string" && value.includes(options.arrayFormatSeparator);
+          const isEncodedArray = typeof value === "string" && !isArray && decode(value, options).includes(options.arrayFormatSeparator);
           value = isEncodedArray ? decode(value, options) : value;
-          const newValue = isArray2 || isEncodedArray ? value.split(options.arrayFormatSeparator).map((item) => decode(item, options)) : value === null ? value : decode(value, options);
+          const newValue = isArray || isEncodedArray ? value.split(options.arrayFormatSeparator).map((item) => decode(item, options)) : value === null ? value : decode(value, options);
           accumulator[key] = newValue;
         };
       }
       case "bracket-separator": {
         return (key, value, accumulator) => {
-          const isArray2 = /(\[])$/.test(key);
+          const isArray = /(\[])$/.test(key);
           key = key.replace(/\[]$/, "");
-          if (!isArray2) {
+          if (!isArray) {
             accumulator[key] = value ? decode(value, options) : value;
             return;
           }
@@ -1679,9 +1706,16 @@ var __publicField = (obj, key, value) => {
         throw new Error("query params不应为嵌套对象，拍平或者手动序列化子对象");
     }
     return queryString.stringifyUrl({
-      url: url.startsWith("/") ? `${metadata.apiServer}/${"welearn"}` : url,
+      url: url.startsWith("/") ? `${metadata.apiServer}/${"welearn"}${url}` : url,
       query
     });
+  }
+  let hasInitializeXhr = false;
+  let GM_xmlhttpRequest$1;
+  async function initializeXhr() {
+    {
+      GM_xmlhttpRequest$1 = await Promise.resolve().then(() => index).then((module) => module.GM_xmlhttpRequest);
+    }
   }
   function requestForUserscript(url, { method, headers, body, query } = {
     method: "GET",
@@ -1689,11 +1723,19 @@ var __publicField = (obj, key, value) => {
     body: void 0,
     query: void 0
   }) {
-    return new Promise((resolve, reject) => {
-      GM_xmlhttpRequest({
+    return new Promise(async (resolve, reject) => {
+      if (!hasInitializeXhr) {
+        await initializeXhr();
+        hasInitializeXhr = true;
+      }
+      GM_xmlhttpRequest$1({
         url: getFullUrl(url, query),
         method,
-        headers,
+        // GM_xmlhttpRequest需要手动设置Content-Type，不然默认是text/plain，后端无法识别
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          ...headers
+        },
         data: typeof body === "object" ? JSON.stringify(body) : body,
         timeout: 5e3,
         responseType: "json",
@@ -1773,19 +1815,19 @@ var __publicField = (obj, key, value) => {
       });
       const returnJson = await response.json();
       if (returnJson.status === false) {
-        throw new Error(returnJson.error);
+        throw new Error(backendErrorToString(returnJson.error));
       } else {
         for (const message of returnJson.data) {
-          logger.info(message);
+          logger.info({ content: message });
         }
       }
     }
     static async queryByTaskId(taskId, isSchoolTest) {
       const response = await request.post("/query/", {
         body: {
-          queryType: 0,
-          taskId,
-          isSchoolTest
+          query_type: 0,
+          task_id: taskId,
+          is_school_test: isSchoolTest
         }
       });
       return await response.json();
@@ -1793,13 +1835,13 @@ var __publicField = (obj, key, value) => {
     static async queryByQuestionId(questionId) {
       const response = await request.post("/query/", {
         body: {
-          queryType: 1,
-          questionId
+          query_type: 1,
+          question_id: questionId
         }
       });
       const returnJson = await response.json();
       if (returnJson.status === false) {
-        throw new Error(returnJson.error);
+        throw new Error(backendErrorToString(returnJson.error));
       } else {
         return returnJson.data;
       }
@@ -1807,13 +1849,13 @@ var __publicField = (obj, key, value) => {
     static async queryByDomString(domString) {
       const response = await request.post("/query/", {
         body: {
-          queryType: 2,
-          domString
+          query_type: 2,
+          dom_string: domString
         }
       });
       const returnJson = await response.json();
       if (returnJson.status === false) {
-        throw new Error(returnJson.error);
+        throw new Error(backendErrorToString(returnJson.error));
       } else {
         return returnJson.data;
       }
@@ -1821,21 +1863,20 @@ var __publicField = (obj, key, value) => {
     static async collectAll(taskId, domString, isSchoolTest) {
       const response = await request.post("/collect/", {
         body: {
-          taskId,
-          domString,
-          isSchoolTest
+          task_id: taskId,
+          dom_string: domString,
+          is_school_test: isSchoolTest
         }
       });
       const returnJson = await response.json();
       if (returnJson.status === false) {
-        throw new Error(returnJson.error);
+        throw new Error(backendErrorToString(returnJson.error));
       } else {
-        logger.info(
-          "当前页面答案收录成功，可以切换至下一页面，手动点击查询按钮上传，或者上传其它练习的答案"
-        );
+        logger.info({
+          content: "当前页面答案收录成功，可以切换至下一页面，手动点击查询按钮上传，或者上传其它练习的答案"
+        });
       }
     }
-    // @requestErrorHandler("上传失败")
     static async upload(byUser = false) {
       const response = await request.post("/upload/", {
         body: {
@@ -1846,9 +1887,13 @@ var __publicField = (obj, key, value) => {
       const returnJson = await response.json();
       if (byUser) {
         if (returnJson.status) {
-          logger.info("成功上传练习");
+          logger.info({ content: "成功上传练习" });
         } else {
-          logger.error("练习上传失败");
+          logger.error({
+            content: {
+              message: "练习上传失败"
+            }
+          });
           logger.debug(returnJson.error);
         }
       }
@@ -1857,9 +1902,9 @@ var __publicField = (obj, key, value) => {
       const response = await request.post("/catalog/");
       const returnJson = await response.json();
       if (returnJson.status === false) {
-        throw new Error(returnJson.error);
+        throw new Error(backendErrorToString(returnJson.error));
       } else {
-        logger.info("成功获取了最新的课程目录");
+        logger.info({ content: "成功获取了最新的课程目录" });
         return returnJson.data;
       }
     }
@@ -1869,19 +1914,22 @@ var __publicField = (obj, key, value) => {
     perSession("LAST_CHECK_DATE")
   ], WELearnAPI, "checkVersion", 1);
   __decorateClass([
-    requestErrorHandler("答案查询失败", "both")
+    requestErrorHandler("答案查询失败")
   ], WELearnAPI, "queryByTaskId", 1);
   __decorateClass([
-    requestErrorHandler("答案查询失败", "both")
+    requestErrorHandler("答案查询失败")
   ], WELearnAPI, "queryByQuestionId", 1);
   __decorateClass([
-    requestErrorHandler("答案查询失败", "both")
+    requestErrorHandler("答案查询失败")
   ], WELearnAPI, "queryByDomString", 1);
   __decorateClass([
     requestErrorHandler("答案收录失败")
   ], WELearnAPI, "collectAll", 1);
   __decorateClass([
-    requestErrorHandler("课程目录获取失败", "both"),
+    perSession("HAS_UPLOAD")
+  ], WELearnAPI, "upload", 1);
+  __decorateClass([
+    requestErrorHandler("课程目录获取失败"),
     perSession("HAS_GET_COURSE_CATALOG")
   ], WELearnAPI, "getCourseCatalog", 1);
   async function sleep(ms) {
@@ -1904,8 +1952,11 @@ var __publicField = (obj, key, value) => {
       taskId
     };
   }
+  function getQuestionIndex(questionItemDiv) {
+    return /\s*(\d*)/.exec(questionItemDiv.querySelector(".test_number").textContent)[1];
+  }
   async function getAnswers() {
-    store.clearLogs();
+    store.clearLogs(1);
     const { isSchoolTest, taskId } = getTaskId();
     if (isFinished()) {
       const domString = document.querySelector(".tab-content").outerHTML;
@@ -1913,7 +1964,24 @@ var __publicField = (obj, key, value) => {
     } else {
       const returnJson = await WELearnAPI.queryByTaskId(taskId, isSchoolTest);
       if (returnJson.status === true) {
+        const questionCount = returnJson.data.length;
         for (const [index2, questionWithAnswer] of returnJson.data.entries()) {
+          logger.question({
+            content: {
+              order: `${String(index2 + 1).padStart(2, "0")} / ${questionCount}`,
+              info: {
+                content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
+              },
+              answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
+              raw: {},
+              solve: {
+                couldSolve: false,
+                hasSolved: false,
+                solveThis: (answerText) => {
+                }
+              }
+            }
+          });
           await sleep(CONSTANT.QUERY_INTERVAL);
         }
       } else {
@@ -1922,12 +1990,29 @@ var __publicField = (obj, key, value) => {
           try {
             const questionWithAnswers = await WELearnAPI.queryByDomString(domString);
             for (const questionWithAnswer of questionWithAnswers) {
+              let questionIndex = "_";
+              let questionIndexString = "_";
               try {
+                questionIndex = getQuestionIndex(questionItemDiv);
+                questionIndexString = String(questionIndex).padStart(2, "0");
               } catch (error) {
               }
-              if (questionWithAnswer.answerText) {
-              } else {
-              }
+              logger.question({
+                content: {
+                  order: `${questionIndexString}`,
+                  info: {
+                    content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
+                  },
+                  answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
+                  raw: {},
+                  solve: {
+                    couldSolve: false,
+                    hasSolved: false,
+                    solveThis: (answerText) => {
+                    }
+                  }
+                }
+              });
               await sleep(CONSTANT.QUERY_INTERVAL);
             }
           } catch (error) {
@@ -1937,40 +2022,25 @@ var __publicField = (obj, key, value) => {
       }
     }
   }
-  function hackPlaySound() {
-    unsafeWindow.PlaySound = (src, id) => {
-      var count2 = $("#hdPlay_" + id).val();
-      if (count2 <= 0)
-        return;
-      if (soundfile == "") {
-        soundfile = resPath + "ItemRes/sound/" + src;
-        createSoundPlayer();
-      } else {
-        soundfile = resPath + "ItemRes/sound/" + src;
-        jwplayer("soundplayer").load([{ file: soundfile }]);
-      }
-      jwplayer("soundplayer").onBufferFull(function() {
-        clearTimeout(bufferingTimer);
-        var sp = $("#btnPlay_" + id);
-        sp.html('<span class=" fa fa-play-circle play_symble">无限次播放机会</span>');
-        sp.removeClass("loading");
-      });
-      $("#btnPlay_" + id).val("正在加载");
-      bufferingTimer = setTimeout("PlayerExpireCheck('" + id + "', 0)", 1e3);
-      $("#btnPlay_" + id).addClass("loading");
-      jwplayer("soundplayer").play();
-    };
-  }
   if (location.href.includes(".sflep.com/test/")) {
-    setTimeout(() => {
-      if (isFinished()) {
-        getAnswers();
-      } else {
-        if (store.userSettings.infiniteListening) {
-          hackPlaySound();
+    window.addEventListener("load", () => {
+      logger.debug("页面加载完成，开始检测");
+      const finished = isFinished();
+      const recordId = `${Math.random()}`;
+      const buttonInfo = {
+        children: `${finished ? "上传" : "查询"}当前Part`,
+        disabled: 5e3,
+        onClick() {
+          getAnswers();
         }
-      }
-    }, 5e3);
+      };
+      logger.info({
+        id: recordId,
+        content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + "<br />❗❗❗测试的每一个Part，都需要点击一次",
+        extra: void 0,
+        action: [buttonInfo]
+      });
+    });
   }
   if (location.href.includes(".sflep.com/student/course_info.aspx?")) {
     WELearnAPI.upload();
@@ -2601,19 +2671,21 @@ var __publicField = (obj, key, value) => {
       if (store.userSettings.autoSolve)
         ;
       logger.question({
-        order: `${String(answer.index).padStart(2, "0")}`,
-        info: {
-          content: "标答"
-        },
-        answerText: answer.text,
-        raw: {
-          element: answer.element
-        },
-        solve: {
-          couldSolve: true,
-          hasSolved: true,
-          solveThis: async () => {
-            logger.debug("solve this");
+        content: {
+          order: `${String(answer.index).padStart(2, "0")}`,
+          info: {
+            content: "标答"
+          },
+          answerText: answer.text,
+          raw: {
+            element: answer.element
+          },
+          solve: {
+            couldSolve: true,
+            hasSolved: true,
+            solveThis: async () => {
+              logger.debug("solve this");
+            }
           }
         }
       });
@@ -2657,7 +2729,7 @@ var __publicField = (obj, key, value) => {
             solveDataSolution(answers);
         } else {
           if (!hasAnswer) {
-            logger.info("此页面已适配，无答案");
+            logger.info({ content: "此页面已适配，无答案" });
           }
         }
       }, 2e3);
@@ -2666,9 +2738,9 @@ var __publicField = (obj, key, value) => {
       dom = await queryData(answerUrl2);
       answers = parseReading(dom);
     } else {
-      logger.info(`未适配的课程类型，请在Github反馈`);
-      logger.info(`${courseInfo}`);
-      logger.info(`注意页面上是否有二维码，且注明需在app中使用，这种题型只能用app`);
+      logger.info({ content: `未适配的课程类型，请在Github反馈` });
+      logger.info({ content: `${courseInfo}` });
+      logger.info({ content: `注意页面上是否有二维码，且注明需在app中使用，这种题型只能用app` });
       logger.debug("未处理的课程类型");
       logger.debug(courseInfo);
       logger.debug(identifier2);
@@ -2737,6 +2809,7 @@ var __publicField = (obj, key, value) => {
   if (location.href.includes(".sflep.com/student/StudyCourse.aspx?") || location.href.includes(".sflep.com/Course/TryCourse.aspx?")) {
     autoRefresh();
   }
+  WELearnAPI.checkVersion();
   var client = {};
   var m$5 = require$$2;
   {
@@ -4870,7 +4943,7 @@ var __publicField = (obj, key, value) => {
       return;
     var _arr = [];
     var _n2 = true;
-    var _d = false;
+    var _d2 = false;
     var _s, _e2;
     try {
       for (_i = _i.call(arr); !(_n2 = (_s = _i.next()).done); _n2 = true) {
@@ -4879,14 +4952,14 @@ var __publicField = (obj, key, value) => {
           break;
       }
     } catch (err) {
-      _d = true;
+      _d2 = true;
       _e2 = err;
     } finally {
       try {
         if (!_n2 && _i["return"] != null)
           _i["return"]();
       } finally {
-        if (_d)
+        if (_d2)
           throw _e2;
       }
     }
@@ -5512,7 +5585,7 @@ var __publicField = (obj, key, value) => {
         return;
       var _arr = [];
       var _n2 = true;
-      var _d = false;
+      var _d2 = false;
       var _s, _e2;
       try {
         for (_i = _i.call(arr); !(_n2 = (_s = _i.next()).done); _n2 = true) {
@@ -5521,14 +5594,14 @@ var __publicField = (obj, key, value) => {
             break;
         }
       } catch (err) {
-        _d = true;
+        _d2 = true;
         _e2 = err;
       } finally {
         try {
           if (!_n2 && _i["return"] != null)
             _i["return"]();
         } finally {
-          if (_d)
+          if (_d2)
             throw _e2;
         }
       }
@@ -6457,15 +6530,15 @@ var __publicField = (obj, key, value) => {
       je(n2, t2);
     });
   }
-  var ge = (_c = class {
+  var ge = (_d = class {
     constructor(t2) {
-      __publicField(this, _a);
       __publicField(this, _b);
+      __publicField(this, _c);
       if (!t2 && !(t2 = this.get))
         throw Error("Unknown getter");
       De$1(this, t2);
     }
-  }, _a = g$3, _b = m$2, _c), De$1 = (e2, t2) => Ee$1(e2, g$3, t2);
+  }, _b = g$3, _c = m$2, _d), De$1 = (e2, t2) => Ee$1(e2, g$3, t2);
   function Gt$1(e2, t2) {
     if (e2[g$3]) {
       let r2 = e2[m$2];
@@ -7228,8 +7301,8 @@ var __publicField = (obj, key, value) => {
     t2.animation[n2] = e2[n2] !== ke(e2, n2) ? et(e2[n2], t2.key) : void 0;
   }
   function Ie(t2, e2, ...n2) {
-    var _a2, _b2, _c2, _d;
-    (_b2 = (_a2 = t2.animation)[e2]) == null ? void 0 : _b2.call(_a2, ...n2), (_d = (_c2 = t2.defaultProps)[e2]) == null ? void 0 : _d.call(_c2, ...n2);
+    var _a2, _b2, _c2, _d2;
+    (_b2 = (_a2 = t2.animation)[e2]) == null ? void 0 : _b2.call(_a2, ...n2), (_d2 = (_c2 = t2.defaultProps)[e2]) == null ? void 0 : _d2.call(_c2, ...n2);
   }
   var Fn = ["onStart", "onChange", "onRest"], kn = 1, le = class {
     constructor(e2, n2) {
@@ -8177,7 +8250,7 @@ var __publicField = (obj, key, value) => {
       }
     };
   };
-  var index$1 = typeof document !== "undefined" ? React$1.useLayoutEffect : React$1.useEffect;
+  var index$2 = typeof document !== "undefined" ? React$1.useLayoutEffect : React$1.useEffect;
   function deepEqual(a2, b2) {
     if (a2 === b2) {
       return true;
@@ -8226,7 +8299,7 @@ var __publicField = (obj, key, value) => {
   }
   function useLatestRef$1(value) {
     const ref = React__namespace.useRef(value);
-    index$1(() => {
+    index$2(() => {
       ref.current = value;
     });
     return ref;
@@ -8299,7 +8372,7 @@ var __publicField = (obj, key, value) => {
         }
       });
     }, [latestMiddleware, placement, strategy, platformRef]);
-    index$1(() => {
+    index$2(() => {
       if (open === false && dataRef.current.isPositioned) {
         dataRef.current.isPositioned = false;
         setData((data2) => ({
@@ -8309,13 +8382,13 @@ var __publicField = (obj, key, value) => {
       }
     }, [open]);
     const isMountedRef = React__namespace.useRef(false);
-    index$1(() => {
+    index$2(() => {
       isMountedRef.current = true;
       return () => {
         isMountedRef.current = false;
       };
     }, []);
-    index$1(() => {
+    index$2(() => {
       if (reference && floating) {
         if (whileElementsMountedRef.current) {
           return whileElementsMountedRef.current(reference, floating, update);
@@ -8440,11 +8513,11 @@ var __publicField = (obj, key, value) => {
   var sortOrderedTabbables = function sortOrderedTabbables2(a2, b2) {
     return a2.tabIndex === b2.tabIndex ? a2.documentOrder - b2.documentOrder : a2.tabIndex - b2.tabIndex;
   };
-  var isInput$1 = function isInput2(node2) {
+  var isInput = function isInput2(node2) {
     return node2.tagName === "INPUT";
   };
   var isHiddenInput = function isHiddenInput2(node2) {
-    return isInput$1(node2) && node2.type === "hidden";
+    return isInput(node2) && node2.type === "hidden";
   };
   var isDetailsWithSummary = function isDetailsWithSummary2(node2) {
     var r2 = node2.tagName === "DETAILS" && Array.prototype.slice.apply(node2.children).some(function(child) {
@@ -8482,7 +8555,7 @@ var __publicField = (obj, key, value) => {
     return !checked || checked === node2;
   };
   var isRadio = function isRadio2(node2) {
-    return isInput$1(node2) && node2.type === "radio";
+    return isInput(node2) && node2.type === "radio";
   };
   var isNonTabbableRadio = function isNonTabbableRadio2(node2) {
     return isRadio(node2) && !isTabbableRadio(node2);
@@ -8710,13 +8783,13 @@ var __publicField = (obj, key, value) => {
       d: dValue
     }));
   });
-  var index = typeof document !== "undefined" ? React$1.useLayoutEffect : React$1.useEffect;
+  var index$1 = typeof document !== "undefined" ? React$1.useLayoutEffect : React$1.useEffect;
   let serverHandoffComplete = false;
   let count = 0;
   const genId = () => "floating-ui-" + count++;
   function useFloatingId() {
     const [id, setId] = React__namespace.useState(() => serverHandoffComplete ? genId() : void 0);
-    index(() => {
+    index$1(() => {
       if (id == null) {
         setId(genId());
       }
@@ -8790,7 +8863,7 @@ var __publicField = (obj, key, value) => {
   }
   function useLatestRef(value) {
     const ref = React$1.useRef(value);
-    index(() => {
+    index$1(() => {
       ref.current = value;
     });
     return ref;
@@ -8984,7 +9057,7 @@ var __publicField = (obj, key, value) => {
         };
       }
     }, [domReference, floating, enabled, context, mouseOnly, restMs, move, closeWithDelay, cleanupMouseMoveHandler, clearPointerEvents, onOpenChange, open, tree, delayRef, handleCloseRef, dataRef]);
-    index(() => {
+    index$1(() => {
       var _handleCloseRef$curre;
       if (!enabled) {
         return;
@@ -9010,7 +9083,7 @@ var __publicField = (obj, key, value) => {
         }
       }
     }, [enabled, open, parentId, floating, domReference, tree, handleCloseRef, dataRef, isHoverOpen]);
-    index(() => {
+    index$1(() => {
       if (!open) {
         pointerTypeRef.current = void 0;
         cleanupMouseMoveHandler();
@@ -9184,7 +9257,7 @@ var __publicField = (obj, key, value) => {
   const FocusGuard = /* @__PURE__ */ React__namespace.forwardRef(function FocusGuard2(props, ref) {
     const onFocus = useEvent(props.onFocus);
     const [role, setRole] = React__namespace.useState();
-    index(() => {
+    index$1(() => {
       if (isSafari()) {
         setRole("button");
       }
@@ -9221,7 +9294,7 @@ var __publicField = (obj, key, value) => {
     const [portalEl, setPortalEl] = React__namespace.useState(null);
     const uniqueId = useId();
     const portalContext = usePortalContext();
-    index(() => {
+    index$1(() => {
       if (!enabled) {
         return;
       }
@@ -9381,7 +9454,7 @@ var __publicField = (obj, key, value) => {
       open,
       onOpenChange
     }), [position2, nodeId, events, open, onOpenChange, refs, elements]);
-    index(() => {
+    index$1(() => {
       const node2 = tree == null ? void 0 : tree.nodesRef.current.find((node3) => node3.id === nodeId);
       if (node2) {
         node2.context = context;
@@ -9467,7 +9540,8 @@ var __publicField = (obj, key, value) => {
     placement = "top-start",
     disabled = false,
     offsetPixel = 8,
-    backgroundColor = "rgba(104, 101, 101, 0.89)"
+    backgroundColor = "rgba(104, 101, 101, 0.89)",
+    delay = false
   }) {
     useTheme();
     const [isOpen, setIsOpen] = React$1.useState(false);
@@ -9485,7 +9559,12 @@ var __publicField = (obj, key, value) => {
         })
       ]
     });
-    const hover = useHover(context);
+    const hover = useHover(context, {
+      delay: {
+        // open: 200,
+        close: delay ? 250 : void 0
+      }
+    });
     const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx(
@@ -9507,14 +9586,16 @@ var __publicField = (obj, key, value) => {
             left: x2 ?? 0,
             backgroundColor,
             // backgroundColor: theme.colors.secondary,
-            width: "max-content",
+            // width: "max-content",
+            maxWidth: "400px",
             color: "white",
             borderRadius: 4,
             fontSize: 20,
             padding: 8,
             zIndex: 9999,
             fontFamily: "华文新魏",
-            lineHeight: "normal"
+            lineHeight: "normal",
+            whiteSpace: "pre-wrap"
           },
           ...getFloatingProps(),
           children: [
@@ -9606,16 +9687,16 @@ var __publicField = (obj, key, value) => {
   var isObject$1 = isObject_1, now$2 = now_1, toNumber$1 = toNumber_1;
   var FUNC_ERROR_TEXT$2 = "Expected a function";
   var nativeMax$1 = Math.max, nativeMin$1 = Math.min;
-  function debounce$1(func, wait2, options) {
+  function debounce$1(func, wait, options) {
     var lastArgs, lastThis, maxWait, result, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
     if (typeof func != "function") {
       throw new TypeError(FUNC_ERROR_TEXT$2);
     }
-    wait2 = toNumber$1(wait2) || 0;
+    wait = toNumber$1(wait) || 0;
     if (isObject$1(options)) {
       leading = !!options.leading;
       maxing = "maxWait" in options;
-      maxWait = maxing ? nativeMax$1(toNumber$1(options.maxWait) || 0, wait2) : maxWait;
+      maxWait = maxing ? nativeMax$1(toNumber$1(options.maxWait) || 0, wait) : maxWait;
       trailing = "trailing" in options ? !!options.trailing : trailing;
     }
     function invokeFunc(time) {
@@ -9627,16 +9708,16 @@ var __publicField = (obj, key, value) => {
     }
     function leadingEdge(time) {
       lastInvokeTime = time;
-      timerId = setTimeout(timerExpired, wait2);
+      timerId = setTimeout(timerExpired, wait);
       return leading ? invokeFunc(time) : result;
     }
     function remainingWait(time) {
-      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait2 - timeSinceLastCall;
+      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
       return maxing ? nativeMin$1(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
     }
     function shouldInvoke(time) {
       var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime;
-      return lastCallTime === void 0 || timeSinceLastCall >= wait2 || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+      return lastCallTime === void 0 || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
     }
     function timerExpired() {
       var time = now$2();
@@ -9674,12 +9755,12 @@ var __publicField = (obj, key, value) => {
         }
         if (maxing) {
           clearTimeout(timerId);
-          timerId = setTimeout(timerExpired, wait2);
+          timerId = setTimeout(timerExpired, wait);
           return invokeFunc(lastCallTime);
         }
       }
       if (timerId === void 0) {
-        timerId = setTimeout(timerExpired, wait2);
+        timerId = setTimeout(timerExpired, wait);
       }
       return result;
     }
@@ -9688,6 +9769,17 @@ var __publicField = (obj, key, value) => {
     return debounced;
   }
   var debounce_1 = debounce$1;
+  const useMount = (fn) => {
+    if (isDev$1) {
+      if (!isFunction(fn)) {
+        console.error(`useMount: parameter \`fn\` expected to be a function, but got "${typeof fn}".`);
+      }
+    }
+    React$1.useEffect(() => {
+      fn === null || fn === void 0 ? void 0 : fn();
+    }, []);
+  };
+  const useMount$1 = useMount;
   function useDebounceFn(fn, options) {
     var _a2;
     if (isDev$1) {
@@ -9696,10 +9788,10 @@ var __publicField = (obj, key, value) => {
       }
     }
     const fnRef = useLatest(fn);
-    const wait2 = (_a2 = options === null || options === void 0 ? void 0 : options.wait) !== null && _a2 !== void 0 ? _a2 : 1e3;
+    const wait = (_a2 = options === null || options === void 0 ? void 0 : options.wait) !== null && _a2 !== void 0 ? _a2 : 1e3;
     const debounced = React$1.useMemo(() => debounce_1((...args) => {
       return fnRef.current(...args);
-    }, wait2, options), []);
+    }, wait, options), []);
     useUnmount$1(() => {
       debounced.cancel();
     });
@@ -10184,7 +10276,7 @@ var __publicField = (obj, key, value) => {
     {
       flexDirection: "column",
       width: 600,
-      position: "absolute",
+      position: "fixed",
       top: 100,
       right: 100,
       zIndex: 101,
@@ -10468,16 +10560,16 @@ var __publicField = (obj, key, value) => {
   const now$1 = now;
   var FUNC_ERROR_TEXT$1 = "Expected a function";
   var nativeMax = Math.max, nativeMin = Math.min;
-  function debounce(func, wait2, options) {
+  function debounce(func, wait, options) {
     var lastArgs, lastThis, maxWait, result, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
     if (typeof func != "function") {
       throw new TypeError(FUNC_ERROR_TEXT$1);
     }
-    wait2 = toNumber(wait2) || 0;
+    wait = toNumber(wait) || 0;
     if (isObject(options)) {
       leading = !!options.leading;
       maxing = "maxWait" in options;
-      maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait2) : maxWait;
+      maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
       trailing = "trailing" in options ? !!options.trailing : trailing;
     }
     function invokeFunc(time) {
@@ -10489,16 +10581,16 @@ var __publicField = (obj, key, value) => {
     }
     function leadingEdge(time) {
       lastInvokeTime = time;
-      timerId = setTimeout(timerExpired, wait2);
+      timerId = setTimeout(timerExpired, wait);
       return leading ? invokeFunc(time) : result;
     }
     function remainingWait(time) {
-      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait2 - timeSinceLastCall;
+      var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
       return maxing ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
     }
     function shouldInvoke(time) {
       var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime;
-      return lastCallTime === void 0 || timeSinceLastCall >= wait2 || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+      return lastCallTime === void 0 || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
     }
     function timerExpired() {
       var time = now$1();
@@ -10536,12 +10628,12 @@ var __publicField = (obj, key, value) => {
         }
         if (maxing) {
           clearTimeout(timerId);
-          timerId = setTimeout(timerExpired, wait2);
+          timerId = setTimeout(timerExpired, wait);
           return invokeFunc(lastCallTime);
         }
       }
       if (timerId === void 0) {
-        timerId = setTimeout(timerExpired, wait2);
+        timerId = setTimeout(timerExpired, wait);
       }
       return result;
     }
@@ -10550,7 +10642,7 @@ var __publicField = (obj, key, value) => {
     return debounced;
   }
   var FUNC_ERROR_TEXT = "Expected a function";
-  function throttle(func, wait2, options) {
+  function throttle(func, wait, options) {
     var leading = true, trailing = true;
     if (typeof func != "function") {
       throw new TypeError(FUNC_ERROR_TEXT);
@@ -10559,9 +10651,9 @@ var __publicField = (obj, key, value) => {
       leading = "leading" in options ? !!options.leading : leading;
       trailing = "trailing" in options ? !!options.trailing : trailing;
     }
-    return debounce(func, wait2, {
+    return debounce(func, wait, {
       "leading": leading,
-      "maxWait": wait2,
+      "maxWait": wait,
       "trailing": trailing
     });
   }
@@ -10823,14 +10915,14 @@ var __publicField = (obj, key, value) => {
           }
         };
         this.drag = function(e2) {
-          var _a2, _b2, _c2, _d, _e2, _f, _g, _h, _j, _k, _l;
+          var _a2, _b2, _c2, _d2, _e2, _f, _g, _h, _j, _k, _l;
           if (!_this.draggedAxis || !_this.contentWrapperEl)
             return;
           var eventOffset;
           var track = _this.axis[_this.draggedAxis].track;
           var trackSize = (_b2 = (_a2 = track.rect) === null || _a2 === void 0 ? void 0 : _a2[_this.axis[_this.draggedAxis].sizeAttr]) !== null && _b2 !== void 0 ? _b2 : 0;
           var scrollbar = _this.axis[_this.draggedAxis].scrollbar;
-          var contentSize = (_d = (_c2 = _this.contentWrapperEl) === null || _c2 === void 0 ? void 0 : _c2[_this.axis[_this.draggedAxis].scrollSizeAttr]) !== null && _d !== void 0 ? _d : 0;
+          var contentSize = (_d2 = (_c2 = _this.contentWrapperEl) === null || _c2 === void 0 ? void 0 : _c2[_this.axis[_this.draggedAxis].scrollSizeAttr]) !== null && _d2 !== void 0 ? _d2 : 0;
           var hostSize = parseInt((_f = (_e2 = _this.elStyles) === null || _e2 === void 0 ? void 0 : _e2[_this.axis[_this.draggedAxis].sizeAttr]) !== null && _f !== void 0 ? _f : "0px", 10);
           e2.preventDefault();
           e2.stopPropagation();
@@ -11205,7 +11297,7 @@ var __publicField = (obj, key, value) => {
       };
       SimpleBarCore2.prototype.onTrackClick = function(e2, axis) {
         var _this = this;
-        var _a2, _b2, _c2, _d;
+        var _a2, _b2, _c2, _d2;
         if (axis === void 0) {
           axis = "y";
         }
@@ -11217,7 +11309,7 @@ var __publicField = (obj, key, value) => {
         this.axis[axis].scrollbar.rect = currentAxis.scrollbar.el.getBoundingClientRect();
         var scrollbar = this.axis[axis].scrollbar;
         var scrollbarOffset = (_b2 = (_a2 = scrollbar.rect) === null || _a2 === void 0 ? void 0 : _a2[this.axis[axis].offsetAttr]) !== null && _b2 !== void 0 ? _b2 : 0;
-        var hostSize = parseInt((_d = (_c2 = this.elStyles) === null || _c2 === void 0 ? void 0 : _c2[this.axis[axis].sizeAttr]) !== null && _d !== void 0 ? _d : "0px", 10);
+        var hostSize = parseInt((_d2 = (_c2 = this.elStyles) === null || _c2 === void 0 ? void 0 : _c2[this.axis[axis].sizeAttr]) !== null && _d2 !== void 0 ? _d2 : "0px", 10);
         var scrolled = this.contentWrapperEl[this.axis[axis].scrollOffsetAttr];
         var t2 = axis === "y" ? this.mouseY - scrollbarOffset : this.mouseX - scrollbarOffset;
         var dir = t2 < 0 ? -1 : 1;
@@ -11443,949 +11535,6 @@ var __publicField = (obj, key, value) => {
     });
     return spring;
   }
-  const InfoRecordContainer = newStyled(it.span)(
-    {
-      lineHeight: "24px",
-      position: "relative"
-    },
-    ({ theme: theme2 }) => ({
-      a: {
-        color: theme2.colors.active,
-        fontStyle: "italic",
-        backgroundColor: theme2.colors.activeSecondary,
-        borderRadius: 4,
-        padding: "0px 4px"
-      },
-      "a:hover": {
-        // borderBottom: `${theme.colors.active} 2px solid`,
-        pointer: "cursor"
-      }
-    })
-  );
-  function InfoRecord({ record }) {
-    const spring = useSlideIn();
-    const theme2 = useTheme();
-    return /* @__PURE__ */ jsxs(
-      "div",
-      {
-        style: {
-          position: "relative",
-          lineHeight: "normal"
-        },
-        children: [
-          /* @__PURE__ */ jsx(
-            InlineTag,
-            {
-              style: {
-                backgroundColor: theme2.colors.active,
-                color: "white",
-                ...spring
-              },
-              children: "提示"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            InfoRecordContainer,
-            {
-              style: {
-                ...spring
-              },
-              dangerouslySetInnerHTML: {
-                __html: `${record.content}<a href="https://github.com/SSmJaE/WELearnHelper" target="_blank"><u>Github</u></a>`
-              }
-            }
-          )
-        ]
-      }
-    );
-  }
-  const isArray = (thing) => Array.isArray(thing);
-  const asArray = (value) => {
-    return isArray(value) ? value : [value];
-  };
-  let Queue = function(initialItems) {
-    let add = function(steps) {
-      asArray(steps).forEach((step) => {
-        var _a2;
-        return _q.set(Symbol((_a2 = step.char) == null ? void 0 : _a2.innerText), buildQueueItem({ ...step }));
-      });
-      return this;
-    };
-    let getTypeable = () => rawValues().filter((value) => value.typeable);
-    let set = function(index2, item) {
-      let keys = [..._q.keys()];
-      _q.set(keys[index2], buildQueueItem(item));
-    };
-    let buildQueueItem = (queueItem) => {
-      queueItem.shouldPauseCursor = function() {
-        return Boolean(this.typeable || this.cursorable || this.deletable);
-      };
-      return queueItem;
-    };
-    let reset = function() {
-      _q.forEach((item) => delete item.done);
-    };
-    let wipe = function() {
-      _q = /* @__PURE__ */ new Map();
-      add(initialItems);
-    };
-    let getQueue = () => _q;
-    let rawValues = () => Array.from(_q.values());
-    let destroy = (key) => _q.delete(key);
-    let getItems = (all = false) => all ? rawValues() : rawValues().filter((i2) => !i2.done);
-    let done = (key, shouldDestroy = false) => shouldDestroy ? _q.delete(key) : _q.get(key).done = true;
-    let _q = /* @__PURE__ */ new Map();
-    add(initialItems);
-    return {
-      add,
-      set,
-      wipe,
-      reset,
-      destroy,
-      done,
-      getItems,
-      getQueue,
-      getTypeable
-    };
-  };
-  const toArray = (val) => Array.from(val);
-  const createTextNode = (content) => document.createTextNode(content);
-  let expandTextNodes = (element) => {
-    [...element.childNodes].forEach((child) => {
-      if (child.nodeValue) {
-        [...child.nodeValue].forEach((c2) => {
-          child.parentNode.insertBefore(createTextNode(c2), child);
-        });
-        child.remove();
-        return;
-      }
-      expandTextNodes(child);
-    });
-    return element;
-  };
-  const getParsedBody = (content) => {
-    let doc = document.implementation.createHTMLDocument();
-    doc.body.innerHTML = content;
-    return expandTextNodes(doc.body);
-  };
-  const DATA_ATTRIBUTE = "data-typeit-id";
-  const CURSOR_CLASS = "ti-cursor";
-  const END = "END";
-  const DEFAULT_STATUSES = {
-    started: false,
-    completed: false,
-    frozen: false,
-    destroyed: false
-  };
-  const DEFAULT_OPTIONS = {
-    breakLines: true,
-    cursor: {
-      autoPause: true,
-      autoPauseDelay: 500,
-      animation: {
-        frames: [0, 0, 1].map((n2) => {
-          return { opacity: n2 };
-        }),
-        options: {
-          iterations: Infinity,
-          easing: "steps(2, start)",
-          fill: "forwards"
-        }
-      }
-    },
-    cursorChar: "|",
-    cursorSpeed: 1e3,
-    deleteSpeed: null,
-    html: true,
-    lifeLike: true,
-    loop: false,
-    loopDelay: 750,
-    nextStringDelay: 750,
-    speed: 100,
-    startDelay: 250,
-    startDelete: false,
-    strings: [],
-    waitUntilVisible: false,
-    beforeString: () => {
-    },
-    afterString: () => {
-    },
-    beforeStep: () => {
-    },
-    afterStep: () => {
-    },
-    afterComplete: () => {
-    }
-  };
-  const PLACEHOLDER_CSS = `[${DATA_ATTRIBUTE}]:before {content: '.'; display: inline-block; width: 0; visibility: hidden;}`;
-  function walkElementNodes(element, shouldReverse = false, shouldIncludeCursor = false) {
-    let cursor2 = element.querySelector(`.${CURSOR_CLASS}`);
-    let walker = document.createTreeWalker(element, NodeFilter.SHOW_ALL, {
-      acceptNode: (node2) => {
-        var _a2, _b2;
-        if (cursor2 && shouldIncludeCursor) {
-          if ((_a2 = node2.classList) == null ? void 0 : _a2.contains(CURSOR_CLASS)) {
-            return NodeFilter.FILTER_ACCEPT;
-          }
-          if (cursor2.contains(node2)) {
-            return NodeFilter.FILTER_REJECT;
-          }
-        }
-        return ((_b2 = node2.classList) == null ? void 0 : _b2.contains(CURSOR_CLASS)) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    let nextNode;
-    let nodes = [];
-    while (nextNode = walker.nextNode()) {
-      if (!nextNode.originalParent) {
-        nextNode.originalParent = nextNode.parentNode;
-      }
-      nodes.push(nextNode);
-    }
-    return shouldReverse ? nodes.reverse() : nodes;
-  }
-  function chunkStringAsHtml(string) {
-    return walkElementNodes(getParsedBody(string));
-  }
-  function maybeChunkStringAsHtml(str, asHtml = true) {
-    return asHtml ? chunkStringAsHtml(str) : toArray(str).map(createTextNode);
-  }
-  const createElement = (el) => document.createElement(el);
-  const appendStyleBlock = (styles, id = "") => {
-    let styleBlock = createElement("style");
-    styleBlock.id = id;
-    styleBlock.appendChild(createTextNode(styles));
-    document.head.appendChild(styleBlock);
-  };
-  const calculateDelay = (delayArg) => {
-    if (!isArray(delayArg)) {
-      delayArg = [delayArg / 2, delayArg / 2];
-    }
-    return delayArg;
-  };
-  const randomInRange = (value, range2) => {
-    return Math.abs(
-      Math.random() * (value + range2 - (value - range2)) + (value - range2)
-    );
-  };
-  let range = (val) => val / 2;
-  function calculatePace(options) {
-    let { speed, deleteSpeed, lifeLike } = options;
-    deleteSpeed = deleteSpeed !== null ? deleteSpeed : speed / 3;
-    return lifeLike ? [
-      randomInRange(speed, range(speed)),
-      randomInRange(deleteSpeed, range(deleteSpeed))
-    ] : [speed, deleteSpeed];
-  }
-  const destroyTimeouts = (timeouts) => {
-    timeouts.forEach(clearTimeout);
-    return [];
-  };
-  const generateHash = () => Math.random().toString().substring(2, 9);
-  const isInput = (el) => "value" in el;
-  let getAllChars = (element) => {
-    if (isInput(element)) {
-      return toArray(element.value);
-    }
-    return walkElementNodes(element, true).filter(
-      (c2) => !(c2.childNodes.length > 0)
-    );
-  };
-  const fireWhenVisible = (element, func) => {
-    let observer = new IntersectionObserver(
-      (entries, observer2) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            func();
-            observer2.unobserve(element);
-          }
-        });
-      },
-      { threshold: 1 }
-    );
-    observer.observe(element);
-  };
-  let handleFunctionalArg = (arg) => {
-    return typeof arg === "function" ? arg() : arg;
-  };
-  const isNumber = (value) => Number.isInteger(value);
-  let select = (selector, element = document, all = false) => {
-    return element[`querySelector${all ? "All" : ""}`](selector);
-  };
-  let isBodyElement = (node2) => /body/i.test(node2 == null ? void 0 : node2.tagName);
-  let insertIntoElement = (originalTarget, character2) => {
-    if (isInput(originalTarget)) {
-      originalTarget.value = `${originalTarget.value}${character2.textContent}`;
-      return;
-    }
-    character2.innerHTML = "";
-    let target = isBodyElement(character2.originalParent) ? originalTarget : character2.originalParent || originalTarget;
-    target.insertBefore(
-      character2,
-      select("." + CURSOR_CLASS, target) || null
-    );
-  };
-  let updateCursorPosition = (steps, cursorPosition, printedCharacters) => {
-    return Math.min(
-      Math.max(cursorPosition + steps, 0),
-      printedCharacters.length
-    );
-  };
-  const merge = (originalObj, newObj) => Object.assign({}, originalObj, newObj);
-  const removeNode = (node2, rootElement) => {
-    if (!node2)
-      return;
-    let nodeParent = node2.parentNode;
-    let nodeToRemove = nodeParent.childNodes.length > 1 || nodeParent.isSameNode(rootElement) ? node2 : nodeParent;
-    nodeToRemove.remove();
-  };
-  const repositionCursor = (element, allChars, newCursorPosition) => {
-    let nodeToInsertBefore = allChars[newCursorPosition - 1];
-    let cursor2 = select(`.${CURSOR_CLASS}`, element);
-    element = (nodeToInsertBefore == null ? void 0 : nodeToInsertBefore.parentNode) || element;
-    element.insertBefore(cursor2, nodeToInsertBefore || null);
-  };
-  function selectorToElement(thing) {
-    return typeof thing === "string" ? select(thing) : thing;
-  }
-  const isNonVoidElement = (el) => /<(.+)>(.*?)<\/(.+)>/.test(el.outerHTML);
-  let wait = (callback, delay, timeouts) => {
-    return new Promise((resolve) => {
-      let cb = async () => {
-        await callback();
-        resolve();
-      };
-      timeouts.push(setTimeout(cb, delay || 0));
-    });
-  };
-  let cursorFontStyles = {
-    "font-family": "",
-    "font-weight": "",
-    "font-size": "",
-    "font-style": "",
-    "line-height": "",
-    color: "",
-    transform: "translateX(-.125em)"
-  };
-  let setCursorStyles = (id, element) => {
-    let rootSelector = `[${DATA_ATTRIBUTE}='${id}']`;
-    let cursorSelector = `${rootSelector} .${CURSOR_CLASS}`;
-    let computedStyles = getComputedStyle(element);
-    let customProperties = Object.entries(cursorFontStyles).reduce(
-      (accumulator, [item, value]) => {
-        return `${accumulator} ${item}: var(--ti-cursor-${item}, ${value || computedStyles[item]});`;
-      },
-      ""
-    );
-    appendStyleBlock(
-      `${cursorSelector} { display: inline-block; width: 0; ${customProperties} }`,
-      id
-    );
-  };
-  const duplicate = (value, times) => new Array(times).fill(value);
-  const countStepsToSelector = ({
-    queueItems,
-    selector,
-    cursorPosition,
-    to
-  }) => {
-    if (isNumber(selector)) {
-      return selector * -1;
-    }
-    let isMovingToEnd = new RegExp(END, "i").test(to);
-    let selectorIndex = selector ? [...queueItems].reverse().findIndex(({ char: char2 }) => {
-      let parentElement = char2.parentElement;
-      let parentMatches = parentElement.matches(selector);
-      if (isMovingToEnd && parentMatches) {
-        return true;
-      }
-      return parentMatches && parentElement.firstChild.isSameNode(char2);
-    }) : -1;
-    if (selectorIndex < 0) {
-      selectorIndex = isMovingToEnd ? 0 : queueItems.length - 1;
-    }
-    let offset = isMovingToEnd ? 0 : 1;
-    return selectorIndex - cursorPosition + offset;
-  };
-  let beforePaint = (cb) => {
-    return new Promise((resolve) => {
-      requestAnimationFrame(async () => {
-        resolve(await cb());
-      });
-    });
-  };
-  let getAnimationFromElement = (element) => {
-    return element == null ? void 0 : element.getAnimations().find((animation) => {
-      return animation.id === element.dataset.tiAnimationId;
-    });
-  };
-  let setCursorAnimation = ({
-    cursor: cursor2,
-    frames,
-    options
-  }) => {
-    let animation = cursor2.animate(frames, options);
-    animation.pause();
-    animation.id = cursor2.dataset.tiAnimationId;
-    beforePaint(() => {
-      beforePaint(() => {
-        animation.play();
-      });
-    });
-    return animation;
-  };
-  let rebuildCursorAnimation = ({
-    cursor: cursor2,
-    options,
-    cursorOptions
-  }) => {
-    if (!cursor2 || !cursorOptions)
-      return;
-    let animation = getAnimationFromElement(cursor2);
-    let oldCurrentTime;
-    if (animation) {
-      options.delay = animation.effect.getComputedTiming().delay;
-      oldCurrentTime = animation.currentTime;
-      animation.cancel();
-    }
-    let newAnimation = setCursorAnimation({
-      cursor: cursor2,
-      frames: cursorOptions.animation.frames,
-      options
-    });
-    if (oldCurrentTime) {
-      newAnimation.currentTime = oldCurrentTime;
-    }
-    return newAnimation;
-  };
-  let execute = (queueItem) => {
-    var _a2;
-    return (_a2 = queueItem.func) == null ? void 0 : _a2.call(null);
-  };
-  let fireItem = async ({
-    index: index2,
-    queueItems,
-    wait: wait2,
-    cursor: cursor2,
-    cursorOptions
-  }) => {
-    let queueItem = queueItems[index2][1];
-    let instantQueue = [];
-    let tempIndex = index2;
-    let futureItem = queueItem;
-    let shouldBeGrouped = () => futureItem && !futureItem.delay;
-    let shouldPauseCursor = queueItem.shouldPauseCursor() && cursorOptions.autoPause;
-    while (shouldBeGrouped()) {
-      instantQueue.push(futureItem);
-      shouldBeGrouped() && tempIndex++;
-      futureItem = queueItems[tempIndex] ? queueItems[tempIndex][1] : null;
-    }
-    if (instantQueue.length) {
-      await beforePaint(async () => {
-        for (let q2 of instantQueue) {
-          await execute(q2);
-        }
-      });
-      return tempIndex - 1;
-    }
-    let animation = getAnimationFromElement(cursor2);
-    let options;
-    if (animation) {
-      options = {
-        ...animation.effect.getComputedTiming(),
-        delay: shouldPauseCursor ? cursorOptions.autoPauseDelay : 0
-      };
-    }
-    await wait2(async () => {
-      if (animation && shouldPauseCursor) {
-        animation.cancel();
-      }
-      await beforePaint(() => {
-        execute(queueItem);
-      });
-    }, queueItem.delay);
-    await rebuildCursorAnimation({
-      cursor: cursor2,
-      options,
-      cursorOptions
-    });
-    return index2;
-  };
-  let processCursorOptions = (cursorOptions) => {
-    var _a2, _b2;
-    if (typeof cursorOptions === "object") {
-      let newOptions = {};
-      let { frames: defaultFrames, options: defaultOptions } = DEFAULT_OPTIONS.cursor.animation;
-      newOptions.animation = cursorOptions.animation || {};
-      newOptions.animation.frames = ((_a2 = cursorOptions.animation) == null ? void 0 : _a2.frames) || defaultFrames;
-      newOptions.animation.options = merge(
-        defaultOptions,
-        ((_b2 = cursorOptions.animation) == null ? void 0 : _b2.options) || {}
-      );
-      newOptions.autoPause = cursorOptions.autoPause ?? DEFAULT_OPTIONS.cursor.autoPause;
-      newOptions.autoPauseDelay = cursorOptions.autoPauseDelay || DEFAULT_OPTIONS.cursor.autoPauseDelay;
-      return newOptions;
-    }
-    if (cursorOptions === true) {
-      return DEFAULT_OPTIONS.cursor;
-    }
-    return cursorOptions;
-  };
-  const TypeIt$1 = function(element, options = {}) {
-    let _wait = async (callback, delay, silent = false) => {
-      if (_statuses.frozen) {
-        await new Promise((resolve) => {
-          this.unfreeze = () => {
-            _statuses.frozen = false;
-            resolve();
-          };
-        });
-      }
-      silent || await _opts.beforeStep(this);
-      await wait(callback, delay, _timeouts);
-      silent || await _opts.afterStep(this);
-    };
-    let _fireItemWithContext = (index2, queueItems) => {
-      return fireItem({
-        index: index2,
-        queueItems,
-        wait: _wait,
-        cursor: _cursor,
-        cursorOptions: _opts.cursor
-      });
-    };
-    let _removeNode = (node2) => removeNode(node2, _element);
-    let _elementIsInput = () => isInput(_element);
-    let _getPace = (index2 = 0) => calculatePace(_opts)[index2];
-    let _getAllChars = () => getAllChars(_element);
-    let _maybeAppendPause = (opts = {}) => {
-      let delay = opts.delay;
-      delay && _queue.add({ delay });
-    };
-    let _queueAndReturn = (steps, opts) => {
-      _queue.add(steps);
-      _maybeAppendPause(opts);
-      return this;
-    };
-    let _getDerivedCursorPosition = () => _predictedCursorPosition ?? _cursorPosition;
-    let _generateTemporaryOptionQueueItems = (newOptions = {}) => {
-      return [
-        { func: () => _options(newOptions) },
-        { func: () => _options(_opts) }
-      ];
-    };
-    let _addSplitPause = (items) => {
-      let delay = _opts.nextStringDelay;
-      _queue.add([{ delay: delay[0] }, ...items, { delay: delay[1] }]);
-    };
-    let _setUpCursor = () => {
-      if (_elementIsInput()) {
-        return;
-      }
-      let cursor2 = createElement("span");
-      cursor2.className = CURSOR_CLASS;
-      if (!_shouldRenderCursor) {
-        cursor2.style.visibility = "hidden";
-        return cursor2;
-      }
-      cursor2.innerHTML = getParsedBody(_opts.cursorChar).innerHTML;
-      return cursor2;
-    };
-    let _attachCursor = async () => {
-      !_elementIsInput() && _cursor && _element.appendChild(_cursor);
-      if (_shouldRenderCursor) {
-        setCursorStyles(_id, _element);
-        _cursor.dataset.tiAnimationId = _id;
-        let { animation } = _opts.cursor;
-        let { frames, options: options2 } = animation;
-        setCursorAnimation({
-          frames,
-          cursor: _cursor,
-          options: {
-            duration: _opts.cursorSpeed,
-            ...options2
-          }
-        });
-      }
-    };
-    let _generateQueue = () => {
-      let strings = _opts.strings.filter((string) => !!string);
-      strings.forEach((string, index2) => {
-        this.type(string);
-        if (index2 + 1 === strings.length) {
-          return;
-        }
-        let splitItems = _opts.breakLines ? [{ func: () => _type(createElement("BR")), typeable: true }] : duplicate(
-          {
-            func: _delete,
-            delay: _getPace(1)
-          },
-          _queue.getTypeable().length
-        );
-        _addSplitPause(splitItems);
-      });
-    };
-    let _prepLoop = async (delay) => {
-      let derivedCursorPosition = _getDerivedCursorPosition();
-      derivedCursorPosition && await _move({ value: derivedCursorPosition });
-      let queueItems = _getAllChars().map((c2) => {
-        return [
-          Symbol(),
-          {
-            func: _delete,
-            delay: _getPace(1),
-            deletable: true,
-            shouldPauseCursor: () => true
-          }
-        ];
-      });
-      for (let index2 = 0; index2 < queueItems.length; index2++) {
-        await _fireItemWithContext(index2, queueItems);
-      }
-      _queue.reset();
-      _queue.set(0, { delay });
-    };
-    let _maybePrependHardcodedStrings = (strings) => {
-      let existingMarkup = _element.innerHTML;
-      if (!existingMarkup) {
-        return strings;
-      }
-      _element.innerHTML = "";
-      if (_opts.startDelete) {
-        _element.innerHTML = existingMarkup;
-        expandTextNodes(_element);
-        _addSplitPause(
-          duplicate(
-            {
-              func: _delete,
-              delay: _getPace(1),
-              deletable: true
-            },
-            _getAllChars().length
-          )
-        );
-        return strings;
-      }
-      let hardCodedStrings = existingMarkup.replace(/<!--(.+?)-->/g, "").trim().split(/<br(?:\s*?)(?:\/)?>/);
-      return hardCodedStrings.concat(strings);
-    };
-    let _fire = async (remember = true) => {
-      _statuses.started = true;
-      let cleanUp = (qKey) => {
-        _queue.done(qKey, !remember);
-      };
-      try {
-        let queueItems = [..._queue.getQueue()];
-        for (let index2 = 0; index2 < queueItems.length; index2++) {
-          let [queueKey, queueItem] = queueItems[index2];
-          if (queueItem.done)
-            continue;
-          if (!queueItem.deletable || queueItem.deletable && _getAllChars().length) {
-            let newIndex = await _fireItemWithContext(index2, queueItems);
-            Array(newIndex - index2).fill(index2 + 1).map((x2, y2) => x2 + y2).forEach((i2) => {
-              let [key] = queueItems[i2];
-              cleanUp(key);
-            });
-            index2 = newIndex;
-          }
-          cleanUp(queueKey);
-        }
-        if (!remember) {
-          return this;
-        }
-        _statuses.completed = true;
-        await _opts.afterComplete(this);
-        if (!_opts.loop) {
-          throw "";
-        }
-        let delay = _opts.loopDelay;
-        _wait(async () => {
-          await _prepLoop(delay[0]);
-          _fire();
-        }, delay[1]);
-      } catch (e2) {
-      }
-      return this;
-    };
-    let _move = async (step) => {
-      _cursorPosition = updateCursorPosition(
-        step,
-        _cursorPosition,
-        _getAllChars()
-      );
-      repositionCursor(_element, _getAllChars(), _cursorPosition);
-    };
-    let _type = (char2) => insertIntoElement(_element, char2);
-    let _options = async (opts) => _opts = merge(_opts, opts);
-    let _empty = async () => {
-      if (_elementIsInput()) {
-        _element.value = "";
-        return;
-      }
-      _getAllChars().forEach(_removeNode);
-      return;
-    };
-    let _delete = () => {
-      let allChars = _getAllChars();
-      if (!allChars.length)
-        return;
-      if (_elementIsInput()) {
-        _element.value = _element.value.slice(0, -1);
-      } else {
-        _removeNode(allChars[_cursorPosition]);
-      }
-    };
-    this.break = function(actionOpts) {
-      return _queueAndReturn(
-        {
-          func: () => _type(createElement("BR")),
-          typeable: true
-        },
-        actionOpts
-      );
-    };
-    this.delete = function(numCharacters = null, actionOpts = {}) {
-      numCharacters = handleFunctionalArg(numCharacters);
-      let bookEndQueueItems = _generateTemporaryOptionQueueItems(actionOpts);
-      let num = numCharacters;
-      let { instant, to } = actionOpts;
-      let typeableQueueItems = _queue.getTypeable();
-      let rounds = (() => {
-        if (num === null) {
-          return typeableQueueItems.length;
-        }
-        if (isNumber(num)) {
-          return num;
-        }
-        return countStepsToSelector({
-          queueItems: typeableQueueItems,
-          selector: num,
-          cursorPosition: _getDerivedCursorPosition(),
-          to
-        });
-      })();
-      return _queueAndReturn(
-        [
-          bookEndQueueItems[0],
-          ...duplicate(
-            {
-              func: _delete,
-              delay: instant ? 0 : _getPace(1),
-              deletable: true
-            },
-            rounds
-          ),
-          bookEndQueueItems[1]
-        ],
-        actionOpts
-      );
-    };
-    this.empty = function(actionOpts = {}) {
-      return _queueAndReturn({ func: _empty }, actionOpts);
-    };
-    this.exec = function(func, actionOpts = {}) {
-      let bookEndQueueItems = _generateTemporaryOptionQueueItems(actionOpts);
-      return _queueAndReturn(
-        [bookEndQueueItems[0], { func: () => func(this) }, bookEndQueueItems[1]],
-        actionOpts
-      );
-    };
-    this.move = function(movementArg, actionOpts = {}) {
-      movementArg = handleFunctionalArg(movementArg);
-      let bookEndQueueItems = _generateTemporaryOptionQueueItems(actionOpts);
-      let { instant, to } = actionOpts;
-      let numberOfSteps = countStepsToSelector({
-        queueItems: _queue.getTypeable(),
-        selector: movementArg === null ? "" : movementArg,
-        to,
-        cursorPosition: _getDerivedCursorPosition()
-      });
-      let directionalStep = numberOfSteps < 0 ? -1 : 1;
-      _predictedCursorPosition = _getDerivedCursorPosition() + numberOfSteps;
-      return _queueAndReturn(
-        [
-          bookEndQueueItems[0],
-          ...duplicate(
-            {
-              func: () => _move(directionalStep),
-              delay: instant ? 0 : _getPace(),
-              cursorable: true
-            },
-            Math.abs(numberOfSteps)
-          ),
-          bookEndQueueItems[1]
-        ],
-        actionOpts
-      );
-    };
-    this.options = function(opts, actionOpts = {}) {
-      opts = handleFunctionalArg(opts);
-      _options(opts);
-      return _queueAndReturn({}, actionOpts);
-    };
-    this.pause = function(milliseconds, actionOpts = {}) {
-      return _queueAndReturn(
-        { delay: handleFunctionalArg(milliseconds) },
-        actionOpts
-      );
-    };
-    this.type = function(string, actionOpts = {}) {
-      string = handleFunctionalArg(string);
-      let { instant } = actionOpts;
-      let bookEndQueueItems = _generateTemporaryOptionQueueItems(actionOpts);
-      let chars = maybeChunkStringAsHtml(string, _opts.html);
-      let charsAsQueueItems = chars.map((char2) => {
-        return {
-          func: () => _type(char2),
-          char: char2,
-          delay: instant || isNonVoidElement(char2) ? 0 : _getPace(),
-          typeable: char2.nodeType === Node.TEXT_NODE
-        };
-      });
-      let itemsToQueue = [
-        bookEndQueueItems[0],
-        { func: async () => await _opts.beforeString(string, this) },
-        ...charsAsQueueItems,
-        { func: async () => await _opts.afterString(string, this) },
-        bookEndQueueItems[1]
-      ];
-      return _queueAndReturn(itemsToQueue, actionOpts);
-    };
-    this.is = function(key) {
-      return _statuses[key];
-    };
-    this.destroy = function(shouldRemoveCursor = true) {
-      _timeouts = destroyTimeouts(_timeouts);
-      handleFunctionalArg(shouldRemoveCursor) && _cursor && _removeNode(_cursor);
-      _statuses.destroyed = true;
-    };
-    this.freeze = function() {
-      _statuses.frozen = true;
-    };
-    this.unfreeze = () => {
-    };
-    this.reset = function(rebuild) {
-      !this.is("destroyed") && this.destroy();
-      if (rebuild) {
-        _queue.wipe();
-        rebuild(this);
-      } else {
-        _queue.reset();
-      }
-      _cursorPosition = 0;
-      for (let property in _statuses) {
-        _statuses[property] = false;
-      }
-      _element[_elementIsInput() ? "value" : "innerHTML"] = "";
-      return this;
-    };
-    this.go = function() {
-      if (_statuses.started) {
-        return this;
-      }
-      _attachCursor();
-      if (!_opts.waitUntilVisible) {
-        _fire();
-        return this;
-      }
-      fireWhenVisible(_element, _fire.bind(this));
-      return this;
-    };
-    this.flush = function(cb = () => {
-    }) {
-      _attachCursor();
-      _fire(false).then(cb);
-      return this;
-    };
-    this.getQueue = () => _queue;
-    this.getOptions = () => _opts;
-    this.updateOptions = (options2) => _options(options2);
-    this.getElement = () => _element;
-    let _element = selectorToElement(element);
-    let _timeouts = [];
-    let _cursorPosition = 0;
-    let _predictedCursorPosition = null;
-    let _statuses = merge({}, DEFAULT_STATUSES);
-    options.cursor = processCursorOptions(
-      options.cursor ?? DEFAULT_OPTIONS.cursor
-    );
-    let _opts = merge(DEFAULT_OPTIONS, options);
-    _opts = merge(_opts, {
-      html: !_elementIsInput() && _opts.html,
-      nextStringDelay: calculateDelay(_opts.nextStringDelay),
-      loopDelay: calculateDelay(_opts.loopDelay)
-    });
-    let _id = generateHash();
-    let _queue = Queue([{ delay: _opts.startDelay }]);
-    _element.dataset.typeitId = _id;
-    appendStyleBlock(PLACEHOLDER_CSS);
-    let _shouldRenderCursor = !!_opts.cursor && !_elementIsInput();
-    let _cursor = _setUpCursor();
-    _opts.strings = _maybePrependHardcodedStrings(asArray(_opts.strings));
-    if (_opts.strings.length) {
-      _generateQueue();
-    }
-  };
-  const defaultProps = {
-    as: "span",
-    options: {},
-    getBeforeInit: (instance) => instance,
-    getAfterInit: (instance) => instance
-  };
-  const DynamicElementComponent = React$1.forwardRef((props, ref) => {
-    const { as: As } = props;
-    return /* @__PURE__ */ jsx(As, { ref, ...props });
-  });
-  const TypeIt = (props) => {
-    const elementRef = React$1.useRef(null);
-    const instanceRef = React$1.useRef(null);
-    const { options, children, getBeforeInit, getAfterInit, ...remainingProps } = props;
-    const [shouldShowChildren, setShouldShowChildren] = React$1.useState(true);
-    const [instanceOptions, setInstanceOptions] = React$1.useState(null);
-    function calculateOptions() {
-      const optionsClone = Object.assign({}, options);
-      if (children && elementRef.current) {
-        optionsClone.strings = elementRef.current.innerHTML;
-      }
-      setInstanceOptions(optionsClone);
-    }
-    function generateNewInstance() {
-      instanceRef.current = new TypeIt$1(elementRef.current, instanceOptions);
-      instanceRef.current = getBeforeInit(instanceRef.current);
-      instanceRef.current.go();
-      instanceRef.current = getAfterInit(instanceRef.current);
-    }
-    React$1.useEffect(() => {
-      calculateOptions();
-      setShouldShowChildren(false);
-    }, [options]);
-    React$1.useEffect(() => {
-      var _a2;
-      if (!instanceOptions)
-        return;
-      ((_a2 = instanceRef.current) == null ? void 0 : _a2.updateOptions(instanceOptions)) || generateNewInstance();
-    }, [instanceOptions]);
-    React$1.useEffect(() => {
-      return () => {
-        var _a2;
-        try {
-          (_a2 = instanceRef.current) == null ? void 0 : _a2.destroy();
-        } catch (error) {
-          logger.debug("TypeIt", error);
-        }
-      };
-    }, []);
-    return /* @__PURE__ */ jsx(
-      DynamicElementComponent,
-      {
-        ref: elementRef,
-        children: shouldShowChildren ? children : null,
-        style: { opacity: shouldShowChildren ? 0 : 1 },
-        ...remainingProps
-      }
-    );
-  };
-  TypeIt.defaultProps = defaultProps;
   const ButtonContainer = newStyled.span(
     {
       display: "inline-block",
@@ -12416,44 +11565,165 @@ var __publicField = (obj, key, value) => {
     onMouseEnter,
     onMouseLeave
   }) {
+    const [isButtonDisabled, setIsButtonDisabled] = React$1.useState(
+      typeof disabled === "number" ? false : !!disabled
+    );
     return /* @__PURE__ */ jsx(
       ButtonContainer,
       {
         style: {
-          cursor: disabled ? "not-allowed" : "pointer",
+          cursor: isButtonDisabled ? "not-allowed" : "pointer",
           ...style
         },
-        disabled: !!disabled,
-        onClick,
+        disabled: isButtonDisabled,
+        onClick: () => {
+          onClick && onClick();
+          if (typeof disabled === "number") {
+            setIsButtonDisabled(true);
+            setTimeout(() => {
+              setIsButtonDisabled(false);
+            }, disabled);
+          }
+        },
         onMouseEnter,
         onMouseLeave,
         children
       }
     );
   }
-  const defaultColorMapping = {
-    GPT: "orange",
-    标答: "limegreen",
-    无答案: "red"
-  };
+  const InfoRecordContainer = newStyled(it.span)(
+    {
+      lineHeight: "24px",
+      position: "relative"
+    },
+    ({ theme: theme2 }) => ({
+      a: {
+        color: theme2.colors.active,
+        fontStyle: "italic",
+        backgroundColor: theme2.colors.activeSecondary,
+        borderRadius: 4,
+        padding: "0px 4px"
+      },
+      "a:hover": {
+        // borderBottom: `${theme.colors.active} 2px solid`,
+        pointer: "cursor"
+      }
+    })
+  );
+  function InfoRecord({ record }) {
+    const spring = useSlideIn();
+    const theme2 = useTheme();
+    const [isHover, setHover] = React$1.useState(false);
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        style: {
+          position: "relative",
+          lineHeight: "normal"
+        },
+        onMouseEnter: () => setHover(true),
+        onMouseLeave: () => setHover(false),
+        children: [
+          /* @__PURE__ */ jsx(
+            InlineTag,
+            {
+              style: {
+                backgroundColor: theme2.colors.active,
+                color: "white",
+                ...spring
+              },
+              children: "提示"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            InfoRecordContainer,
+            {
+              style: {
+                ...spring
+              },
+              dangerouslySetInnerHTML: {
+                __html: `${record.content}`
+              }
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                display: isHover ? "flex" : "none"
+              },
+              children: record.action && record.action.map(({ children, ...restProps }, index2) => /* @__PURE__ */ jsx(Button, { ...restProps, children }, index2))
+            }
+          )
+        ]
+      }
+    );
+  }
+  const TypingAnimationContainer = newStyled.span`
+    line-height: normal;
+    /* font-family: monospace; */
+    /* 有中文的话，尤其是中英文混杂的情况，用不用monospace都一样了 */
+
+    background: linear-gradient(#000000 0 0) 0 0
+        ${(props) => props.showCursor ? ", linear-gradient(-90deg, #000000 10px, #0000 0) 10px 0" : void 0};
+    background-clip: text ${(props) => props.showCursor ? ", padding-box" : void 0};
+    color: transparent;
+
+    background-size: calc(${(props) => props.count} * 1ch) 200%;
+    background-repeat: no-repeat;
+
+    @keyframes typing {
+        from {
+            background-size: 0 200%;
+        }
+    }
+
+    @keyframes cursor {
+        50% {
+            background-position: 0 -100%;
+        }
+    }
+
+    animation: typing ${(props) => props.duration}ms linear 1 alternate;
+    animation-timing-function: steps(${(props) => props.count});
+`;
+  function TypingAnimation({
+    content,
+    startDelay = 600,
+    interval = 25
+  }) {
+    const [shouldDisplay, setShouldDisplay] = React$1.useState(false);
+    const [showCursor, setShowCursor] = React$1.useState(false);
+    const duration = content.length * interval;
+    useMount$1(() => {
+      setTimeout(() => {
+        setShouldDisplay(true);
+        setShowCursor(true);
+        setTimeout(() => {
+          setShowCursor(false);
+        }, duration + 250);
+      }, startDelay);
+    });
+    return shouldDisplay ? /* @__PURE__ */ jsx(
+      TypingAnimationContainer,
+      {
+        count: content.length,
+        duration,
+        showCursor,
+        children: content
+      }
+    ) : /* @__PURE__ */ jsx(Fragment, {});
+  }
   function SolveButton({ content: { solve, answerText } }) {
     const [isHovering, setIsHovering] = React$1.useState(false);
-    let buttonText = "解答该题";
-    if (solve.couldSolve) {
-      if (solve.hasSolved) {
-        if (isHovering) {
-          buttonText = "再次解答";
-        } else {
-          buttonText = "已解答👌";
-        }
-      }
-    } else {
-      buttonText = "无法解答";
-    }
+    const buttonText = "无法解答";
     return /* @__PURE__ */ jsx(
       Button,
       {
-        disabled: !solve.couldSolve,
+        disabled: true,
         onClick: () => {
           solve.solveThis(answerText);
         },
@@ -12526,7 +11796,7 @@ var __publicField = (obj, key, value) => {
               style: {
                 ...spring,
                 // backgroundColor: "limegreen", // "red" "yellow"
-                backgroundColor: record.content.info.color ? record.content.info.color : defaultColorMapping[record.content.info.content] ?? "gray",
+                backgroundColor: record.content.info.color ? record.content.info.color : theme2.answerTypeColorMapping[record.content.info.content] ?? "gray",
                 color: "white",
                 fontFamily: "华文新魏"
               },
@@ -12534,24 +11804,11 @@ var __publicField = (obj, key, value) => {
             }
           ),
           store.userSettings.enableTyping ? /* @__PURE__ */ jsx(
-            TypeIt,
+            TypingAnimation,
             {
-              options: {
-                startDelay: 600,
-                // waitUntilVisible: true,
-                cursorChar: "█",
-                speed: 25,
-                lifeLike: true,
-                afterComplete: (instance) => {
-                  try {
-                    instance == null ? void 0 : instance.destroy();
-                  } catch (error) {
-                    logger.debug("typeit destroy error");
-                  }
-                }
-              },
-              style: {},
-              children: record.content.answerText
+              content: record.content.answerText,
+              startDelay: 600,
+              interval: 35
             }
           ) : /* @__PURE__ */ jsx(
             it.span,
@@ -12574,9 +11831,47 @@ var __publicField = (obj, key, value) => {
                 // zIndex: ,
               },
               children: [
+                record.action && record.action.map(({ children, ...restProps }, index2) => /* @__PURE__ */ jsx(Button, { ...restProps, children }, index2)),
                 /* @__PURE__ */ jsx(SolveButton, { content: record.content }),
                 /* @__PURE__ */ jsx(CopyButton, { answerText: record.content.answerText })
               ]
+            }
+          )
+        ]
+      }
+    );
+  }
+  function ErrorRecord({ record }) {
+    const spring = useSlideIn();
+    const theme2 = useTheme();
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        style: {
+          position: "relative",
+          lineHeight: "24px"
+        },
+        children: [
+          /* @__PURE__ */ jsx(
+            InlineTag,
+            {
+              style: {
+                backgroundColor: theme2.colors.error,
+                color: "white",
+                ...spring
+              },
+              children: "异常"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            it.span,
+            {
+              style: {
+                lineHeight: "24px",
+                position: "relative",
+                ...spring
+              },
+              children: record.content.message
             }
           )
         ]
@@ -12597,6 +11892,9 @@ var __publicField = (obj, key, value) => {
         break;
       case "question":
         recordDisplay = /* @__PURE__ */ jsx(QuestionRecord, { record });
+        break;
+      case "error":
+        recordDisplay = /* @__PURE__ */ jsx(ErrorRecord, { record });
         break;
       default:
         recordDisplay = /* @__PURE__ */ jsx(
@@ -12675,7 +11973,8 @@ var __publicField = (obj, key, value) => {
           it.div,
           {
             style: {
-              position: "absolute",
+              // 页面可能很长，所以这里使用 fixed 定位
+              position: "fixed",
               top: 100,
               left: 100,
               // minWidth: 300,
@@ -12766,13 +12065,14 @@ var __publicField = (obj, key, value) => {
                     ),
                     logs.map((record, index2) => {
                       return (
-                        // TODO hasExtra => !disabled，避免页面上的PopOver过多，略微优化一下性能
+                        // hasExtra => !disabled，避免页面上的PopOver过多，略微优化一下性能
                         /* @__PURE__ */ jsx(
                           PopOver,
                           {
-                            content: "extra",
+                            content: record.extra,
                             placement: "right",
-                            disabled: false,
+                            disabled: record.extra === void 0,
+                            delay: record.type === "error",
                             children: /* @__PURE__ */ jsx(
                               RecordContainer,
                               {
@@ -12803,7 +12103,6 @@ var __publicField = (obj, key, value) => {
     );
   }
   const theme = {
-    closeButton: "hotpink",
     colors: {
       primary: "rgb(255, 255, 255)",
       // 60%
@@ -12811,7 +12110,13 @@ var __publicField = (obj, key, value) => {
       // 30%
       active: "#2196f3",
       // 10%
-      activeSecondary: "rgb(231, 243, 255)"
+      activeSecondary: "rgb(231, 243, 255)",
+      error: "rgb(231, 71, 93)"
+    },
+    answerTypeColorMapping: {
+      GPT: "orange",
+      标答: "limegreen",
+      无答案: "rgb(231, 71, 93)"
     }
   };
   function App() {
@@ -12875,4 +12180,61 @@ var __publicField = (obj, key, value) => {
     await initialUserSettings();
     initialize();
   })();
+  var monkeyWindow = window;
+  var GM = /* @__PURE__ */ (() => monkeyWindow.GM)();
+  var unsafeWindow = /* @__PURE__ */ (() => {
+    return monkeyWindow.unsafeWindow;
+  })();
+  var GM_info = /* @__PURE__ */ (() => monkeyWindow.GM_info)();
+  var GM_cookie = /* @__PURE__ */ (() => monkeyWindow.GM_cookie)();
+  var GM_setValue = /* @__PURE__ */ (() => monkeyWindow.GM_setValue)();
+  var GM_deleteValue = /* @__PURE__ */ (() => monkeyWindow.GM_deleteValue)();
+  var GM_listValues = /* @__PURE__ */ (() => monkeyWindow.GM_listValues)();
+  var GM_addValueChangeListener = /* @__PURE__ */ (() => monkeyWindow.GM_addValueChangeListener)();
+  var GM_removeValueChangeListener = /* @__PURE__ */ (() => monkeyWindow.GM_removeValueChangeListener)();
+  var GM_getResourceText = /* @__PURE__ */ (() => monkeyWindow.GM_getResourceText)();
+  var GM_getResourceURL = /* @__PURE__ */ (() => monkeyWindow.GM_getResourceURL)();
+  var GM_addElement = /* @__PURE__ */ (() => monkeyWindow.GM_addElement)();
+  var GM_addStyle = /* @__PURE__ */ (() => monkeyWindow.GM_addStyle)();
+  var GM_openInTab = /* @__PURE__ */ (() => monkeyWindow.GM_openInTab)();
+  var GM_registerMenuCommand = /* @__PURE__ */ (() => monkeyWindow.GM_registerMenuCommand)();
+  var GM_unregisterMenuCommand = /* @__PURE__ */ (() => monkeyWindow.GM_unregisterMenuCommand)();
+  var GM_notification = /* @__PURE__ */ (() => monkeyWindow.GM_notification)();
+  var GM_xmlhttpRequest = /* @__PURE__ */ (() => monkeyWindow.GM_xmlhttpRequest)();
+  var GM_setClipboard = /* @__PURE__ */ (() => monkeyWindow.GM_setClipboard)();
+  var GM_download = /* @__PURE__ */ (() => monkeyWindow.GM_download)();
+  var GM_log = /* @__PURE__ */ (() => monkeyWindow.GM_log)();
+  var GM_getTab = /* @__PURE__ */ (() => monkeyWindow.GM_getTab)();
+  var GM_saveTab = /* @__PURE__ */ (() => monkeyWindow.GM_saveTab)();
+  var GM_getTabs = /* @__PURE__ */ (() => monkeyWindow.GM_getTabs)();
+  var GM_getValue = /* @__PURE__ */ (() => monkeyWindow.GM_getValue)();
+  const index = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    GM,
+    GM_addElement,
+    GM_addStyle,
+    GM_addValueChangeListener,
+    GM_cookie,
+    GM_deleteValue,
+    GM_download,
+    GM_getResourceText,
+    GM_getResourceURL,
+    GM_getTab,
+    GM_getTabs,
+    GM_getValue,
+    GM_info,
+    GM_listValues,
+    GM_log,
+    GM_notification,
+    GM_openInTab,
+    GM_registerMenuCommand,
+    GM_removeValueChangeListener,
+    GM_saveTab,
+    GM_setClipboard,
+    GM_setValue,
+    GM_unregisterMenuCommand,
+    GM_xmlhttpRequest,
+    monkeyWindow,
+    unsafeWindow
+  }, Symbol.toStringTag, { value: "Module" }));
 })(React, ReactDOM);
