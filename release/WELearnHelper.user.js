@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.1
+// @version      1.0.2
 // @author       SSmJaE
-// @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；开放自定义设置
+// @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成
 // @license      GPL-3.0
 // @icon         https://vitejs.dev/logo.svg
 // @homepage     https://www.github.com/SSmJaE/
@@ -126,6 +126,9 @@ var __publicField = (obj, key, value) => {
   const Fragment = jsxRuntimeExports.Fragment;
   const jsx = jsxRuntimeExports.jsx;
   const jsxs = jsxRuntimeExports.jsxs;
+  async function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   const e$3 = Symbol(), t$3 = Symbol(), r$6 = "a", n$5 = "w";
   let o$2 = (e2, t2) => new Proxy(e2, t2);
   const s$2 = Object.getPrototypeOf, c$7 = /* @__PURE__ */ new WeakMap(), l$7 = (e2) => e2 && (c$7.has(e2) ? c$7.get(e2) : s$2(e2) === Object.prototype || s$2(e2) === Array.prototype), f$5 = (e2) => "object" == typeof e2 && null !== e2, i$3 = (e2) => {
@@ -1082,7 +1085,8 @@ var __publicField = (obj, key, value) => {
   function scrollDown() {
     setTimeout(() => {
       var _a2;
-      (_a2 = document.querySelector("#container-messages")) == null ? void 0 : _a2.scrollBy(0, 1e3);
+      logger.debug("scroll down");
+      (_a2 = document.querySelector("#log-panel-log-container .simplebar-content-wrapper")) == null ? void 0 : _a2.scrollBy(0, 1e3);
     }, 10);
   }
   class Logger {
@@ -1131,7 +1135,7 @@ var __publicField = (obj, key, value) => {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.1",
+      version: "1.0.2",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
@@ -1139,7 +1143,7 @@ var __publicField = (obj, key, value) => {
         "*://centercourseware.sflep.com/*"
       ],
       namespace: "https://github.com/SSmJaE/WELearnHelper",
-      description: "显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；开放自定义设置",
+      description: "显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成",
       connect: [
         "localhost",
         "47.100.166.53"
@@ -1932,9 +1936,6 @@ var __publicField = (obj, key, value) => {
     requestErrorHandler("课程目录获取失败"),
     perSession("HAS_GET_COURSE_CATALOG")
   ], WELearnAPI, "getCourseCatalog", 1);
-  async function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   function isFinished() {
     return document.querySelector("#aSubmit").style.display == "none" ? true : false;
   }
@@ -1997,6 +1998,20 @@ var __publicField = (obj, key, value) => {
                 questionIndexString = String(questionIndex).padStart(2, "0");
               } catch (error) {
               }
+              const isListening = !!questionItemDiv.querySelector(
+                'a[href^="javascript:PlaySound"]'
+              );
+              const replayButton = {
+                children: "播放音频",
+                onClick: () => {
+                  const mainAudio = questionItemDiv.querySelector('a[href^="javascript:PlaySound"]');
+                  const mainAudioFile = /'(.*?)'/.exec(
+                    mainAudio.getAttribute("href")
+                  )[1];
+                  logger.debug(mainAudioFile);
+                  PlaySound(mainAudioFile);
+                }
+              };
               logger.question({
                 content: {
                   order: `${questionIndexString}`,
@@ -2004,14 +2019,17 @@ var __publicField = (obj, key, value) => {
                     content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
                   },
                   answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
-                  raw: {},
+                  raw: {
+                    element: questionItemDiv
+                  },
                   solve: {
                     couldSolve: false,
                     hasSolved: false,
                     solveThis: (answerText) => {
                     }
                   }
-                }
+                },
+                action: isListening ? [replayButton] : void 0
               });
               await sleep(CONSTANT.QUERY_INTERVAL);
             }
@@ -2022,25 +2040,45 @@ var __publicField = (obj, key, value) => {
       }
     }
   }
-  if (location.href.includes(".sflep.com/test/")) {
-    window.addEventListener("load", () => {
-      logger.debug("页面加载完成，开始检测");
-      const finished = isFinished();
-      const recordId = `${Math.random()}`;
-      const buttonInfo = {
-        children: `${finished ? "上传" : "查询"}当前Part`,
-        disabled: 5e3,
-        onClick() {
-          getAnswers();
-        }
-      };
-      logger.info({
-        id: recordId,
-        content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + "<br />❗❗❗测试的每一个Part，都需要点击一次",
-        extra: void 0,
-        action: [buttonInfo]
-      });
+  let isPageReady = false;
+  let elapsedTime = 0;
+  function checkPageReady() {
+    const element = document.querySelector("#aSubmit");
+    if (element) {
+      isPageReady = true;
+    }
+  }
+  async function watcher() {
+    while (!isPageReady || elapsedTime > 1e4) {
+      await sleep(200);
+      elapsedTime += 200;
+      checkPageReady();
+    }
+    logger.debug(`页面加载完成，耗时${elapsedTime}ms`);
+    notify$1();
+  }
+  function notify$1() {
+    logger.debug("页面加载完成，开始检测完成情况");
+    const finished = isFinished();
+    const recordId = `${Math.random()}`;
+    const buttonInfo = {
+      children: `${finished ? "上传" : "查询"}当前Part`,
+      disabled: 5e3,
+      onClick() {
+        getAnswers();
+      }
+    };
+    logger.info({
+      id: recordId,
+      content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + "<br />❗❗❗测试的每一个Part，都需要点击一次",
+      extra: void 0,
+      action: [buttonInfo]
     });
+  }
+  if (location.href.includes(".sflep.com/test/")) {
+    (async () => {
+      await watcher();
+    })();
   }
   if (location.href.includes(".sflep.com/student/course_info.aspx?")) {
     WELearnAPI.upload();
@@ -2752,7 +2790,7 @@ var __publicField = (obj, key, value) => {
     }
   }
   if (location.href.includes("centercourseware.sflep.com")) {
-    let watcher = function() {
+    let watcher2 = function() {
       let currentUrl = location.href;
       logger.debug(currentUrl);
       if (currentUrl != bufferUrl) {
@@ -2762,7 +2800,7 @@ var __publicField = (obj, key, value) => {
       bufferUrl = currentUrl;
     };
     let bufferUrl = "";
-    setInterval(watcher, 200);
+    setInterval(watcher2, 200);
     initialCourseCatalog();
   }
   function generateRandomInterval() {
@@ -2852,18 +2890,18 @@ var __publicField = (obj, key, value) => {
     }
   ];
   const WELearnExamSettings = [
-    {
-      title: "考试",
-      settings: [
-        {
-          id: "infiniteListening",
-          name: "无限听力",
-          default: true,
-          valueType: "boolean",
-          description: "允许无限次播放听力音频"
-        }
-      ]
-    }
+    // {
+    //     title: "考试",
+    //     settings: [
+    //         {
+    //             id: "infiniteListening",
+    //             name: "无限听力",
+    //             default: true,
+    //             valueType: "boolean",
+    //             description: "允许无限次播放听力音频",
+    //         },
+    //     ],
+    // },
   ];
   const WELearnTimeSettings = [
     {
@@ -11672,7 +11710,7 @@ var __publicField = (obj, key, value) => {
     background-clip: text ${(props) => props.showCursor ? ", padding-box" : void 0};
     color: transparent;
 
-    background-size: calc(${(props) => props.count} * 1ch) 200%;
+    background-size: calc(${(props) => props.count} * 2ch) 200%;
     background-repeat: no-repeat;
 
     @keyframes typing {
@@ -11687,8 +11725,8 @@ var __publicField = (obj, key, value) => {
         }
     }
 
-    animation: typing ${(props) => props.duration}ms linear 1 alternate;
-    animation-timing-function: steps(${(props) => props.count});
+    animation: typing ${(props) => props.duration * 2}ms linear 1 alternate;
+    animation-timing-function: steps(${(props) => props.count * 2});
 `;
   function TypingAnimation({
     content,
@@ -12046,6 +12084,7 @@ var __publicField = (obj, key, value) => {
               /* @__PURE__ */ jsxs(
                 SimpleBar,
                 {
+                  id: "log-panel-log-container",
                   style: {
                     borderTop: "black 2px solid",
                     padding: "4px 8px",
