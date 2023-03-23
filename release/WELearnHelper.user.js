@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.2
+// @version      1.0.3
 // @author       SSmJaE
 // @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成
 // @license      GPL-3.0
@@ -1135,7 +1135,7 @@ var __publicField = (obj, key, value) => {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.2",
+      version: "1.0.3",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
@@ -12015,6 +12015,7 @@ var __publicField = (obj, key, value) => {
               position: "fixed",
               top: 100,
               left: 100,
+              zIndex: 99,
               // minWidth: 300,
               // maxWidth: 500,
               width: 600,
