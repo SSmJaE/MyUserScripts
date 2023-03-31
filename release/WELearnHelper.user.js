@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.3
+// @version      1.0.4
 // @author       SSmJaE
 // @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成
 // @license      GPL-3.0
@@ -18,10 +18,11 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
+// @grant        unsafeWindow
 // @run-at       document-end
 // ==/UserScript==
 
-(i=>{const e=document.createElement("style");e.dataset.source="vite-plugin-monkey",e.innerText=i,document.head.appendChild(e)})(' [data-simplebar]{position:relative;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-content:flex-start;align-items:flex-start}.simplebar-wrapper{overflow:hidden;width:inherit;height:inherit;max-width:inherit;max-height:inherit}.simplebar-mask{direction:inherit;position:absolute;overflow:hidden;padding:0;margin:0;left:0;top:0;bottom:0;right:0;width:auto!important;height:auto!important;z-index:0}.simplebar-offset{direction:inherit!important;box-sizing:inherit!important;resize:none!important;position:absolute;top:0;left:0;bottom:0;right:0;padding:0;margin:0;-webkit-overflow-scrolling:touch}.simplebar-content-wrapper{direction:inherit;box-sizing:border-box!important;position:relative;display:block;height:100%;width:auto;max-width:100%;max-height:100%;overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.simplebar-content-wrapper::-webkit-scrollbar,.simplebar-hide-scrollbar::-webkit-scrollbar{display:none;width:0;height:0}.simplebar-content:after,.simplebar-content:before{content:" ";display:table}.simplebar-placeholder{max-height:100%;max-width:100%;width:100%;pointer-events:none}.simplebar-height-auto-observer-wrapper{box-sizing:inherit!important;height:100%;width:100%;max-width:1px;position:relative;float:left;max-height:1px;overflow:hidden;z-index:-1;padding:0;margin:0;pointer-events:none;flex-grow:inherit;flex-shrink:0;flex-basis:0}.simplebar-height-auto-observer{box-sizing:inherit;display:block;opacity:0;position:absolute;top:0;left:0;height:1000%;width:1000%;min-height:1px;min-width:1px;overflow:hidden;pointer-events:none;z-index:-1}.simplebar-track{z-index:1;position:absolute;right:0;bottom:0;pointer-events:none;overflow:hidden}[data-simplebar].simplebar-dragging,[data-simplebar].simplebar-dragging .simplebar-content{pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}[data-simplebar].simplebar-dragging .simplebar-track{pointer-events:all}.simplebar-scrollbar{position:absolute;left:0;right:0;min-height:10px}.simplebar-scrollbar:before{position:absolute;content:"";background:#000;border-radius:7px;left:2px;right:2px;opacity:0;transition:opacity .2s .5s linear}.simplebar-scrollbar.simplebar-visible:before{opacity:.5;transition-delay:0s;transition-duration:0s}.simplebar-track.simplebar-vertical{top:0;width:11px}.simplebar-scrollbar:before{top:2px;bottom:2px;left:2px;right:2px}.simplebar-track.simplebar-horizontal{left:0;height:11px}.simplebar-track.simplebar-horizontal .simplebar-scrollbar{right:auto;left:0;top:0;bottom:0;min-height:0;min-width:10px;width:auto}[data-simplebar-direction=rtl] .simplebar-track.simplebar-vertical{right:auto;left:0}.simplebar-dummy-scrollbar-size{direction:rtl;position:fixed;opacity:0;visibility:hidden;height:500px;width:500px;overflow-y:hidden;overflow-x:scroll;-ms-overflow-style:scrollbar!important}.simplebar-dummy-scrollbar-size>div{width:200%;height:200%;margin:10px 0}.simplebar-hide-scrollbar{position:fixed;left:0;visibility:hidden;overflow-y:scroll;scrollbar-width:none;-ms-overflow-style:none} ');
+(e=>{const i=document.createElement("style");i.dataset.source="vite-plugin-monkey",i.innerText=e,document.head.appendChild(i)})(' .i-icon{display:inline-block;color:inherit;font-style:normal;line-height:0;text-align:center;text-transform:none;vertical-align:-.125em;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.i-icon-spin svg{animation:i-icon-spin 1s infinite linear}.i-icon-rtl{transform:scaleX(-1)}@keyframes i-icon-spin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes i-icon-spin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}[data-simplebar]{position:relative;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-content:flex-start;align-items:flex-start}.simplebar-wrapper{overflow:hidden;width:inherit;height:inherit;max-width:inherit;max-height:inherit}.simplebar-mask{direction:inherit;position:absolute;overflow:hidden;padding:0;margin:0;left:0;top:0;bottom:0;right:0;width:auto!important;height:auto!important;z-index:0}.simplebar-offset{direction:inherit!important;box-sizing:inherit!important;resize:none!important;position:absolute;top:0;left:0;bottom:0;right:0;padding:0;margin:0;-webkit-overflow-scrolling:touch}.simplebar-content-wrapper{direction:inherit;box-sizing:border-box!important;position:relative;display:block;height:100%;width:auto;max-width:100%;max-height:100%;overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.simplebar-content-wrapper::-webkit-scrollbar,.simplebar-hide-scrollbar::-webkit-scrollbar{display:none;width:0;height:0}.simplebar-content:after,.simplebar-content:before{content:" ";display:table}.simplebar-placeholder{max-height:100%;max-width:100%;width:100%;pointer-events:none}.simplebar-height-auto-observer-wrapper{box-sizing:inherit!important;height:100%;width:100%;max-width:1px;position:relative;float:left;max-height:1px;overflow:hidden;z-index:-1;padding:0;margin:0;pointer-events:none;flex-grow:inherit;flex-shrink:0;flex-basis:0}.simplebar-height-auto-observer{box-sizing:inherit;display:block;opacity:0;position:absolute;top:0;left:0;height:1000%;width:1000%;min-height:1px;min-width:1px;overflow:hidden;pointer-events:none;z-index:-1}.simplebar-track{z-index:1;position:absolute;right:0;bottom:0;pointer-events:none;overflow:hidden}[data-simplebar].simplebar-dragging,[data-simplebar].simplebar-dragging .simplebar-content{pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}[data-simplebar].simplebar-dragging .simplebar-track{pointer-events:all}.simplebar-scrollbar{position:absolute;left:0;right:0;min-height:10px}.simplebar-scrollbar:before{position:absolute;content:"";background:#000;border-radius:7px;left:2px;right:2px;opacity:0;transition:opacity .2s .5s linear}.simplebar-scrollbar.simplebar-visible:before{opacity:.5;transition-delay:0s;transition-duration:0s}.simplebar-track.simplebar-vertical{top:0;width:11px}.simplebar-scrollbar:before{top:2px;bottom:2px;left:2px;right:2px}.simplebar-track.simplebar-horizontal{left:0;height:11px}.simplebar-track.simplebar-horizontal .simplebar-scrollbar{right:auto;left:0;top:0;bottom:0;min-height:0;min-width:10px;width:auto}[data-simplebar-direction=rtl] .simplebar-track.simplebar-vertical{right:auto;left:0}.simplebar-dummy-scrollbar-size{direction:rtl;position:fixed;opacity:0;visibility:hidden;height:500px;width:500px;overflow-y:hidden;overflow-x:scroll;-ms-overflow-style:scrollbar!important}.simplebar-dummy-scrollbar-size>div{width:200%;height:200%;margin:10px 0}.simplebar-hide-scrollbar{position:fixed;left:0;visibility:hidden;overflow-y:scroll;scrollbar-width:none;-ms-overflow-style:none} ');
 
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -102,7 +103,7 @@ var __publicField = (obj, key, value) => {
    * This source code is licensed under the MIT license found in the
    * LICENSE file in the root directory of this source tree.
    */
-  var f$6 = React$1, k$5 = Symbol.for("react.element"), l$8 = Symbol.for("react.fragment"), m$7 = Object.prototype.hasOwnProperty, n$6 = f$6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, p$7 = { key: true, ref: true, __self: true, __source: true };
+  var f$6 = React$1, k$6 = Symbol.for("react.element"), l$8 = Symbol.for("react.fragment"), m$7 = Object.prototype.hasOwnProperty, n$6 = f$6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, p$7 = { key: true, ref: true, __self: true, __source: true };
   function q$4(c2, a2, g2) {
     var b2, d2 = {}, e2 = null, h2 = null;
     void 0 !== g2 && (e2 = "" + g2);
@@ -113,7 +114,7 @@ var __publicField = (obj, key, value) => {
     if (c2 && c2.defaultProps)
       for (b2 in a2 = c2.defaultProps, a2)
         void 0 === d2[b2] && (d2[b2] = a2[b2]);
-    return { $$typeof: k$5, type: c2, key: e2, ref: h2, props: d2, _owner: n$6.current };
+    return { $$typeof: k$6, type: c2, key: e2, ref: h2, props: d2, _owner: n$6.current };
   }
   reactJsxRuntime_production_min.Fragment = l$8;
   reactJsxRuntime_production_min.jsx = q$4;
@@ -126,9 +127,6 @@ var __publicField = (obj, key, value) => {
   const Fragment = jsxRuntimeExports.Fragment;
   const jsx = jsxRuntimeExports.jsx;
   const jsxs = jsxRuntimeExports.jsxs;
-  async function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   const e$3 = Symbol(), t$3 = Symbol(), r$6 = "a", n$5 = "w";
   let o$2 = (e2, t2) => new Proxy(e2, t2);
   const s$2 = Object.getPrototypeOf, c$7 = /* @__PURE__ */ new WeakMap(), l$7 = (e2) => e2 && (c$7.has(e2) ? c$7.get(e2) : s$2(e2) === Object.prototype || s$2(e2) === Array.prototype), f$5 = (e2) => "object" == typeof e2 && null !== e2, i$3 = (e2) => {
@@ -248,11 +246,11 @@ var __publicField = (obj, key, value) => {
     if ((cache == null ? void 0 : cache[0]) === version) {
       return cache[1];
     }
-    const snap = Array.isArray(target) ? [] : Object.create(Object.getPrototypeOf(target));
-    h$8(snap, true);
-    snapCache.set(target, [version, snap]);
+    const snap2 = Array.isArray(target) ? [] : Object.create(Object.getPrototypeOf(target));
+    h$8(snap2, true);
+    snapCache.set(target, [version, snap2]);
     Reflect.ownKeys(target).forEach((key) => {
-      if (Object.getOwnPropertyDescriptor(snap, key)) {
+      if (Object.getOwnPropertyDescriptor(snap2, key)) {
         return;
       }
       const value = Reflect.get(target, key);
@@ -278,9 +276,9 @@ var __publicField = (obj, key, value) => {
           handlePromise
         );
       }
-      Object.defineProperty(snap, key, desc);
+      Object.defineProperty(snap2, key, desc);
     });
-    return snap;
+    return snap2;
   }, proxyCache = /* @__PURE__ */ new WeakMap(), versionHolder = [1, 1], proxyFunction = (initialObject) => {
     if (!isObject$6(initialObject)) {
       throw new Error("object required");
@@ -509,7 +507,7 @@ var __publicField = (obj, key, value) => {
   function h$7(a2, b2) {
     return a2 === b2 && (0 !== a2 || 1 / a2 === 1 / b2) || a2 !== a2 && b2 !== b2;
   }
-  var k$4 = "function" === typeof Object.is ? Object.is : h$7, l$6 = e$2.useState, m$6 = e$2.useEffect, n$4 = e$2.useLayoutEffect, p$5 = e$2.useDebugValue;
+  var k$5 = "function" === typeof Object.is ? Object.is : h$7, l$6 = e$2.useState, m$6 = e$2.useEffect, n$4 = e$2.useLayoutEffect, p$5 = e$2.useDebugValue;
   function q$3(a2, b2) {
     var d2 = b2(), f2 = l$6({ inst: { value: d2, getSnapshot: b2 } }), c2 = f2[0].inst, g2 = f2[1];
     n$4(function() {
@@ -531,7 +529,7 @@ var __publicField = (obj, key, value) => {
     a2 = a2.value;
     try {
       var d2 = b2();
-      return !k$4(a2, d2);
+      return !k$5(a2, d2);
     } catch (f2) {
       return true;
     }
@@ -688,6 +686,53 @@ var __publicField = (obj, key, value) => {
       unsub2 == null ? void 0 : unsub2();
     };
   }
+  function scrollDown() {
+    setTimeout(() => {
+      var _a2;
+      logger.debug("scroll down");
+      (_a2 = document.querySelector("#log-panel-log-container .simplebar-content-wrapper")) == null ? void 0 : _a2.scrollBy(0, 1e3);
+    }, 10);
+  }
+  class Logger {
+    constructor(maxSize = 100, shiftOffset = 10) {
+      __publicField(this, "maxSize");
+      __publicField(this, "shiftOffset");
+      this.maxSize = maxSize;
+      this.shiftOffset = shiftOffset;
+    }
+    get logs() {
+      return store.logs;
+    }
+    addLog(log2) {
+      store.logs.push(log2);
+      if (store.userSettings.autoScrollDown) {
+        scrollDown();
+      }
+    }
+    log(option) {
+      this.addLog({
+        ...option,
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        id: option.id ?? `${Math.random()}`
+      });
+    }
+    info({ id, content, extra, action }) {
+      return this.log({ type: "info", id, content, extra, action });
+    }
+    question({ id, content, extra, action }) {
+      return this.log({ type: "question", id, content, extra, action });
+    }
+    error({ id, content, extra, action }) {
+      return this.log({ type: "error", id, content, extra, action });
+    }
+    hr() {
+      return this.log({ type: "hr", content: "" });
+    }
+    debug(...content) {
+      console.log(`[eocs-helper]`, ...content);
+    }
+  }
+  const logger = new Logger();
   var freeGlobal$3 = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
   var _freeGlobal = freeGlobal$3;
   var freeGlobal$2 = _freeGlobal;
@@ -1082,60 +1127,16 @@ var __publicField = (obj, key, value) => {
     QUERY_INTERVAL: 2e3,
     DEBUG_MODE: false
   };
-  function scrollDown() {
-    setTimeout(() => {
-      var _a2;
-      logger.debug("scroll down");
-      (_a2 = document.querySelector("#log-panel-log-container .simplebar-content-wrapper")) == null ? void 0 : _a2.scrollBy(0, 1e3);
-    }, 10);
+  async function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  class Logger {
-    constructor(maxSize = 100, shiftOffset = 10) {
-      __publicField(this, "maxSize");
-      __publicField(this, "shiftOffset");
-      this.maxSize = maxSize;
-      this.shiftOffset = shiftOffset;
-    }
-    get logs() {
-      return store.logs;
-    }
-    addLog(log2) {
-      store.logs.push(log2);
-      if (store.userSettings.autoScrollDown) {
-        scrollDown();
-      }
-    }
-    log(option) {
-      this.addLog({
-        ...option,
-        timestamp: new Date().toISOString(),
-        id: option.id ?? `${Math.random()}`
-      });
-    }
-    info({ id, content, extra, action }) {
-      return this.log({ type: "info", id, content, extra, action });
-    }
-    question({ id, content, extra, action }) {
-      return this.log({ type: "question", id, content, extra, action });
-    }
-    error({ id, content, extra, action }) {
-      return this.log({ type: "error", id, content, extra, action });
-    }
-    hr() {
-      return this.log({ type: "hr", content: "" });
-    }
-    debug(...content) {
-      console.log(`[eocs-helper]`, ...content);
-    }
-  }
-  const logger = new Logger();
   const apiServer = "http://47.100.166.53/api";
   const homepage = "https://www.github.com/SSmJaE/";
   const projects = {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.3",
+      version: "1.0.4",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
@@ -1167,48 +1168,6 @@ var __publicField = (obj, key, value) => {
     homepage,
     projects
   };
-  function backendErrorToString(errorDetail) {
-    return errorDetail ? `异常id : ${errorDetail.id}
-具体信息 : ${errorDetail.message}` : void 0;
-  }
-  function requestErrorHandler(message = "请求异常，稍后再试") {
-    return function(target, propertyKey, descriptor) {
-      const originalMethod = descriptor.value;
-      descriptor.value = function(...args) {
-        const result = originalMethod.apply(this, args);
-        result.catch((error) => {
-          logger.error(
-            {
-              content: {
-                message
-              },
-              extra: error.message
-            }
-          );
-        });
-        return result;
-      };
-      return descriptor;
-    };
-  }
-  function perSession(storageKey) {
-    return function(target, propertyKey, descriptor) {
-      const originalMethod = descriptor.value;
-      descriptor.value = function(...args) {
-        const hasChecked = sessionStorage.getItem(storageKey);
-        if (!hasChecked) {
-          const result = originalMethod.apply(this, args);
-          logger.debug(`${storageKey}未执行过，开始执行`);
-          sessionStorage.setItem(storageKey, new Date().toISOString());
-          return result;
-        } else {
-          logger.debug(`${storageKey}已执行过，放弃执行`);
-          return Promise.resolve();
-        }
-      };
-      return descriptor;
-    };
-  }
   const token$1 = "%[a-f0-9]{2}";
   const singleMatcher = new RegExp("(" + token$1 + ")|([^%]+?)", "gi");
   const multiMatcher = new RegExp("(" + token$1 + ")+", "gi");
@@ -1704,8 +1663,8 @@ var __publicField = (obj, key, value) => {
     stringify: stringify$1,
     stringifyUrl
   }, Symbol.toStringTag, { value: "Module" }));
-  function getFullUrl(url, query) {
-    for (const [, value] of Object.entries(query || {})) {
+  function getFullUrl(url, query = {}) {
+    for (const [, value] of Object.entries(query)) {
       if (typeof value === "object")
         throw new Error("query params不应为嵌套对象，拍平或者手动序列化子对象");
     }
@@ -1721,7 +1680,7 @@ var __publicField = (obj, key, value) => {
       GM_xmlhttpRequest$1 = await Promise.resolve().then(() => index).then((module) => module.GM_xmlhttpRequest);
     }
   }
-  function requestForUserscript(url, { method, headers, body, query } = {
+  function requestForUserscript(url, { method, headers = {}, query, body } = {
     method: "GET",
     headers: {},
     body: void 0,
@@ -1799,6 +1758,48 @@ var __publicField = (obj, key, value) => {
     }
   }
   const request = new Request();
+  function backendErrorToString(errorDetail) {
+    return errorDetail ? `异常id : ${errorDetail.id}
+具体信息 : ${errorDetail.message}` : void 0;
+  }
+  function requestErrorHandler(message = "请求异常，稍后再试") {
+    return function(target, propertyKey, descriptor) {
+      const originalMethod = descriptor.value;
+      descriptor.value = function(...args) {
+        const result = originalMethod.apply(this, args);
+        result.catch((error) => {
+          logger.error(
+            {
+              content: {
+                message
+              },
+              extra: error.message
+            }
+          );
+        });
+        return result;
+      };
+      return descriptor;
+    };
+  }
+  function perSession(storageKey) {
+    return function(target, propertyKey, descriptor) {
+      const originalMethod = descriptor.value;
+      descriptor.value = function(...args) {
+        const hasChecked = sessionStorage.getItem(storageKey);
+        if (!hasChecked) {
+          const result = originalMethod.apply(this, args);
+          logger.debug(`${storageKey}未执行过，开始执行`);
+          sessionStorage.setItem(storageKey, (/* @__PURE__ */ new Date()).toISOString());
+          return result;
+        } else {
+          logger.debug(`${storageKey}已执行过，放弃执行`);
+          return Promise.resolve();
+        }
+      };
+      return descriptor;
+    };
+  }
   var __defProp2 = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __decorateClass = (decorators, target, key, kind) => {
@@ -1824,14 +1825,24 @@ var __publicField = (obj, key, value) => {
         for (const message of returnJson.data) {
           logger.info({ content: message });
         }
+        await setValue("VERSION_INFO", returnJson.data);
       }
     }
-    static async queryByTaskId(taskId, isSchoolTest) {
+    static async queryByTaskId({
+      typical,
+      is_school_test,
+      tt_id,
+      sheet_id,
+      stt_id
+    }) {
       const response = await request.post("/query/", {
         body: {
           query_type: 0,
-          task_id: taskId,
-          is_school_test: isSchoolTest
+          typical,
+          is_school_test,
+          tt_id,
+          sheet_id,
+          stt_id
         }
       });
       return await response.json();
@@ -1944,9 +1955,9 @@ var __publicField = (obj, key, value) => {
     let taskId;
     if (location.href.includes("schooltest")) {
       isSchoolTest = true;
-      taskId = parseInt(/schooltestid=(\d*)/.exec(location.href)[1], 10);
+      taskId = /schooltestid=(\d*)/.exec(location.href)[1];
     } else {
-      taskId = parseInt(/taskid=(\d*)/.exec(location.href)[1], 10);
+      taskId = /taskid=(\d*)/.exec(location.href)[1];
     }
     return {
       isSchoolTest,
@@ -1954,7 +1965,55 @@ var __publicField = (obj, key, value) => {
     };
   }
   function getQuestionIndex(questionItemDiv) {
-    return /\s*(\d*)/.exec(questionItemDiv.querySelector(".test_number").textContent)[1];
+    const indexOfQuestions = [];
+    for (const element of questionItemDiv.querySelectorAll('span[id^="question_"]')) {
+      const index2 = /question_(\d*)/.exec(element.id)[1];
+      indexOfQuestions.push(index2);
+    }
+    return indexOfQuestions;
+  }
+  async function querySingleQuestion(questionItemDiv) {
+    const domString = questionItemDiv.outerHTML;
+    const questionWithAnswers = await WELearnAPI.queryByDomString(domString);
+    for (const [index2, questionWithAnswer] of questionWithAnswers.entries()) {
+      let questionIndex = "_";
+      let questionIndexString = "_";
+      try {
+        questionIndex = getQuestionIndex(questionItemDiv)[index2] || "_";
+        questionIndexString = String(questionIndex).padStart(2, "0");
+      } catch (error) {
+      }
+      const isListening = !!questionItemDiv.querySelector('a[href^="javascript:PlaySound"]');
+      const replayButton = {
+        children: "播放音频",
+        onClick: () => {
+          const mainAudio = questionItemDiv.querySelector('a[href^="javascript:PlaySound"]');
+          const mainAudioFile = /'(.*?)'/.exec(mainAudio.getAttribute("href"))[1];
+          logger.debug(mainAudioFile);
+          PlaySound(mainAudioFile);
+        }
+      };
+      logger.question({
+        content: {
+          order: `${questionIndexString}`,
+          info: {
+            content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
+          },
+          answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
+          raw: {
+            element: questionItemDiv
+          },
+          solve: {
+            couldSolve: false,
+            hasSolved: false,
+            solveThis: (answerText) => {
+            }
+          }
+        },
+        action: isListening ? [replayButton] : void 0
+      });
+      await sleep(CONSTANT.QUERY_INTERVAL);
+    }
   }
   async function getAnswers() {
     store.clearLogs(1);
@@ -1963,82 +2022,55 @@ var __publicField = (obj, key, value) => {
       const domString = document.querySelector(".tab-content").outerHTML;
       await WELearnAPI.collectAll(taskId, domString, isSchoolTest);
     } else {
-      const returnJson = await WELearnAPI.queryByTaskId(taskId, isSchoolTest);
-      if (returnJson.status === true) {
-        const questionCount = returnJson.data.length;
-        for (const [index2, questionWithAnswer] of returnJson.data.entries()) {
-          logger.question({
-            content: {
-              order: `${String(index2 + 1).padStart(2, "0")} / ${questionCount}`,
-              info: {
-                content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
-              },
-              answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
-              raw: {},
-              solve: {
-                couldSolve: false,
-                hasSolved: false,
-                solveThis: (answerText) => {
-                }
-              }
-            }
-          });
-          await sleep(CONSTANT.QUERY_INTERVAL);
-        }
-      } else {
-        for (const questionItemDiv of document.querySelectorAll(".itemDiv")) {
-          const domString = questionItemDiv.outerHTML;
-          try {
-            const questionWithAnswers = await WELearnAPI.queryByDomString(domString);
-            for (const questionWithAnswer of questionWithAnswers) {
-              let questionIndex = "_";
-              let questionIndexString = "_";
-              try {
-                questionIndex = getQuestionIndex(questionItemDiv);
-                questionIndexString = String(questionIndex).padStart(2, "0");
-              } catch (error) {
-              }
-              const isListening = !!questionItemDiv.querySelector(
-                'a[href^="javascript:PlaySound"]'
-              );
-              const replayButton = {
-                children: "播放音频",
-                onClick: () => {
-                  const mainAudio = questionItemDiv.querySelector('a[href^="javascript:PlaySound"]');
-                  const mainAudioFile = /'(.*?)'/.exec(
-                    mainAudio.getAttribute("href")
-                  )[1];
-                  logger.debug(mainAudioFile);
-                  PlaySound(mainAudioFile);
-                }
-              };
-              logger.question({
-                content: {
-                  order: `${questionIndexString}`,
-                  info: {
-                    content: questionWithAnswer.answer_text ? "标答" : questionWithAnswer.answer_text_gpt ? "GPT" : "无答案"
-                  },
-                  answerText: questionWithAnswer.answer_text || questionWithAnswer.answer_text_gpt || "尚未收录答案",
-                  raw: {
-                    element: questionItemDiv
-                  },
-                  solve: {
-                    couldSolve: false,
-                    hasSolved: false,
-                    solveThis: (answerText) => {
-                    }
-                  }
-                },
-                action: isListening ? [replayButton] : void 0
-              });
-              await sleep(CONSTANT.QUERY_INTERVAL);
-            }
-          } catch (error) {
-            logger.debug(error);
-          }
+      const questionItemDivNodes = document.querySelectorAll(".itemDiv");
+      try {
+        const html_string = document.head.innerHTML;
+        const tt_id = /ttid\s*:\s*(-?\d*)/.exec(html_string);
+        const sheet_id = /sheetid\s*:\s*(-?\d*)/.exec(html_string);
+        const stt_id = /sttid\s*:\s*(-?\d*)/.exec(html_string);
+        console.log();
+        await WELearnAPI.queryByTaskId({
+          typical: !!questionItemDivNodes.length,
+          is_school_test: isSchoolTest,
+          tt_id: tt_id ? tt_id[1] : null,
+          sheet_id: sheet_id ? sheet_id[1] : null,
+          stt_id: stt_id ? stt_id[1] : null
+        });
+      } catch (e2) {
+        logger.debug(e2);
+      }
+      for (const [index2, questionItemDiv] of questionItemDivNodes.entries()) {
+        try {
+          await querySingleQuestion(questionItemDiv);
+        } catch (error) {
+          logger.debug(error);
         }
       }
     }
+  }
+  function hackPlaySound() {
+    (unsafeWindow || window).PlaySound = (src2, id) => {
+      var count2 = $("#hdPlay_" + id).val();
+      if (count2 <= 0)
+        return;
+      if (soundfile == "") {
+        soundfile = resPath + "ItemRes/sound/" + src2;
+        createSoundPlayer();
+      } else {
+        soundfile = resPath + "ItemRes/sound/" + src2;
+        jwplayer("soundplayer").load([{ file: soundfile }]);
+      }
+      jwplayer("soundplayer").onBufferFull(function() {
+        clearTimeout(bufferingTimer);
+        var sp = $("#btnPlay_" + id);
+        sp.html('<span class=" fa fa-play-circle play_symble">无限次播放机会</span>');
+        sp.removeClass("loading");
+      });
+      $("#btnPlay_" + id).val("正在加载");
+      bufferingTimer = setTimeout("PlayerExpireCheck('" + id + "', 0)", 1e3);
+      $("#btnPlay_" + id).addClass("loading");
+      jwplayer("soundplayer").play();
+    };
   }
   let isPageReady = false;
   let elapsedTime = 0;
@@ -2061,19 +2093,24 @@ var __publicField = (obj, key, value) => {
     logger.debug("页面加载完成，开始检测完成情况");
     const finished = isFinished();
     const recordId = `${Math.random()}`;
-    const buttonInfo = {
-      children: `${finished ? "上传" : "查询"}当前Part`,
-      disabled: 5e3,
-      onClick() {
-        getAnswers();
-      }
-    };
     logger.info({
       id: recordId,
       content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + "<br />❗❗❗测试的每一个Part，都需要点击一次",
       extra: void 0,
-      action: [buttonInfo]
+      action: [
+        {
+          children: `${finished ? "上传" : "查询"}当前Part`,
+          disabled: 5e3,
+          onClick() {
+            getAnswers();
+          }
+        }
+      ]
     });
+    if (store.userSettings.infiniteListening) {
+      hackPlaySound();
+      logger.debug("已开启无限听力");
+    }
   }
   if (location.href.includes(".sflep.com/test/")) {
     (async () => {
@@ -2848,11 +2885,12 @@ var __publicField = (obj, key, value) => {
     autoRefresh();
   }
   WELearnAPI.checkVersion();
-  var client = {};
+  const index$3 = "";
+  var createRoot;
   var m$5 = require$$2;
   {
-    client.createRoot = m$5.createRoot;
-    client.hydrateRoot = m$5.hydrateRoot;
+    createRoot = m$5.createRoot;
+    m$5.hydrateRoot;
   }
   const WELearnExerciseSettings = [
     {
@@ -2890,18 +2928,18 @@ var __publicField = (obj, key, value) => {
     }
   ];
   const WELearnExamSettings = [
-    // {
-    //     title: "考试",
-    //     settings: [
-    //         {
-    //             id: "infiniteListening",
-    //             name: "无限听力",
-    //             default: true,
-    //             valueType: "boolean",
-    //             description: "允许无限次播放听力音频",
-    //         },
-    //     ],
-    // },
+    {
+      title: "考试",
+      settings: [
+        {
+          id: "infiniteListening",
+          name: "无限听力",
+          default: true,
+          valueType: "boolean",
+          description: "允许无限次播放听力音频"
+        }
+      ]
+    }
   ];
   const WELearnTimeSettings = [
     {
@@ -3458,7 +3496,7 @@ var __publicField = (obj, key, value) => {
       return ret;
     };
   };
-  function memoize(fn) {
+  function memoize$1(fn) {
     var cache = /* @__PURE__ */ Object.create(null);
     return function(arg) {
       if (cache[arg] === void 0)
@@ -3743,8 +3781,8 @@ var __publicField = (obj, key, value) => {
         currentSheet.insert(rule);
       })];
       var serializer = middleware(omnipresentPlugins.concat(stylisPlugins, finalizingPlugins));
-      var stylis = function stylis2(styles) {
-        return serialize(compile(styles), serializer);
+      var stylis = function stylis2(styles2) {
+        return serialize(compile(styles2), serializer);
       };
       _insert = function insert(selector, serialized, sheet, shouldCache) {
         currentSheet = sheet;
@@ -3804,7 +3842,7 @@ var __publicField = (obj, key, value) => {
    * This source code is licensed under the MIT license found in the
    * LICENSE file in the root directory of this source tree.
    */
-  var b$5 = "function" === typeof Symbol && Symbol.for, c$6 = b$5 ? Symbol.for("react.element") : 60103, d$4 = b$5 ? Symbol.for("react.portal") : 60106, e$1 = b$5 ? Symbol.for("react.fragment") : 60107, f$4 = b$5 ? Symbol.for("react.strict_mode") : 60108, g$4 = b$5 ? Symbol.for("react.profiler") : 60114, h$6 = b$5 ? Symbol.for("react.provider") : 60109, k$3 = b$5 ? Symbol.for("react.context") : 60110, l$5 = b$5 ? Symbol.for("react.async_mode") : 60111, m$4 = b$5 ? Symbol.for("react.concurrent_mode") : 60111, n$3 = b$5 ? Symbol.for("react.forward_ref") : 60112, p$4 = b$5 ? Symbol.for("react.suspense") : 60113, q$2 = b$5 ? Symbol.for("react.suspense_list") : 60120, r$4 = b$5 ? Symbol.for("react.memo") : 60115, t$1 = b$5 ? Symbol.for("react.lazy") : 60116, v$4 = b$5 ? Symbol.for("react.block") : 60121, w$3 = b$5 ? Symbol.for("react.fundamental") : 60117, x$5 = b$5 ? Symbol.for("react.responder") : 60118, y$6 = b$5 ? Symbol.for("react.scope") : 60119;
+  var b$5 = "function" === typeof Symbol && Symbol.for, c$6 = b$5 ? Symbol.for("react.element") : 60103, d$4 = b$5 ? Symbol.for("react.portal") : 60106, e$1 = b$5 ? Symbol.for("react.fragment") : 60107, f$4 = b$5 ? Symbol.for("react.strict_mode") : 60108, g$4 = b$5 ? Symbol.for("react.profiler") : 60114, h$6 = b$5 ? Symbol.for("react.provider") : 60109, k$4 = b$5 ? Symbol.for("react.context") : 60110, l$5 = b$5 ? Symbol.for("react.async_mode") : 60111, m$4 = b$5 ? Symbol.for("react.concurrent_mode") : 60111, n$3 = b$5 ? Symbol.for("react.forward_ref") : 60112, p$4 = b$5 ? Symbol.for("react.suspense") : 60113, q$2 = b$5 ? Symbol.for("react.suspense_list") : 60120, r$4 = b$5 ? Symbol.for("react.memo") : 60115, t$1 = b$5 ? Symbol.for("react.lazy") : 60116, v$4 = b$5 ? Symbol.for("react.block") : 60121, w$3 = b$5 ? Symbol.for("react.fundamental") : 60117, x$5 = b$5 ? Symbol.for("react.responder") : 60118, y$6 = b$5 ? Symbol.for("react.scope") : 60119;
   function z$3(a2) {
     if ("object" === typeof a2 && null !== a2) {
       var u2 = a2.$$typeof;
@@ -3820,7 +3858,7 @@ var __publicField = (obj, key, value) => {
               return a2;
             default:
               switch (a2 = a2 && a2.$$typeof, a2) {
-                case k$3:
+                case k$4:
                 case n$3:
                 case t$1:
                 case r$4:
@@ -3840,7 +3878,7 @@ var __publicField = (obj, key, value) => {
   }
   reactIs_production_min.AsyncMode = l$5;
   reactIs_production_min.ConcurrentMode = m$4;
-  reactIs_production_min.ContextConsumer = k$3;
+  reactIs_production_min.ContextConsumer = k$4;
   reactIs_production_min.ContextProvider = h$6;
   reactIs_production_min.Element = c$6;
   reactIs_production_min.ForwardRef = n$3;
@@ -3856,7 +3894,7 @@ var __publicField = (obj, key, value) => {
   };
   reactIs_production_min.isConcurrentMode = A$2;
   reactIs_production_min.isContextConsumer = function(a2) {
-    return z$3(a2) === k$3;
+    return z$3(a2) === k$4;
   };
   reactIs_production_min.isContextProvider = function(a2) {
     return z$3(a2) === h$6;
@@ -3889,7 +3927,7 @@ var __publicField = (obj, key, value) => {
     return z$3(a2) === p$4;
   };
   reactIs_production_min.isValidElementType = function(a2) {
-    return "string" === typeof a2 || "function" === typeof a2 || a2 === e$1 || a2 === m$4 || a2 === g$4 || a2 === f$4 || a2 === p$4 || a2 === q$2 || "object" === typeof a2 && null !== a2 && (a2.$$typeof === t$1 || a2.$$typeof === r$4 || a2.$$typeof === h$6 || a2.$$typeof === k$3 || a2.$$typeof === n$3 || a2.$$typeof === w$3 || a2.$$typeof === x$5 || a2.$$typeof === y$6 || a2.$$typeof === v$4);
+    return "string" === typeof a2 || "function" === typeof a2 || a2 === e$1 || a2 === m$4 || a2 === g$4 || a2 === f$4 || a2 === p$4 || a2 === q$2 || "object" === typeof a2 && null !== a2 && (a2.$$typeof === t$1 || a2.$$typeof === r$4 || a2.$$typeof === h$6 || a2.$$typeof === k$4 || a2.$$typeof === n$3 || a2.$$typeof === w$3 || a2.$$typeof === x$5 || a2.$$typeof === y$6 || a2.$$typeof === v$4);
   };
   reactIs_production_min.typeOf = z$3;
   (function(module) {
@@ -4040,7 +4078,7 @@ var __publicField = (obj, key, value) => {
   var isProcessableValue = function isProcessableValue2(value) {
     return value != null && typeof value !== "boolean";
   };
-  var processStyleName = /* @__PURE__ */ memoize(function(styleName) {
+  var processStyleName = /* @__PURE__ */ memoize$1(function(styleName) {
     return isCustomProperty(styleName) ? styleName : styleName.replace(hyphenateRegex, "-$&").toLowerCase();
   });
   var processStyleValue = function processStyleValue2(key, value) {
@@ -4097,8 +4135,8 @@ var __publicField = (obj, key, value) => {
               next2 = next2.next;
             }
           }
-          var styles = interpolation.styles + ";";
-          return styles;
+          var styles2 = interpolation.styles + ";";
+          return styles2;
         }
         return createStringFromObject(mergedProps, registered, interpolation);
       }
@@ -4168,32 +4206,32 @@ var __publicField = (obj, key, value) => {
       return args[0];
     }
     var stringMode = true;
-    var styles = "";
+    var styles2 = "";
     cursor = void 0;
     var strings = args[0];
     if (strings == null || strings.raw === void 0) {
       stringMode = false;
-      styles += handleInterpolation(mergedProps, registered, strings);
+      styles2 += handleInterpolation(mergedProps, registered, strings);
     } else {
-      styles += strings[0];
+      styles2 += strings[0];
     }
     for (var i2 = 1; i2 < args.length; i2++) {
-      styles += handleInterpolation(mergedProps, registered, args[i2]);
+      styles2 += handleInterpolation(mergedProps, registered, args[i2]);
       if (stringMode) {
-        styles += strings[i2];
+        styles2 += strings[i2];
       }
     }
     labelPattern.lastIndex = 0;
     var identifierName = "";
     var match2;
-    while ((match2 = labelPattern.exec(styles)) !== null) {
+    while ((match2 = labelPattern.exec(styles2)) !== null) {
       identifierName += "-" + // $FlowFixMe we know it's not null
       match2[1];
     }
-    var name = murmur2(styles) + identifierName;
+    var name = murmur2(styles2) + identifierName;
     return {
       name,
-      styles,
+      styles: styles2,
       next: cursor
     };
   };
@@ -4247,8 +4285,8 @@ var __publicField = (obj, key, value) => {
     }, props.children);
   };
   var Global = /* @__PURE__ */ withEmotionCache(function(props, cache) {
-    var styles = props.styles;
-    var serialized = serializeStyles([styles], void 0, React$1.useContext(ThemeContext));
+    var styles2 = props.styles;
+    var serialized = serializeStyles([styles2], void 0, React$1.useContext(ThemeContext));
     var sheetRef = React$1.useRef();
     useInsertionEffectWithLayoutFallback(function() {
       var key = cache.key + "-global";
@@ -4325,7 +4363,7 @@ var __publicField = (obj, key, value) => {
       cjsExports = v2;
     }
   };
-  var Draggable$1 = {};
+  var Draggable$2 = {};
   var propTypesExports = {};
   var propTypes = {
     get exports() {
@@ -4558,7 +4596,7 @@ var __publicField = (obj, key, value) => {
     }
     return newObj;
   }
-  function ownKeys(object, enumerableOnly) {
+  function ownKeys$1(object, enumerableOnly) {
     var keys = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
       var symbols = Object.getOwnPropertySymbols(object);
@@ -4568,18 +4606,18 @@ var __publicField = (obj, key, value) => {
     }
     return keys;
   }
-  function _objectSpread(target) {
+  function _objectSpread$1(target) {
     for (var i2 = 1; i2 < arguments.length; i2++) {
       var source = null != arguments[i2] ? arguments[i2] : {};
-      i2 % 2 ? ownKeys(Object(source), true).forEach(function(key) {
-        _defineProperty$1(target, key, source[key]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+      i2 % 2 ? ownKeys$1(Object(source), true).forEach(function(key) {
+        _defineProperty$2(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function(key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
     return target;
   }
-  function _defineProperty$1(obj, key, value) {
+  function _defineProperty$2(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -4612,7 +4650,7 @@ var __publicField = (obj, key, value) => {
   function addEvent(el, event, handler, inputOptions) {
     if (!el)
       return;
-    var options = _objectSpread({
+    var options = _objectSpread$1({
       capture: true
     }, inputOptions);
     if (el.addEventListener) {
@@ -4626,7 +4664,7 @@ var __publicField = (obj, key, value) => {
   function removeEvent(el, event, handler, inputOptions) {
     if (!el)
       return;
-    var options = _objectSpread({
+    var options = _objectSpread$1({
       capture: true
     }, inputOptions);
     if (el.removeEventListener) {
@@ -4680,7 +4718,7 @@ var __publicField = (obj, key, value) => {
   }
   function createCSSTransform(controlPos, positionOffset) {
     var translation = getTranslation(controlPos, positionOffset, "px");
-    return _defineProperty$1({}, (0, _getPrefix.browserPrefixToKey)("transform", _getPrefix.default), translation);
+    return _defineProperty$2({}, (0, _getPrefix.browserPrefixToKey)("transform", _getPrefix.default), translation);
   }
   function createSVGTransform(controlPos, positionOffset) {
     var translation = getTranslation(controlPos, positionOffset, "");
@@ -5094,7 +5132,7 @@ var __publicField = (obj, key, value) => {
     };
     return _getPrototypeOf(o2);
   }
-  function _defineProperty(obj, key, value) {
+  function _defineProperty$1(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
     } else {
@@ -5125,15 +5163,15 @@ var __publicField = (obj, key, value) => {
         args[_key] = arguments[_key];
       }
       _this = _super.call.apply(_super, [this].concat(args));
-      _defineProperty(_assertThisInitialized(_this), "state", {
+      _defineProperty$1(_assertThisInitialized(_this), "state", {
         dragging: false,
         // Used while dragging to determine deltas.
         lastX: NaN,
         lastY: NaN,
         touchIdentifier: null
       });
-      _defineProperty(_assertThisInitialized(_this), "mounted", false);
-      _defineProperty(_assertThisInitialized(_this), "handleDragStart", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "mounted", false);
+      _defineProperty$1(_assertThisInitialized(_this), "handleDragStart", function(e2) {
         _this.props.onMouseDown(e2);
         if (!_this.props.allowAnyClick && typeof e2.button === "number" && e2.button !== 0)
           return false;
@@ -5171,7 +5209,7 @@ var __publicField = (obj, key, value) => {
         (0, _domFns.addEvent)(ownerDocument, dragEventFor.move, _this.handleDrag);
         (0, _domFns.addEvent)(ownerDocument, dragEventFor.stop, _this.handleDragStop);
       });
-      _defineProperty(_assertThisInitialized(_this), "handleDrag", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "handleDrag", function(e2) {
         var position2 = (0, _positionFns.getControlPosition)(e2, _this.state.touchIdentifier, _assertThisInitialized(_this));
         if (position2 == null)
           return;
@@ -5204,7 +5242,7 @@ var __publicField = (obj, key, value) => {
           lastY: y2
         });
       });
-      _defineProperty(_assertThisInitialized(_this), "handleDragStop", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "handleDragStop", function(e2) {
         if (!_this.state.dragging)
           return;
         var position2 = (0, _positionFns.getControlPosition)(e2, _this.state.touchIdentifier, _assertThisInitialized(_this));
@@ -5241,19 +5279,19 @@ var __publicField = (obj, key, value) => {
           (0, _domFns.removeEvent)(thisNode.ownerDocument, dragEventFor.stop, _this.handleDragStop);
         }
       });
-      _defineProperty(_assertThisInitialized(_this), "onMouseDown", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseDown", function(e2) {
         dragEventFor = eventsFor.mouse;
         return _this.handleDragStart(e2);
       });
-      _defineProperty(_assertThisInitialized(_this), "onMouseUp", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "onMouseUp", function(e2) {
         dragEventFor = eventsFor.mouse;
         return _this.handleDragStop(e2);
       });
-      _defineProperty(_assertThisInitialized(_this), "onTouchStart", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "onTouchStart", function(e2) {
         dragEventFor = eventsFor.touch;
         return _this.handleDragStart(e2);
       });
-      _defineProperty(_assertThisInitialized(_this), "onTouchEnd", function(e2) {
+      _defineProperty$1(_assertThisInitialized(_this), "onTouchEnd", function(e2) {
         dragEventFor = eventsFor.touch;
         return _this.handleDragStop(e2);
       });
@@ -5314,8 +5352,8 @@ var __publicField = (obj, key, value) => {
     return DraggableCore2;
   }(React2.Component);
   DraggableCore$2.default = DraggableCore$1;
-  _defineProperty(DraggableCore$1, "displayName", "DraggableCore");
-  _defineProperty(DraggableCore$1, "propTypes", {
+  _defineProperty$1(DraggableCore$1, "displayName", "DraggableCore");
+  _defineProperty$1(DraggableCore$1, "propTypes", {
     /**
      * `allowAnyClick` allows dragging using any mouse button.
      * By default, we only accept the left button.
@@ -5438,7 +5476,7 @@ var __publicField = (obj, key, value) => {
     style: _shims.dontSetMe,
     transform: _shims.dontSetMe
   });
-  _defineProperty(DraggableCore$1, "defaultProps", {
+  _defineProperty$1(DraggableCore$1, "defaultProps", {
     allowAnyClick: false,
     // by default only accept left click
     disabled: false,
@@ -5481,7 +5519,7 @@ var __publicField = (obj, key, value) => {
     var _shims2 = shims;
     var _DraggableCore = _interopRequireDefault2(DraggableCore$2);
     var _log2 = _interopRequireDefault2(log$1);
-    var _excluded = ["axis", "bounds", "children", "defaultPosition", "defaultClassName", "defaultClassNameDragging", "defaultClassNameDragged", "position", "positionOffset", "scale"];
+    var _excluded2 = ["axis", "bounds", "children", "defaultPosition", "defaultClassName", "defaultClassNameDragging", "defaultClassNameDragged", "position", "positionOffset", "scale"];
     function _interopRequireDefault2(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
@@ -5537,10 +5575,10 @@ var __publicField = (obj, key, value) => {
       };
       return _extends2.apply(this, arguments);
     }
-    function _objectWithoutProperties(source, excluded) {
+    function _objectWithoutProperties2(source, excluded) {
       if (source == null)
         return {};
-      var target = _objectWithoutPropertiesLoose(source, excluded);
+      var target = _objectWithoutPropertiesLoose2(source, excluded);
       var key, i2;
       if (Object.getOwnPropertySymbols) {
         var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
@@ -5555,7 +5593,7 @@ var __publicField = (obj, key, value) => {
       }
       return target;
     }
-    function _objectWithoutPropertiesLoose(source, excluded) {
+    function _objectWithoutPropertiesLoose2(source, excluded) {
       if (source == null)
         return {};
       var target = {};
@@ -5862,7 +5900,7 @@ var __publicField = (obj, key, value) => {
           _this$props2.bounds;
           var children = _this$props2.children, defaultPosition = _this$props2.defaultPosition, defaultClassName = _this$props2.defaultClassName, defaultClassNameDragging = _this$props2.defaultClassNameDragging, defaultClassNameDragged = _this$props2.defaultClassNameDragged, position2 = _this$props2.position, positionOffset = _this$props2.positionOffset;
           _this$props2.scale;
-          var draggableCoreProps = _objectWithoutProperties(_this$props2, _excluded);
+          var draggableCoreProps = _objectWithoutProperties2(_this$props2, _excluded2);
           var style = {};
           var svgTransform = null;
           var controlled = Boolean(position2);
@@ -6035,13 +6073,13 @@ var __publicField = (obj, key, value) => {
       },
       scale: 1
     }));
-  })(Draggable$1);
-  var _require = Draggable$1, Draggable = _require.default, DraggableCore = _require.DraggableCore;
-  cjs.exports = Draggable;
-  cjsExports.default = Draggable;
+  })(Draggable$2);
+  var _require = Draggable$2, Draggable$1 = _require.default, DraggableCore = _require.DraggableCore;
+  cjs.exports = Draggable$1;
+  cjsExports.default = Draggable$1;
   cjsExports.DraggableCore = DraggableCore;
   var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/;
-  var isPropValid = /* @__PURE__ */ memoize(
+  var isPropValid = /* @__PURE__ */ memoize$1(
     function(prop) {
       return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111 && prop.charCodeAt(1) === 110 && prop.charCodeAt(2) < 91;
     }
@@ -6092,18 +6130,18 @@ var __publicField = (obj, key, value) => {
     var shouldUseAs = !defaultShouldForwardProp("as");
     return function() {
       var args = arguments;
-      var styles = isReal && tag.__emotion_styles !== void 0 ? tag.__emotion_styles.slice(0) : [];
+      var styles2 = isReal && tag.__emotion_styles !== void 0 ? tag.__emotion_styles.slice(0) : [];
       if (identifierName !== void 0) {
-        styles.push("label:" + identifierName + ";");
+        styles2.push("label:" + identifierName + ";");
       }
       if (args[0] == null || args[0].raw === void 0) {
-        styles.push.apply(styles, args);
+        styles2.push.apply(styles2, args);
       } else {
-        styles.push(args[0][0]);
+        styles2.push(args[0][0]);
         var len = args.length;
         var i2 = 1;
         for (; i2 < len; i2++) {
-          styles.push(args[i2], args[0][i2]);
+          styles2.push(args[i2], args[0][i2]);
         }
       }
       var Styled = withEmotionCache(function(props, cache, ref) {
@@ -6123,7 +6161,7 @@ var __publicField = (obj, key, value) => {
         } else if (props.className != null) {
           className = props.className + " ";
         }
-        var serialized = serializeStyles(styles.concat(classInterpolations), cache.registered, mergedProps);
+        var serialized = serializeStyles(styles2.concat(classInterpolations), cache.registered, mergedProps);
         className += cache.key + "-" + serialized.name;
         if (targetClassName !== void 0) {
           className += " " + targetClassName;
@@ -6152,7 +6190,7 @@ var __publicField = (obj, key, value) => {
       Styled.defaultProps = tag.defaultProps;
       Styled.__emotion_real = Styled;
       Styled.__emotion_base = baseTag;
-      Styled.__emotion_styles = styles;
+      Styled.__emotion_styles = styles2;
       Styled.__emotion_forwardProp = shouldForwardProp;
       Object.defineProperty(Styled, "toString", {
         value: function value() {
@@ -6165,7 +6203,7 @@ var __publicField = (obj, key, value) => {
       Styled.withComponent = function(nextTag, nextOptions) {
         return createStyled2(nextTag, _extends$1({}, options, nextOptions, {
           shouldForwardProp: composeShouldForwardProps(Styled, nextOptions, true)
-        })).apply(void 0, styles);
+        })).apply(void 0, styles2);
       };
       return Styled;
     };
@@ -6311,6 +6349,190 @@ var __publicField = (obj, key, value) => {
   tags.forEach(function(tagName) {
     newStyled[tagName] = newStyled(tagName);
   });
+  var _excluded = ["size", "strokeWidth", "strokeLinecap", "strokeLinejoin", "theme", "fill", "className", "spin"];
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      enumerableOnly && (symbols = symbols.filter(function(sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+  function _objectSpread(target) {
+    for (var i2 = 1; i2 < arguments.length; i2++) {
+      var source = null != arguments[i2] ? arguments[i2] : {};
+      i2 % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+        _defineProperty(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+    return target;
+  }
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function _objectWithoutProperties(source, excluded) {
+    if (source == null)
+      return {};
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+    var key, i2;
+    if (Object.getOwnPropertySymbols) {
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (i2 = 0; i2 < sourceSymbolKeys.length; i2++) {
+        key = sourceSymbolKeys[i2];
+        if (excluded.indexOf(key) >= 0)
+          continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key))
+          continue;
+        target[key] = source[key];
+      }
+    }
+    return target;
+  }
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null)
+      return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i2;
+    for (i2 = 0; i2 < sourceKeys.length; i2++) {
+      key = sourceKeys[i2];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      target[key] = source[key];
+    }
+    return target;
+  }
+  var DEFAULT_ICON_CONFIGS = {
+    size: "1em",
+    strokeWidth: 4,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    rtl: false,
+    theme: "outline",
+    colors: {
+      outline: {
+        fill: "#333",
+        background: "transparent"
+      },
+      filled: {
+        fill: "#333",
+        background: "#FFF"
+      },
+      twoTone: {
+        fill: "#333",
+        twoTone: "#2F88FF"
+      },
+      multiColor: {
+        outStrokeColor: "#333",
+        outFillColor: "#2F88FF",
+        innerStrokeColor: "#FFF",
+        innerFillColor: "#43CCF8"
+      }
+    },
+    prefix: "i"
+  };
+  function guid() {
+    return "icon-" + ((1 + Math.random()) * 4294967296 | 0).toString(16).substring(1);
+  }
+  function IconConverter(id, icon, config) {
+    var fill = typeof icon.fill === "string" ? [icon.fill] : icon.fill || [];
+    var colors = [];
+    var theme2 = icon.theme || config.theme;
+    switch (theme2) {
+      case "outline":
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push("none");
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push("none");
+        break;
+      case "filled":
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push("#FFF");
+        colors.push("#FFF");
+        break;
+      case "two-tone":
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push(typeof fill[1] === "string" ? fill[1] : config.colors.twoTone.twoTone);
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push(typeof fill[1] === "string" ? fill[1] : config.colors.twoTone.twoTone);
+        break;
+      case "multi-color":
+        colors.push(typeof fill[0] === "string" ? fill[0] : "currentColor");
+        colors.push(typeof fill[1] === "string" ? fill[1] : config.colors.multiColor.outFillColor);
+        colors.push(typeof fill[2] === "string" ? fill[2] : config.colors.multiColor.innerStrokeColor);
+        colors.push(typeof fill[3] === "string" ? fill[3] : config.colors.multiColor.innerFillColor);
+        break;
+    }
+    return {
+      size: icon.size || config.size,
+      strokeWidth: icon.strokeWidth || config.strokeWidth,
+      strokeLinecap: icon.strokeLinecap || config.strokeLinecap,
+      strokeLinejoin: icon.strokeLinejoin || config.strokeLinejoin,
+      colors,
+      id
+    };
+  }
+  var IconContext = /* @__PURE__ */ React$1.createContext(DEFAULT_ICON_CONFIGS);
+  IconContext.Provider;
+  function IconWrapper(name, rtl, render) {
+    return function(props) {
+      var size = props.size, strokeWidth = props.strokeWidth, strokeLinecap = props.strokeLinecap, strokeLinejoin = props.strokeLinejoin, theme2 = props.theme, fill = props.fill, className = props.className, spin = props.spin, extra = _objectWithoutProperties(props, _excluded);
+      var ICON_CONFIGS = React$1.useContext(IconContext);
+      var id = React$1.useMemo(guid, []);
+      var svgProps = IconConverter(id, {
+        size,
+        strokeWidth,
+        strokeLinecap,
+        strokeLinejoin,
+        theme: theme2,
+        fill
+      }, ICON_CONFIGS);
+      var cls = [ICON_CONFIGS.prefix + "-icon"];
+      cls.push(ICON_CONFIGS.prefix + "-icon-" + name);
+      if (rtl && ICON_CONFIGS.rtl) {
+        cls.push(ICON_CONFIGS.prefix + "-icon-rtl");
+      }
+      if (spin) {
+        cls.push(ICON_CONFIGS.prefix + "-icon-spin");
+      }
+      if (className) {
+        cls.push(className);
+      }
+      return /* @__PURE__ */ React$1.createElement("span", _objectSpread(_objectSpread({}, extra), {}, {
+        className: cls.join(" ")
+      }), render(svgProps));
+    };
+  }
+  const Close = IconWrapper("close", false, function(props) {
+    return /* @__PURE__ */ React$1.createElement("svg", {
+      width: props.size,
+      height: props.size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /* @__PURE__ */ React$1.createElement("path", {
+      d: "M8 8L40 40",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap,
+      strokeLinejoin: props.strokeLinejoin
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M8 40L40 8",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap,
+      strokeLinejoin: props.strokeLinejoin
+    }));
+  });
   var f$3 = l$4(), n$2 = (e2) => c$5(e2, f$3), m$3 = l$4();
   n$2.write = (e2) => c$5(e2, m$3);
   var d$3 = l$4();
@@ -6408,7 +6630,7 @@ var __publicField = (obj, key, value) => {
       ze$1(e2, r2, { get: t2[r2], enumerable: true });
   };
   var p$2 = {};
-  Le$2(p$2, { assign: () => U, colors: () => c$4, createStringInterpolator: () => k$2, skipAnimation: () => ee, to: () => J$1, willAdvance: () => S$1 });
+  Le$2(p$2, { assign: () => U, colors: () => c$4, createStringInterpolator: () => k$3, skipAnimation: () => ee, to: () => J$1, willAdvance: () => S$1 });
   function Y() {
   }
   var mt$1 = (e2, t2, r2) => Object.defineProperty(e2, t2, { value: r2, writable: true, configurable: true }), l$3 = { arr: Array.isArray, obj: (e2) => !!e2 && e2.constructor.name === "Object", fun: (e2) => typeof e2 == "function", str: (e2) => typeof e2 == "string", num: (e2) => typeof e2 == "number", und: (e2) => e2 === void 0 };
@@ -6441,13 +6663,13 @@ var __publicField = (obj, key, value) => {
     }
   }
   var yt$1 = (e2, ...t2) => Pe$1(e2, (r2) => r2(...t2)), h$4 = () => typeof window > "u" || !window.navigator || /ServerSideRendering|^Deno\//.test(window.navigator.userAgent);
-  var k$2, J$1, c$4 = null, ee = false, S$1 = Y, U = (e2) => {
-    e2.to && (J$1 = e2.to), e2.now && (n$2.now = e2.now), e2.colors !== void 0 && (c$4 = e2.colors), e2.skipAnimation != null && (ee = e2.skipAnimation), e2.createStringInterpolator && (k$2 = e2.createStringInterpolator), e2.requestAnimationFrame && n$2.use(e2.requestAnimationFrame), e2.batchedUpdates && (n$2.batchedUpdates = e2.batchedUpdates), e2.willAdvance && (S$1 = e2.willAdvance), e2.frameLoop && (n$2.frameLoop = e2.frameLoop);
+  var k$3, J$1, c$4 = null, ee = false, S$1 = Y, U = (e2) => {
+    e2.to && (J$1 = e2.to), e2.now && (n$2.now = e2.now), e2.colors !== void 0 && (c$4 = e2.colors), e2.skipAnimation != null && (ee = e2.skipAnimation), e2.createStringInterpolator && (k$3 = e2.createStringInterpolator), e2.requestAnimationFrame && n$2.use(e2.requestAnimationFrame), e2.batchedUpdates && (n$2.batchedUpdates = e2.batchedUpdates), e2.willAdvance && (S$1 = e2.willAdvance), e2.frameLoop && (n$2.frameLoop = e2.frameLoop);
   };
-  var E$3 = /* @__PURE__ */ new Set(), u$3 = [], H$2 = [], A$1 = 0, qe$1 = { get idle() {
-    return !E$3.size && !u$3.length;
+  var E$2 = /* @__PURE__ */ new Set(), u$3 = [], H$2 = [], A$1 = 0, qe$1 = { get idle() {
+    return !E$2.size && !u$3.length;
   }, start(e2) {
-    A$1 > e2.priority ? (E$3.add(e2), n$2.onStart($e)) : (te$1(e2), n$2(B));
+    A$1 > e2.priority ? (E$2.add(e2), n$2.onStart($e)) : (te$1(e2), n$2(B));
   }, advance: B, sort(e2) {
     if (A$1)
       n$2.onFrame(() => qe$1.sort(e2));
@@ -6456,10 +6678,10 @@ var __publicField = (obj, key, value) => {
       ~t2 && (u$3.splice(t2, 1), re(e2));
     }
   }, clear() {
-    u$3 = [], E$3.clear();
+    u$3 = [], E$2.clear();
   } };
   function $e() {
-    E$3.forEach(te$1), E$3.clear(), n$2(B);
+    E$2.forEach(te$1), E$2.clear(), n$2(B);
   }
   function te$1(e2) {
     u$3.includes(e2) || re(e2);
@@ -6526,7 +6748,7 @@ var __publicField = (obj, key, value) => {
     if (l$3.arr(e2))
       return W$2({ range: e2, output: t2, extrapolate: r2 });
     if (l$3.str(e2.output[0]))
-      return k$2(e2);
+      return k$3(e2);
     let n2 = e2, f2 = n2.output, o2 = n2.range || [0, 1], i2 = n2.extrapolateLeft || n2.extrapolate || "extend", s2 = n2.extrapolateRight || n2.extrapolate || "extend", x2 = n2.easing || ((a2) => a2);
     return (a2) => {
       let F2 = He$1(a2, o2);
@@ -6556,7 +6778,7 @@ var __publicField = (obj, key, value) => {
     r2 = t2 === "end" ? Math.min(r2, 0.999) : Math.max(r2, 1e-3);
     let n2 = r2 * e2, f2 = t2 === "end" ? Math.floor(n2) : Math.ceil(n2);
     return ne$2(0, 1, f2 / e2);
-  }, P = 1.70158, L$2 = P * 1.525, xe$1 = P + 1, he$1 = 2 * Math.PI / 3, ye$1 = 2 * Math.PI / 4.5, V$2 = (e2) => e2 < 1 / 2.75 ? 7.5625 * e2 * e2 : e2 < 2 / 2.75 ? 7.5625 * (e2 -= 1.5 / 2.75) * e2 + 0.75 : e2 < 2.5 / 2.75 ? 7.5625 * (e2 -= 2.25 / 2.75) * e2 + 0.9375 : 7.5625 * (e2 -= 2.625 / 2.75) * e2 + 0.984375, Lt$1 = { linear: (e2) => e2, easeInQuad: (e2) => e2 * e2, easeOutQuad: (e2) => 1 - (1 - e2) * (1 - e2), easeInOutQuad: (e2) => e2 < 0.5 ? 2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 2) / 2, easeInCubic: (e2) => e2 * e2 * e2, easeOutCubic: (e2) => 1 - Math.pow(1 - e2, 3), easeInOutCubic: (e2) => e2 < 0.5 ? 4 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 3) / 2, easeInQuart: (e2) => e2 * e2 * e2 * e2, easeOutQuart: (e2) => 1 - Math.pow(1 - e2, 4), easeInOutQuart: (e2) => e2 < 0.5 ? 8 * e2 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 4) / 2, easeInQuint: (e2) => e2 * e2 * e2 * e2 * e2, easeOutQuint: (e2) => 1 - Math.pow(1 - e2, 5), easeInOutQuint: (e2) => e2 < 0.5 ? 16 * e2 * e2 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 5) / 2, easeInSine: (e2) => 1 - Math.cos(e2 * Math.PI / 2), easeOutSine: (e2) => Math.sin(e2 * Math.PI / 2), easeInOutSine: (e2) => -(Math.cos(Math.PI * e2) - 1) / 2, easeInExpo: (e2) => e2 === 0 ? 0 : Math.pow(2, 10 * e2 - 10), easeOutExpo: (e2) => e2 === 1 ? 1 : 1 - Math.pow(2, -10 * e2), easeInOutExpo: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : e2 < 0.5 ? Math.pow(2, 20 * e2 - 10) / 2 : (2 - Math.pow(2, -20 * e2 + 10)) / 2, easeInCirc: (e2) => 1 - Math.sqrt(1 - Math.pow(e2, 2)), easeOutCirc: (e2) => Math.sqrt(1 - Math.pow(e2 - 1, 2)), easeInOutCirc: (e2) => e2 < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * e2, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * e2 + 2, 2)) + 1) / 2, easeInBack: (e2) => xe$1 * e2 * e2 * e2 - P * e2 * e2, easeOutBack: (e2) => 1 + xe$1 * Math.pow(e2 - 1, 3) + P * Math.pow(e2 - 1, 2), easeInOutBack: (e2) => e2 < 0.5 ? Math.pow(2 * e2, 2) * ((L$2 + 1) * 2 * e2 - L$2) / 2 : (Math.pow(2 * e2 - 2, 2) * ((L$2 + 1) * (e2 * 2 - 2) + L$2) + 2) / 2, easeInElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : -Math.pow(2, 10 * e2 - 10) * Math.sin((e2 * 10 - 10.75) * he$1), easeOutElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : Math.pow(2, -10 * e2) * Math.sin((e2 * 10 - 0.75) * he$1) + 1, easeInOutElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : e2 < 0.5 ? -(Math.pow(2, 20 * e2 - 10) * Math.sin((20 * e2 - 11.125) * ye$1)) / 2 : Math.pow(2, -20 * e2 + 10) * Math.sin((20 * e2 - 11.125) * ye$1) / 2 + 1, easeInBounce: (e2) => 1 - V$2(1 - e2), easeOutBounce: V$2, easeInOutBounce: (e2) => e2 < 0.5 ? (1 - V$2(1 - 2 * e2)) / 2 : (1 + V$2(2 * e2 - 1)) / 2, steps: Be };
+  }, P = 1.70158, L$3 = P * 1.525, xe$1 = P + 1, he$1 = 2 * Math.PI / 3, ye$1 = 2 * Math.PI / 4.5, V$2 = (e2) => e2 < 1 / 2.75 ? 7.5625 * e2 * e2 : e2 < 2 / 2.75 ? 7.5625 * (e2 -= 1.5 / 2.75) * e2 + 0.75 : e2 < 2.5 / 2.75 ? 7.5625 * (e2 -= 2.25 / 2.75) * e2 + 0.9375 : 7.5625 * (e2 -= 2.625 / 2.75) * e2 + 0.984375, Lt$1 = { linear: (e2) => e2, easeInQuad: (e2) => e2 * e2, easeOutQuad: (e2) => 1 - (1 - e2) * (1 - e2), easeInOutQuad: (e2) => e2 < 0.5 ? 2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 2) / 2, easeInCubic: (e2) => e2 * e2 * e2, easeOutCubic: (e2) => 1 - Math.pow(1 - e2, 3), easeInOutCubic: (e2) => e2 < 0.5 ? 4 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 3) / 2, easeInQuart: (e2) => e2 * e2 * e2 * e2, easeOutQuart: (e2) => 1 - Math.pow(1 - e2, 4), easeInOutQuart: (e2) => e2 < 0.5 ? 8 * e2 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 4) / 2, easeInQuint: (e2) => e2 * e2 * e2 * e2 * e2, easeOutQuint: (e2) => 1 - Math.pow(1 - e2, 5), easeInOutQuint: (e2) => e2 < 0.5 ? 16 * e2 * e2 * e2 * e2 * e2 : 1 - Math.pow(-2 * e2 + 2, 5) / 2, easeInSine: (e2) => 1 - Math.cos(e2 * Math.PI / 2), easeOutSine: (e2) => Math.sin(e2 * Math.PI / 2), easeInOutSine: (e2) => -(Math.cos(Math.PI * e2) - 1) / 2, easeInExpo: (e2) => e2 === 0 ? 0 : Math.pow(2, 10 * e2 - 10), easeOutExpo: (e2) => e2 === 1 ? 1 : 1 - Math.pow(2, -10 * e2), easeInOutExpo: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : e2 < 0.5 ? Math.pow(2, 20 * e2 - 10) / 2 : (2 - Math.pow(2, -20 * e2 + 10)) / 2, easeInCirc: (e2) => 1 - Math.sqrt(1 - Math.pow(e2, 2)), easeOutCirc: (e2) => Math.sqrt(1 - Math.pow(e2 - 1, 2)), easeInOutCirc: (e2) => e2 < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * e2, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * e2 + 2, 2)) + 1) / 2, easeInBack: (e2) => xe$1 * e2 * e2 * e2 - P * e2 * e2, easeOutBack: (e2) => 1 + xe$1 * Math.pow(e2 - 1, 3) + P * Math.pow(e2 - 1, 2), easeInOutBack: (e2) => e2 < 0.5 ? Math.pow(2 * e2, 2) * ((L$3 + 1) * 2 * e2 - L$3) / 2 : (Math.pow(2 * e2 - 2, 2) * ((L$3 + 1) * (e2 * 2 - 2) + L$3) + 2) / 2, easeInElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : -Math.pow(2, 10 * e2 - 10) * Math.sin((e2 * 10 - 10.75) * he$1), easeOutElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : Math.pow(2, -10 * e2) * Math.sin((e2 * 10 - 0.75) * he$1) + 1, easeInOutElastic: (e2) => e2 === 0 ? 0 : e2 === 1 ? 1 : e2 < 0.5 ? -(Math.pow(2, 20 * e2 - 10) * Math.sin((20 * e2 - 11.125) * ye$1)) / 2 : Math.pow(2, -20 * e2 + 10) * Math.sin((20 * e2 - 11.125) * ye$1) / 2 + 1, easeInBounce: (e2) => 1 - V$2(1 - e2), easeOutBounce: V$2, easeInOutBounce: (e2) => e2 < 0.5 ? (1 - V$2(1 - 2 * e2)) / 2 : (1 + V$2(2 * e2 - 1)) / 2, steps: Be };
   var g$3 = Symbol.for("FluidValue.get"), m$2 = Symbol.for("FluidValue.observers");
   var Pt = (e2) => Boolean(e2 && e2[g$3]), ve = (e2) => e2 && e2[g$3] ? e2[g$3]() : e2, qt = (e2) => e2[m$2] || null;
   function je(e2, t2) {
@@ -6592,7 +6814,7 @@ var __publicField = (obj, key, value) => {
     }
   }
   var Ee$1 = (e2, t2, r2) => Object.defineProperty(e2, t2, { value: r2, writable: true, configurable: true });
-  var O$2 = /[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, Oe = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/gi, K = new RegExp(`(${O$2.source})(%|[a-z]+)`, "i"), we$1 = /rgba\(([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+)\)/gi, b$3 = /var\((--[a-zA-Z0-9-_]+),? ?([a-zA-Z0-9 ()%#.,-]+)?\)/;
+  var O$1 = /[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, Oe = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/gi, K = new RegExp(`(${O$1.source})(%|[a-z]+)`, "i"), we$1 = /rgba\(([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+)\)/gi, b$3 = /var\((--[a-zA-Z0-9-_]+),? ?([a-zA-Z0-9 ()%#.,-]+)?\)/;
   var N = (e2) => {
     let [t2, r2] = We(e2);
     if (!t2 || h$4())
@@ -6619,15 +6841,15 @@ var __publicField = (obj, key, value) => {
   };
   var _$1, Ke$1 = (e2, t2, r2, n2, f2) => `rgba(${Math.round(t2)}, ${Math.round(r2)}, ${Math.round(n2)}, ${f2})`, Xt = (e2) => {
     _$1 || (_$1 = c$4 ? new RegExp(`(${Object.keys(c$4).join("|")})(?!\\w)`, "g") : /^\b$/);
-    let t2 = e2.output.map((o2) => ve(o2).replace(b$3, N).replace(Oe, D$3).replace(_$1, D$3)), r2 = t2.map((o2) => o2.match(O$2).map(Number)), f2 = r2[0].map((o2, i2) => r2.map((s2) => {
+    let t2 = e2.output.map((o2) => ve(o2).replace(b$3, N).replace(Oe, D$3).replace(_$1, D$3)), r2 = t2.map((o2) => o2.match(O$1).map(Number)), f2 = r2[0].map((o2, i2) => r2.map((s2) => {
       if (!(i2 in s2))
         throw Error('The arity of each "output" value must be equal');
       return s2[i2];
     })).map((o2) => W$2({ ...e2, output: o2 }));
     return (o2) => {
       var _a2;
-      let i2 = !K.test(t2[0]) && ((_a2 = t2.find((x2) => K.test(x2))) == null ? void 0 : _a2.replace(O$2, "")), s2 = 0;
-      return t2[0].replace(O$2, () => `${f2[s2++](o2)}${i2 || ""}`).replace(we$1, Ke$1);
+      let i2 = !K.test(t2[0]) && ((_a2 = t2.find((x2) => K.test(x2))) == null ? void 0 : _a2.replace(O$1, "")), s2 = 0;
+      return t2[0].replace(O$1, () => `${f2[s2++](o2)}${i2 || ""}`).replace(we$1, Ke$1);
     };
   };
   var Z = "react-spring: ", Te = (e2) => {
@@ -6682,7 +6904,7 @@ var __publicField = (obj, key, value) => {
       t2.current = e2;
     }), t2.current;
   }
-  var h$3 = Symbol.for("Animated:node"), v$2 = (e2) => !!e2 && e2[h$3] === e2, k$1 = (e2) => e2 && e2[h$3], D$2 = (e2, t2) => mt$1(e2, h$3, t2), F$2 = (e2) => e2 && e2[h$3] && e2[h$3].getPayload(), c$3 = class c {
+  var h$3 = Symbol.for("Animated:node"), v$2 = (e2) => !!e2 && e2[h$3] === e2, k$2 = (e2) => e2 && e2[h$3], D$2 = (e2, t2) => mt$1(e2, h$3, t2), F$2 = (e2) => e2 && e2[h$3] && e2[h$3].getPayload(), c$3 = class c {
     constructor() {
       __publicField(this, "payload");
       D$2(this, this);
@@ -6799,7 +7021,7 @@ var __publicField = (obj, key, value) => {
     return (or(e2) ? d$1 : l$2).create(e2);
   }
   function Le$1(e2) {
-    let t2 = k$1(e2);
+    let t2 = k$2(e2);
     return t2 ? t2.constructor : l$3.arr(e2) ? y$3 : or(e2) ? d$1 : l$2;
   }
   var x$3 = (e2, t2) => {
@@ -6969,20 +7191,20 @@ var __publicField = (obj, key, value) => {
       }
     });
   }
-  var be = (t2, e2) => e2.length == 1 ? e2[0] : e2.some((n2) => n2.cancelled) ? q$1(t2.get()) : e2.every((n2) => n2.noop) ? nt(t2.get()) : E$2(t2.get(), e2.every((n2) => n2.finished)), nt = (t2) => ({ value: t2, noop: true, finished: true, cancelled: false }), E$2 = (t2, e2, n2 = false) => ({ value: t2, finished: e2, cancelled: n2 }), q$1 = (t2) => ({ value: t2, cancelled: true, finished: false });
+  var be = (t2, e2) => e2.length == 1 ? e2[0] : e2.some((n2) => n2.cancelled) ? q$1(t2.get()) : e2.every((n2) => n2.noop) ? nt(t2.get()) : E$1(t2.get(), e2.every((n2) => n2.finished)), nt = (t2) => ({ value: t2, noop: true, finished: true, cancelled: false }), E$1 = (t2, e2, n2 = false) => ({ value: t2, finished: e2, cancelled: n2 }), q$1 = (t2) => ({ value: t2, cancelled: true, finished: false });
   function De(t2, e2, n2, r2) {
     let { callId: o2, parentId: s2, onRest: a2 } = e2, { asyncTo: i2, promise: u2 } = n2;
     return !s2 && t2 === i2 && !e2.reset ? u2 : n2.promise = (async () => {
       n2.asyncId = o2, n2.asyncTo = t2;
       let p2 = ne(e2, (l2, h2) => h2 === "onRest" ? void 0 : l2), f2, d2, m2 = new Promise((l2, h2) => (f2 = l2, d2 = h2)), b2 = (l2) => {
-        let h2 = o2 <= (n2.cancelId || 0) && q$1(r2) || o2 !== n2.asyncId && E$2(r2, false);
+        let h2 = o2 <= (n2.cancelId || 0) && q$1(r2) || o2 !== n2.asyncId && E$1(r2, false);
         if (h2)
           throw l2.result = h2, d2(l2), l2;
       }, c2 = (l2, h2) => {
         let g2 = new Ae(), x2 = new Ne();
         return (async () => {
           if (p$2.skipAnimation)
-            throw oe(n2), x2.result = E$2(r2, false), d2(x2), x2;
+            throw oe(n2), x2.result = E$1(r2, false), d2(x2), x2;
           b2(g2);
           let S2 = l$3.obj(l2) ? { ...l2 } : { ...h2, to: l2 };
           S2.parentId = o2, xt(p2, (V2, _2) => {
@@ -6995,13 +7217,13 @@ var __publicField = (obj, key, value) => {
         })();
       }, P2;
       if (p$2.skipAnimation)
-        return oe(n2), E$2(r2, false);
+        return oe(n2), E$1(r2, false);
       try {
         let l2;
         l$3.arr(t2) ? l2 = (async (h2) => {
           for (let g2 of h2)
             await c2(g2);
-        })(t2) : l2 = Promise.resolve(t2(c2, r2.stop.bind(r2))), await Promise.all([l2.then(f2), m2]), P2 = E$2(r2.get(), true, false);
+        })(t2) : l2 = Promise.resolve(t2(c2, r2.stop.bind(r2))), await Promise.all([l2.then(f2), m2]), P2 = E$1(r2.get(), true, false);
       } catch (l2) {
         if (l2 instanceof Ae)
           P2 = l2.result;
@@ -7044,7 +7266,7 @@ var __publicField = (obj, key, value) => {
       this._priority != e2 && (this._priority = e2, this._onPriorityChange(e2));
     }
     get() {
-      let e2 = k$1(this);
+      let e2 = k$2(this);
       return e2 && e2.getValue();
     }
     to(...e2) {
@@ -7098,7 +7320,7 @@ var __publicField = (obj, key, value) => {
       return ve(this.animation.to);
     }
     get velocity() {
-      let e2 = k$1(this);
+      let e2 = k$2(this);
       return e2 instanceof l$2 ? e2.lastVelocity || 0 : e2.getPayload().map((n2) => n2.lastVelocity || 0);
     }
     get hasAnimated() {
@@ -7146,7 +7368,7 @@ var __publicField = (obj, key, value) => {
         }
         i2 && !i2[d2].done && (b2 = false), b2 ? f2.done = true : n2 = false, f2.setValue(c2, s2.round) && (r2 = true);
       });
-      let u2 = k$1(this), p2 = u2.getValue();
+      let u2 = k$2(this), p2 = u2.getValue();
       if (n2) {
         let f2 = ve(o2.to);
         (p2 !== f2 || r2) && !s2.decay ? (u2.setValue(f2), this._onChange(f2)) : r2 && s2.decay && this._onChange(p2), this._stop();
@@ -7194,7 +7416,7 @@ var __publicField = (obj, key, value) => {
       let n2 = this.key || "", { to: r2, from: o2 } = e2;
       r2 = l$3.obj(r2) ? r2[n2] : r2, (r2 == null || Ee(r2)) && (r2 = void 0), o2 = l$3.obj(o2) ? o2[n2] : o2, o2 == null && (o2 = void 0);
       let s2 = { to: r2, from: o2 };
-      return qe(this) || (e2.reverse && ([r2, o2] = [o2, r2]), o2 = ve(o2), l$3.und(o2) ? k$1(this) || this._set(r2) : this._set(o2)), s2;
+      return qe(this) || (e2.reverse && ([r2, o2] = [o2, r2]), o2 = ve(o2), l$3.und(o2) ? k$2(this) || this._set(r2) : this._set(o2)), s2;
     }
     _update({ ...e2 }, n2) {
       let { key: r2, defaultProps: o2 } = this;
@@ -7204,9 +7426,9 @@ var __publicField = (obj, key, value) => {
         throw Error("Cannot animate a `SpringValue` object that is frozen. Did you forget to pass your component to `animated(...)` before animating its props?");
       let a2 = this._state;
       return Me(++this._lastCallId, { key: r2, props: e2, defaultProps: o2, state: a2, actions: { pause: () => {
-        ye(this) || (it$1(this, true), yt$1(a2.pauseQueue), Ie(this, "onPause", E$2(this, Ce(this, this.animation.to)), this));
+        ye(this) || (it$1(this, true), yt$1(a2.pauseQueue), Ie(this, "onPause", E$1(this, Ce(this, this.animation.to)), this));
       }, resume: () => {
-        ye(this) && (it$1(this, false), Q(this) && this._resume(), yt$1(a2.resumeQueue), Ie(this, "onResume", E$2(this, Ce(this, this.animation.to)), this));
+        ye(this) && (it$1(this, false), Q(this) && this._resume(), yt$1(a2.resumeQueue), Ie(this, "onResume", E$1(this, Ce(this, this.animation.to)), this));
       }, start: this._merge.bind(this, s2) } }).then((i2) => {
         if (e2.loop && i2.finished && !(n2 && i2.noop)) {
           let u2 = at(e2);
@@ -7233,9 +7455,9 @@ var __publicField = (obj, key, value) => {
       c2 && this._focus(d2);
       let P2 = Ee(n2.to), { config: l2 } = u2, { decay: h2, velocity: g2 } = l2;
       (o2 || s2) && (l2.velocity = 0), n2.config && !P2 && gt(l2, I$1(n2.config, a2), n2.config !== i2.config ? I$1(i2.config, a2) : void 0);
-      let x2 = k$1(this);
+      let x2 = k$2(this);
       if (!x2 || l$3.und(d2))
-        return r2(E$2(this, true));
+        return r2(E$1(this, true));
       let S2 = l$3.und(n2.reset) ? s2 && !n2.default : !l$3.und(m2) && te(n2.reset, a2), A2 = S2 ? m2 : this.get(), V2 = me(d2), _2 = l$3.num(V2) || l$3.arr(V2) || or(V2), v2 = !P2 && (!_2 || te(i2.immediate || n2.immediate, a2));
       if (c2) {
         let L2 = Le$1(d2);
@@ -7253,7 +7475,7 @@ var __publicField = (obj, key, value) => {
       if ($2 && Q(this) && (u2.changed && !S2 ? C2 = true : C2 || this._stop(p2)), !P2 && ((C2 || Pt(p2)) && (u2.values = x2.getPayload(), u2.toValues = Pt(d2) ? null : w2 == d$1 ? [1] : ht$1(V2)), u2.immediate != v2 && (u2.immediate = v2, !v2 && !S2 && this._set(p2)), C2)) {
         let { onRest: L2 } = u2;
         Ve(_n, (y2) => _t(this, n2, y2));
-        let N2 = E$2(this, Ce(this, p2));
+        let N2 = E$1(this, Ce(this, p2));
         yt$1(this._pendingCalls, N2), this._pendingCalls.add(r2), u2.changed && n$2.batchedUpdates(() => {
           var _a2;
           u2.changed = !S2, L2 == null ? void 0 : L2(N2, this), S2 ? I$1(i2.onRest, N2) : (_a2 = u2.onStart) == null ? void 0 : _a2.call(u2, N2, this);
@@ -7276,7 +7498,7 @@ var __publicField = (obj, key, value) => {
     _set(e2, n2 = true) {
       let r2 = ve(e2);
       if (!l$3.und(r2)) {
-        let o2 = k$1(this);
+        let o2 = k$2(this);
         if (!o2 || !bt$1(r2, o2.getValue())) {
           let s2 = Le$1(r2);
           !o2 || o2.constructor != s2 ? D$2(this, s2.create(r2)) : o2.setValue(r2), o2 && n$2.batchedUpdates(() => {
@@ -7284,18 +7506,18 @@ var __publicField = (obj, key, value) => {
           });
         }
       }
-      return k$1(this);
+      return k$2(this);
     }
     _onStart() {
       let e2 = this.animation;
-      e2.changed || (e2.changed = true, Ie(this, "onStart", E$2(this, Ce(this, e2.to)), this));
+      e2.changed || (e2.changed = true, Ie(this, "onStart", E$1(this, Ce(this, e2.to)), this));
     }
     _onChange(e2, n2) {
       n2 || (this._onStart(), I$1(this.animation.onChange, e2, this)), I$1(this.defaultProps.onChange, e2, this), super._onChange(e2, n2);
     }
     _start() {
       let e2 = this.animation;
-      k$1(this).reset(ve(e2.to)), e2.immediate || (e2.fromValues = e2.values.map((n2) => n2.lastPosition)), Q(this) || (st(this, true), ye(this) || this._resume());
+      k$2(this).reset(ve(e2.to)), e2.immediate || (e2.fromValues = e2.values.map((n2) => n2.lastPosition)), Q(this) || (st(this, true), ye(this) || this._resume());
     }
     _resume() {
       p$2.skipAnimation ? this.finish() : qe$1.start(this);
@@ -7307,7 +7529,7 @@ var __publicField = (obj, key, value) => {
         Ve(r2.values, (s2) => {
           s2.done = true;
         }), r2.toValues && (r2.onChange = r2.onPause = r2.onResume = void 0), $t(this, { type: "idle", parent: this });
-        let o2 = n2 ? q$1(this.get()) : E$2(this.get(), Ce(this, e2 ?? r2.to));
+        let o2 = n2 ? q$1(this.get()) : E$1(this.get(), Ce(this, e2 ?? r2.to));
         yt$1(this._pendingCalls, o2), r2.changed && (r2.changed = false, Ie(this, "onRest", o2, this));
       }
     }
@@ -7722,7 +7944,7 @@ var __publicField = (obj, key, value) => {
     }
     advance(n2) {
       let r2 = this._get(), o2 = this.get();
-      bt$1(r2, o2) || (k$1(this).setValue(r2), this._onChange(r2, this.idle)), !this.idle && Yt(this._active) && ct(this);
+      bt$1(r2, o2) || (k$2(this).setValue(r2), this._onChange(r2, this.idle)), !this.idle && Yt(this._active) && ct(this);
     }
     _get() {
       let n2 = l$3.arr(this.source) ? this.source.map(ve) : ht$1(ve(this.source));
@@ -7760,9 +7982,9 @@ var __publicField = (obj, key, value) => {
     }), $t(t2, { type: "idle", parent: t2 }));
   }
   p$2.assign({ createStringInterpolator: Xt, to: (t2, e2) => new W$1(t2, e2) });
-  var k = /^--/;
+  var k$1 = /^--/;
   function I(t2, e2) {
-    return e2 == null || typeof e2 == "boolean" || e2 === "" ? "" : typeof e2 == "number" && e2 !== 0 && !k.test(t2) && !(c$2.hasOwnProperty(t2) && c$2[t2]) ? e2 + "px" : ("" + e2).trim();
+    return e2 == null || typeof e2 == "boolean" || e2 === "" ? "" : typeof e2 == "number" && e2 !== 0 && !k$1.test(t2) && !(c$2.hasOwnProperty(t2) && c$2[t2]) ? e2 + "px" : ("" + e2).trim();
   }
   var v$1 = {};
   function V$1(t2, e2) {
@@ -7773,14 +7995,14 @@ var __publicField = (obj, key, value) => {
     for (let o2 in i2)
       if (i2.hasOwnProperty(o2)) {
         let p2 = I(o2, i2[o2]);
-        k.test(o2) ? t2.style.setProperty(o2, p2) : t2.style[o2] = p2;
+        k$1.test(o2) ? t2.style.setProperty(o2, p2) : t2.style[o2] = p2;
       }
     m2.forEach((o2, p2) => {
       t2.setAttribute(o2, d2[p2]);
     }), u2 !== void 0 && (t2.scrollTop = u2), l2 !== void 0 && (t2.scrollLeft = l2), a2 !== void 0 && t2.setAttribute("viewBox", a2);
   }
-  var c$2 = { animationIterationCount: true, borderImageOutset: true, borderImageSlice: true, borderImageWidth: true, boxFlex: true, boxFlexGroup: true, boxOrdinalGroup: true, columnCount: true, columns: true, flex: true, flexGrow: true, flexPositive: true, flexShrink: true, flexNegative: true, flexOrder: true, gridRow: true, gridRowEnd: true, gridRowSpan: true, gridRowStart: true, gridColumn: true, gridColumnEnd: true, gridColumnSpan: true, gridColumnStart: true, fontWeight: true, lineClamp: true, lineHeight: true, opacity: true, order: true, orphans: true, tabSize: true, widows: true, zIndex: true, zoom: true, fillOpacity: true, floodOpacity: true, stopOpacity: true, strokeDasharray: true, strokeDashoffset: true, strokeMiterlimit: true, strokeOpacity: true, strokeWidth: true }, F$1 = (t2, e2) => t2 + e2.charAt(0).toUpperCase() + e2.substring(1), L$1 = ["Webkit", "Ms", "Moz", "O"];
-  c$2 = Object.keys(c$2).reduce((t2, e2) => (L$1.forEach((r2) => t2[F$1(r2, e2)] = t2[e2]), t2), c$2);
+  var c$2 = { animationIterationCount: true, borderImageOutset: true, borderImageSlice: true, borderImageWidth: true, boxFlex: true, boxFlexGroup: true, boxOrdinalGroup: true, columnCount: true, columns: true, flex: true, flexGrow: true, flexPositive: true, flexShrink: true, flexNegative: true, flexOrder: true, gridRow: true, gridRowEnd: true, gridRowSpan: true, gridRowStart: true, gridColumn: true, gridColumnEnd: true, gridColumnSpan: true, gridColumnStart: true, fontWeight: true, lineClamp: true, lineHeight: true, opacity: true, order: true, orphans: true, tabSize: true, widows: true, zIndex: true, zoom: true, fillOpacity: true, floodOpacity: true, stopOpacity: true, strokeDasharray: true, strokeDashoffset: true, strokeMiterlimit: true, strokeOpacity: true, strokeWidth: true }, F$1 = (t2, e2) => t2 + e2.charAt(0).toUpperCase() + e2.substring(1), L$2 = ["Webkit", "Ms", "Moz", "O"];
+  c$2 = Object.keys(c$2).reduce((t2, e2) => (L$2.forEach((r2) => t2[F$1(r2, e2)] = t2[e2]), t2), c$2);
   var _ = /^(matrix|translate|scale|rotate|skew)/, $$1 = /^(translate)/, G = /^(rotate|skew)/, y$2 = (t2, e2) => l$3.num(t2) && t2 !== 0 ? t2 + e2 : t2, h$2 = (t2, e2) => l$3.arr(t2) ? t2.every((r2) => h$2(r2, e2)) : l$3.num(t2) ? t2 === e2 : parseFloat(t2) === e2, g$2 = class g extends u$2 {
     constructor({ x: e2, y: r2, z: i2, ...s2 }) {
       let u2 = [], l2 = [];
@@ -7918,8 +8140,8 @@ var __publicField = (obj, key, value) => {
   async function s$1(t2, e2) {
     var n2;
     void 0 === e2 && (e2 = {});
-    const { x: o2, y: i2, platform: r2, rects: s2, elements: c2, strategy: f2 } = t2, { boundary: m2 = "clippingAncestors", rootBoundary: u2 = "viewport", elementContext: g2 = "floating", altBoundary: d2 = false, padding: p2 = 0 } = e2, h2 = a$1(p2), y2 = c2[d2 ? "floating" === g2 ? "reference" : "floating" : g2], x2 = l$1(await r2.getClippingRect({ element: null == (n2 = await (null == r2.isElement ? void 0 : r2.isElement(y2))) || n2 ? y2 : y2.contextElement || await (null == r2.getDocumentElement ? void 0 : r2.getDocumentElement(c2.floating)), boundary: m2, rootBoundary: u2, strategy: f2 })), w2 = "floating" === g2 ? { ...s2.floating, x: o2, y: i2 } : s2.reference, v2 = await (null == r2.getOffsetParent ? void 0 : r2.getOffsetParent(c2.floating)), b2 = await (null == r2.isElement ? void 0 : r2.isElement(v2)) && await (null == r2.getScale ? void 0 : r2.getScale(v2)) || { x: 1, y: 1 }, R2 = l$1(r2.convertOffsetParentRelativeRectToViewportRelativeRect ? await r2.convertOffsetParentRelativeRectToViewportRelativeRect({ rect: w2, offsetParent: v2, strategy: f2 }) : w2);
-    return { top: (x2.top - R2.top + h2.top) / b2.y, bottom: (R2.bottom - x2.bottom + h2.bottom) / b2.y, left: (x2.left - R2.left + h2.left) / b2.x, right: (R2.right - x2.right + h2.right) / b2.x };
+    const { x: o2, y: i2, platform: r2, rects: s2, elements: c2, strategy: f2 } = t2, { boundary: m2 = "clippingAncestors", rootBoundary: u2 = "viewport", elementContext: g2 = "floating", altBoundary: d2 = false, padding: p2 = 0 } = e2, h2 = a$1(p2), y2 = c2[d2 ? "floating" === g2 ? "reference" : "floating" : g2], x2 = l$1(await r2.getClippingRect({ element: null == (n2 = await (null == r2.isElement ? void 0 : r2.isElement(y2))) || n2 ? y2 : y2.contextElement || await (null == r2.getDocumentElement ? void 0 : r2.getDocumentElement(c2.floating)), boundary: m2, rootBoundary: u2, strategy: f2 })), w2 = "floating" === g2 ? { ...s2.floating, x: o2, y: i2 } : s2.reference, v2 = await (null == r2.getOffsetParent ? void 0 : r2.getOffsetParent(c2.floating)), b2 = await (null == r2.isElement ? void 0 : r2.isElement(v2)) && await (null == r2.getScale ? void 0 : r2.getScale(v2)) || { x: 1, y: 1 }, A2 = l$1(r2.convertOffsetParentRelativeRectToViewportRelativeRect ? await r2.convertOffsetParentRelativeRectToViewportRelativeRect({ rect: w2, offsetParent: v2, strategy: f2 }) : w2);
+    return { top: (x2.top - A2.top + h2.top) / b2.y, bottom: (A2.bottom - x2.bottom + h2.bottom) / b2.y, left: (x2.left - A2.left + h2.left) / b2.x, right: (A2.right - x2.right + h2.right) / b2.x };
   }
   const c$1 = Math.min, f$1 = Math.max;
   function m$1(t2, e2, n2) {
@@ -7929,11 +8151,11 @@ var __publicField = (obj, key, value) => {
     const { element: r2, padding: l2 = 0 } = n2 || {}, { x: s2, y: c2, placement: f2, rects: u2, platform: g2, elements: d2 } = i2;
     if (null == r2)
       return {};
-    const p2 = a$1(l2), h2 = { x: s2, y: c2 }, y2 = o$1(f2), x2 = e(y2), w2 = await g2.getDimensions(r2), v2 = "y" === y2, b2 = v2 ? "top" : "left", R2 = v2 ? "bottom" : "right", A2 = v2 ? "clientHeight" : "clientWidth", P2 = u2.reference[x2] + u2.reference[y2] - h2[y2] - u2.floating[x2], T2 = h2[y2] - u2.reference[y2], O2 = await (null == g2.getOffsetParent ? void 0 : g2.getOffsetParent(r2));
-    let E2 = O2 ? O2[A2] : 0;
-    E2 && await (null == g2.isElement ? void 0 : g2.isElement(O2)) || (E2 = d2.floating[A2] || u2.floating[x2]);
-    const D2 = P2 / 2 - T2 / 2, L2 = p2[b2], k2 = E2 - w2[x2] - p2[R2], B2 = E2 / 2 - w2[x2] / 2 + D2, C2 = m$1(L2, B2, k2), H2 = null != t(f2) && B2 != C2 && u2.reference[x2] / 2 - (B2 < L2 ? p2[b2] : p2[R2]) - w2[x2] / 2 < 0;
-    return { [y2]: h2[y2] - (H2 ? B2 < L2 ? L2 - B2 : k2 - B2 : 0), data: { [y2]: C2, centerOffset: B2 - C2 } };
+    const p2 = a$1(l2), h2 = { x: s2, y: c2 }, y2 = o$1(f2), x2 = e(y2), w2 = await g2.getDimensions(r2), v2 = "y" === y2, b2 = v2 ? "top" : "left", A2 = v2 ? "bottom" : "right", R2 = v2 ? "clientHeight" : "clientWidth", P2 = u2.reference[x2] + u2.reference[y2] - h2[y2] - u2.floating[x2], E2 = h2[y2] - u2.reference[y2], T2 = await (null == g2.getOffsetParent ? void 0 : g2.getOffsetParent(r2));
+    let D2 = T2 ? T2[R2] : 0;
+    D2 && await (null == g2.isElement ? void 0 : g2.isElement(T2)) || (D2 = d2.floating[R2] || u2.floating[x2]);
+    const L2 = P2 / 2 - E2 / 2, k2 = p2[b2], O2 = D2 - w2[x2] - p2[A2], B2 = D2 / 2 - w2[x2] / 2 + L2, C2 = m$1(k2, B2, O2), H2 = null != t(f2) && B2 != C2 && u2.reference[x2] / 2 - (B2 < k2 ? p2[b2] : p2[A2]) - w2[x2] / 2 < 0;
+    return { [y2]: h2[y2] - (H2 ? B2 < k2 ? k2 - B2 : O2 - B2 : 0), data: { [y2]: C2, centerOffset: B2 - C2 } };
   } }), g$1 = ["top", "right", "bottom", "left"];
   g$1.reduce((t2, e2) => t2.concat(e2, e2 + "-start", e2 + "-end"), []);
   const p$1 = { left: "right", right: "left", bottom: "top", top: "bottom" };
@@ -7953,11 +8175,11 @@ var __publicField = (obj, key, value) => {
   const b$1 = function(e2) {
     return void 0 === e2 && (e2 = {}), { name: "flip", options: e2, async fn(o2) {
       var i2;
-      const { placement: r2, middlewareData: a2, rects: l2, initialPlacement: c2, platform: f2, elements: m2 } = o2, { mainAxis: u2 = true, crossAxis: g2 = true, fallbackPlacements: d2, fallbackStrategy: p2 = "bestFit", fallbackAxisSideDirection: x2 = "none", flipAlignment: v2 = true, ...b2 } = e2, R2 = n$1(r2), A2 = n$1(c2) === c2, P2 = await (null == f2.isRTL ? void 0 : f2.isRTL(m2.floating)), T2 = d2 || (A2 || !v2 ? [h$1(c2)] : function(t2) {
+      const { placement: r2, middlewareData: a2, rects: l2, initialPlacement: c2, platform: f2, elements: m2 } = o2, { mainAxis: u2 = true, crossAxis: g2 = true, fallbackPlacements: d2, fallbackStrategy: p2 = "bestFit", fallbackAxisSideDirection: x2 = "none", flipAlignment: v2 = true, ...b2 } = e2, A2 = n$1(r2), R2 = n$1(c2) === c2, P2 = await (null == f2.isRTL ? void 0 : f2.isRTL(m2.floating)), E2 = d2 || (R2 || !v2 ? [h$1(c2)] : function(t2) {
         const e3 = h$1(t2);
         return [w$1(t2), e3, w$1(e3)];
       }(c2));
-      d2 || "none" === x2 || T2.push(...function(e3, o3, i3, r3) {
+      d2 || "none" === x2 || E2.push(...function(e3, o3, i3, r3) {
         const a3 = t(e3);
         let l3 = function(t2, e4, n2) {
           const o4 = ["left", "right"], i4 = ["right", "left"], r4 = ["top", "bottom"], a4 = ["bottom", "top"];
@@ -7974,23 +8196,23 @@ var __publicField = (obj, key, value) => {
         }(n$1(e3), "start" === i3, r3);
         return a3 && (l3 = l3.map((t2) => t2 + "-" + a3), o3 && (l3 = l3.concat(l3.map(w$1)))), l3;
       }(c2, v2, x2, P2));
-      const O2 = [c2, ...T2], E2 = await s$1(o2, b2), D2 = [];
-      let L2 = (null == (i2 = a2.flip) ? void 0 : i2.overflows) || [];
-      if (u2 && D2.push(E2[R2]), g2) {
+      const T2 = [c2, ...E2], D2 = await s$1(o2, b2), L2 = [];
+      let k2 = (null == (i2 = a2.flip) ? void 0 : i2.overflows) || [];
+      if (u2 && L2.push(D2[A2]), g2) {
         const { main: t2, cross: e3 } = y$1(r2, l2, P2);
-        D2.push(E2[t2], E2[e3]);
+        L2.push(D2[t2], D2[e3]);
       }
-      if (L2 = [...L2, { placement: r2, overflows: D2 }], !D2.every((t2) => t2 <= 0)) {
-        var k2, B2;
-        const t2 = ((null == (k2 = a2.flip) ? void 0 : k2.index) || 0) + 1, e3 = O2[t2];
+      if (k2 = [...k2, { placement: r2, overflows: L2 }], !L2.every((t2) => t2 <= 0)) {
+        var O2, B2;
+        const t2 = ((null == (O2 = a2.flip) ? void 0 : O2.index) || 0) + 1, e3 = T2[t2];
         if (e3)
-          return { data: { index: t2, overflows: L2 }, reset: { placement: e3 } };
-        let n2 = null == (B2 = L2.filter((t3) => t3.overflows[0] <= 0).sort((t3, e4) => t3.overflows[1] - e4.overflows[1])[0]) ? void 0 : B2.placement;
+          return { data: { index: t2, overflows: k2 }, reset: { placement: e3 } };
+        let n2 = null == (B2 = k2.filter((t3) => t3.overflows[0] <= 0).sort((t3, e4) => t3.overflows[1] - e4.overflows[1])[0]) ? void 0 : B2.placement;
         if (!n2)
           switch (p2) {
             case "bestFit": {
               var C2;
-              const t3 = null == (C2 = L2.map((t4) => [t4.placement, t4.overflows.filter((t5) => t5 > 0).reduce((t5, e4) => t5 + e4, 0)]).sort((t4, e4) => t4[1] - e4[1])[0]) ? void 0 : C2[0];
+              const t3 = null == (C2 = k2.map((t4) => [t4.placement, t4.overflows.filter((t5) => t5 > 0).reduce((t5, e4) => t5 + e4, 0)]).sort((t4, e4) => t4[1] - e4[1])[0]) ? void 0 : C2[0];
               t3 && (n2 = t3);
               break;
             }
@@ -8003,7 +8225,7 @@ var __publicField = (obj, key, value) => {
       return {};
     } };
   };
-  const O$1 = function(e2) {
+  const D$1 = function(e2) {
     return void 0 === e2 && (e2 = 0), { name: "offset", options: e2, async fn(i2) {
       const { x: r2, y: a2 } = i2, l2 = await async function(e3, i3) {
         const { placement: r3, platform: a3, elements: l3 } = e3, s2 = await (null == a3.isRTL ? void 0 : a3.isRTL(l3.floating)), c2 = n$1(r3), f2 = t(r3), m2 = "x" === o$1(r3), u2 = ["left", "top"].includes(c2) ? -1 : 1, g2 = s2 && m2 ? -1 : 1, d2 = "function" == typeof i3 ? i3(e3) : i3;
@@ -8013,15 +8235,15 @@ var __publicField = (obj, key, value) => {
       return { x: r2 + l2.x, y: a2 + l2.y, data: l2 };
     } };
   };
-  function E$1(t2) {
+  function L$1(t2) {
     return "x" === t2 ? "y" : "x";
   }
-  const D$1 = function(t2) {
+  const k = function(t2) {
     return void 0 === t2 && (t2 = {}), { name: "shift", options: t2, async fn(e2) {
       const { x: i2, y: r2, placement: a2 } = e2, { mainAxis: l2 = true, crossAxis: c2 = false, limiter: f2 = { fn: (t3) => {
         let { x: e3, y: n2 } = t3;
         return { x: e3, y: n2 };
-      } }, ...u2 } = t2, g2 = { x: i2, y: r2 }, d2 = await s$1(e2, u2), p2 = o$1(n$1(a2)), h2 = E$1(p2);
+      } }, ...u2 } = t2, g2 = { x: i2, y: r2 }, d2 = await s$1(e2, u2), p2 = o$1(n$1(a2)), h2 = L$1(p2);
       let y2 = g2[p2], x2 = g2[h2];
       if (l2) {
         const t3 = "y" === p2 ? "bottom" : "right";
@@ -8042,162 +8264,162 @@ var __publicField = (obj, key, value) => {
   function o(t2) {
     return n(t2).getComputedStyle(t2);
   }
-  const i = Math.min, r = Math.max, l = Math.round;
-  function c(t2) {
-    const e2 = o(t2);
-    let n2 = parseFloat(e2.width), i2 = parseFloat(e2.height);
-    const r2 = t2.offsetWidth, c2 = t2.offsetHeight, s2 = l(n2) !== r2 || l(i2) !== c2;
-    return s2 && (n2 = r2, i2 = c2), { width: n2, height: i2, fallback: s2 };
-  }
-  function s(t2) {
-    return h(t2) ? (t2.nodeName || "").toLowerCase() : "";
-  }
-  let f;
-  function u() {
-    if (f)
-      return f;
-    const t2 = navigator.userAgentData;
-    return t2 && Array.isArray(t2.brands) ? (f = t2.brands.map((t3) => t3.brand + "/" + t3.version).join(" "), f) : navigator.userAgent;
-  }
-  function a(t2) {
-    return t2 instanceof n(t2).HTMLElement;
-  }
-  function d(t2) {
-    return t2 instanceof n(t2).Element;
-  }
-  function h(t2) {
+  function i(t2) {
     return t2 instanceof n(t2).Node;
   }
-  function p(t2) {
+  function r(t2) {
+    return i(t2) ? (t2.nodeName || "").toLowerCase() : "";
+  }
+  let l;
+  function c() {
+    if (l)
+      return l;
+    const t2 = navigator.userAgentData;
+    return t2 && Array.isArray(t2.brands) ? (l = t2.brands.map((t3) => t3.brand + "/" + t3.version).join(" "), l) : navigator.userAgent;
+  }
+  function s(t2) {
+    return t2 instanceof n(t2).HTMLElement;
+  }
+  function f(t2) {
+    return t2 instanceof n(t2).Element;
+  }
+  function u(t2) {
     if ("undefined" == typeof ShadowRoot)
       return false;
     return t2 instanceof n(t2).ShadowRoot || t2 instanceof ShadowRoot;
   }
-  function g(t2) {
+  function a(t2) {
     const { overflow: e2, overflowX: n2, overflowY: i2, display: r2 } = o(t2);
     return /auto|scroll|overlay|hidden|clip/.test(e2 + i2 + n2) && !["inline", "contents"].includes(r2);
   }
-  function m(t2) {
-    return ["table", "td", "th"].includes(s(t2));
+  function d(t2) {
+    return ["table", "td", "th"].includes(r(t2));
   }
-  function y(t2) {
-    const e2 = /firefox/i.test(u()), n2 = o(t2), i2 = n2.backdropFilter || n2.WebkitBackdropFilter;
+  function h(t2) {
+    const e2 = /firefox/i.test(c()), n2 = o(t2), i2 = n2.backdropFilter || n2.WebkitBackdropFilter;
     return "none" !== n2.transform || "none" !== n2.perspective || !!i2 && "none" !== i2 || e2 && "filter" === n2.willChange || e2 && !!n2.filter && "none" !== n2.filter || ["transform", "perspective"].some((t3) => n2.willChange.includes(t3)) || ["paint", "layout", "strict", "content"].some((t3) => {
       const e3 = n2.contain;
       return null != e3 && e3.includes(t3);
     });
   }
-  function x() {
-    return /^((?!chrome|android).)*safari/i.test(u());
+  function p() {
+    return /^((?!chrome|android).)*safari/i.test(c());
   }
+  function g(t2) {
+    return ["html", "body", "#document"].includes(r(t2));
+  }
+  const m = Math.min, y = Math.max, x = Math.round;
   function w(t2) {
-    return ["html", "body", "#document"].includes(s(t2));
+    const e2 = o(t2);
+    let n2 = parseFloat(e2.width), i2 = parseFloat(e2.height);
+    const r2 = s(t2), l2 = r2 ? t2.offsetWidth : n2, c2 = r2 ? t2.offsetHeight : i2, f2 = x(n2) !== l2 || x(i2) !== c2;
+    return f2 && (n2 = l2, i2 = c2), { width: n2, height: i2, fallback: f2 };
   }
   function v(t2) {
-    return d(t2) ? t2 : t2.contextElement;
+    return f(t2) ? t2 : t2.contextElement;
   }
   const b = { x: 1, y: 1 };
   function L(t2) {
     const e2 = v(t2);
-    if (!a(e2))
+    if (!s(e2))
       return b;
-    const n2 = e2.getBoundingClientRect(), { width: o2, height: i2, fallback: r2 } = c(e2);
-    let s2 = (r2 ? l(n2.width) : n2.width) / o2, f2 = (r2 ? l(n2.height) : n2.height) / i2;
-    return s2 && Number.isFinite(s2) || (s2 = 1), f2 && Number.isFinite(f2) || (f2 = 1), { x: s2, y: f2 };
+    const n2 = e2.getBoundingClientRect(), { width: o2, height: i2, fallback: r2 } = w(e2);
+    let l2 = (r2 ? x(n2.width) : n2.width) / o2, c2 = (r2 ? x(n2.height) : n2.height) / i2;
+    return l2 && Number.isFinite(l2) || (l2 = 1), c2 && Number.isFinite(c2) || (c2 = 1), { x: l2, y: c2 };
   }
   function E(e2, o2, i2, r2) {
     var l2, c2;
     void 0 === o2 && (o2 = false), void 0 === i2 && (i2 = false);
-    const s2 = e2.getBoundingClientRect(), f2 = v(e2);
-    let u2 = b;
-    o2 && (r2 ? d(r2) && (u2 = L(r2)) : u2 = L(e2));
-    const a2 = f2 ? n(f2) : window, h2 = x() && i2;
-    let p2 = (s2.left + (h2 && (null == (l2 = a2.visualViewport) ? void 0 : l2.offsetLeft) || 0)) / u2.x, g2 = (s2.top + (h2 && (null == (c2 = a2.visualViewport) ? void 0 : c2.offsetTop) || 0)) / u2.y, m2 = s2.width / u2.x, y2 = s2.height / u2.y;
-    if (f2) {
-      const t2 = n(f2), e3 = r2 && d(r2) ? n(r2) : r2;
+    const s2 = e2.getBoundingClientRect(), u2 = v(e2);
+    let a2 = b;
+    o2 && (r2 ? f(r2) && (a2 = L(r2)) : a2 = L(e2));
+    const d2 = u2 ? n(u2) : window, h2 = p() && i2;
+    let g2 = (s2.left + (h2 && (null == (l2 = d2.visualViewport) ? void 0 : l2.offsetLeft) || 0)) / a2.x, m2 = (s2.top + (h2 && (null == (c2 = d2.visualViewport) ? void 0 : c2.offsetTop) || 0)) / a2.y, y2 = s2.width / a2.x, x2 = s2.height / a2.y;
+    if (u2) {
+      const t2 = n(u2), e3 = r2 && f(r2) ? n(r2) : r2;
       let o3 = t2.frameElement;
       for (; o3 && r2 && e3 !== t2; ) {
         const t3 = L(o3), e4 = o3.getBoundingClientRect(), i3 = getComputedStyle(o3);
-        e4.x += (o3.clientLeft + parseFloat(i3.paddingLeft)) * t3.x, e4.y += (o3.clientTop + parseFloat(i3.paddingTop)) * t3.y, p2 *= t3.x, g2 *= t3.y, m2 *= t3.x, y2 *= t3.y, p2 += e4.x, g2 += e4.y, o3 = n(o3).frameElement;
+        e4.x += (o3.clientLeft + parseFloat(i3.paddingLeft)) * t3.x, e4.y += (o3.clientTop + parseFloat(i3.paddingTop)) * t3.y, g2 *= t3.x, m2 *= t3.y, y2 *= t3.x, x2 *= t3.y, g2 += e4.x, m2 += e4.y, o3 = n(o3).frameElement;
       }
     }
-    return l$1({ width: m2, height: y2, x: p2, y: g2 });
-  }
-  function R(t2) {
-    return ((h(t2) ? t2.ownerDocument : t2.document) || window.document).documentElement;
+    return l$1({ width: y2, height: x2, x: g2, y: m2 });
   }
   function T(t2) {
-    return d(t2) ? { scrollLeft: t2.scrollLeft, scrollTop: t2.scrollTop } : { scrollLeft: t2.pageXOffset, scrollTop: t2.pageYOffset };
+    return ((i(t2) ? t2.ownerDocument : t2.document) || window.document).documentElement;
+  }
+  function R(t2) {
+    return f(t2) ? { scrollLeft: t2.scrollLeft, scrollTop: t2.scrollTop } : { scrollLeft: t2.pageXOffset, scrollTop: t2.pageYOffset };
   }
   function C(t2) {
-    return E(R(t2)).left + T(t2).scrollLeft;
+    return E(T(t2)).left + R(t2).scrollLeft;
   }
   function F(t2) {
-    if ("html" === s(t2))
+    if ("html" === r(t2))
       return t2;
-    const e2 = t2.assignedSlot || t2.parentNode || p(t2) && t2.host || R(t2);
-    return p(e2) ? e2.host : e2;
+    const e2 = t2.assignedSlot || t2.parentNode || u(t2) && t2.host || T(t2);
+    return u(e2) ? e2.host : e2;
   }
   function W(t2) {
     const e2 = F(t2);
-    return w(e2) ? e2.ownerDocument.body : a(e2) && g(e2) ? e2 : W(e2);
+    return g(e2) ? e2.ownerDocument.body : s(e2) && a(e2) ? e2 : W(e2);
   }
   function D(t2, e2) {
     var o2;
     void 0 === e2 && (e2 = []);
     const i2 = W(t2), r2 = i2 === (null == (o2 = t2.ownerDocument) ? void 0 : o2.body), l2 = n(i2);
-    return r2 ? e2.concat(l2, l2.visualViewport || [], g(i2) ? i2 : []) : e2.concat(i2, D(i2));
+    return r2 ? e2.concat(l2, l2.visualViewport || [], a(i2) ? i2 : []) : e2.concat(i2, D(i2));
   }
-  function S(e2, i2, l2) {
-    let c2;
+  function S(e2, i2, r2) {
+    let l2;
     if ("viewport" === i2)
-      c2 = function(t2, e3) {
-        const o2 = n(t2), i3 = R(t2), r2 = o2.visualViewport;
-        let l3 = i3.clientWidth, c3 = i3.clientHeight, s3 = 0, f3 = 0;
-        if (r2) {
-          l3 = r2.width, c3 = r2.height;
-          const t3 = x();
-          (!t3 || t3 && "fixed" === e3) && (s3 = r2.offsetLeft, f3 = r2.offsetTop);
+      l2 = function(t2, e3) {
+        const o2 = n(t2), i3 = T(t2), r3 = o2.visualViewport;
+        let l3 = i3.clientWidth, c3 = i3.clientHeight, s2 = 0, f2 = 0;
+        if (r3) {
+          l3 = r3.width, c3 = r3.height;
+          const t3 = p();
+          (!t3 || t3 && "fixed" === e3) && (s2 = r3.offsetLeft, f2 = r3.offsetTop);
         }
-        return { width: l3, height: c3, x: s3, y: f3 };
-      }(e2, l2);
+        return { width: l3, height: c3, x: s2, y: f2 };
+      }(e2, r2);
     else if ("document" === i2)
-      c2 = function(t2) {
-        const e3 = R(t2), n2 = T(t2), i3 = t2.ownerDocument.body, l3 = r(e3.scrollWidth, e3.clientWidth, i3.scrollWidth, i3.clientWidth), c3 = r(e3.scrollHeight, e3.clientHeight, i3.scrollHeight, i3.clientHeight);
-        let s3 = -n2.scrollLeft + C(t2);
-        const f3 = -n2.scrollTop;
-        return "rtl" === o(i3).direction && (s3 += r(e3.clientWidth, i3.clientWidth) - l3), { width: l3, height: c3, x: s3, y: f3 };
-      }(R(e2));
-    else if (d(i2))
-      c2 = function(t2, e3) {
-        const n2 = E(t2, true, "fixed" === e3), o2 = n2.top + t2.clientTop, i3 = n2.left + t2.clientLeft, r2 = a(t2) ? L(t2) : { x: 1, y: 1 };
-        return { width: t2.clientWidth * r2.x, height: t2.clientHeight * r2.y, x: i3 * r2.x, y: o2 * r2.y };
-      }(i2, l2);
+      l2 = function(t2) {
+        const e3 = T(t2), n2 = R(t2), i3 = t2.ownerDocument.body, r3 = y(e3.scrollWidth, e3.clientWidth, i3.scrollWidth, i3.clientWidth), l3 = y(e3.scrollHeight, e3.clientHeight, i3.scrollHeight, i3.clientHeight);
+        let c3 = -n2.scrollLeft + C(t2);
+        const s2 = -n2.scrollTop;
+        return "rtl" === o(i3).direction && (c3 += y(e3.clientWidth, i3.clientWidth) - r3), { width: r3, height: l3, x: c3, y: s2 };
+      }(T(e2));
+    else if (f(i2))
+      l2 = function(t2, e3) {
+        const n2 = E(t2, true, "fixed" === e3), o2 = n2.top + t2.clientTop, i3 = n2.left + t2.clientLeft, r3 = s(t2) ? L(t2) : { x: 1, y: 1 };
+        return { width: t2.clientWidth * r3.x, height: t2.clientHeight * r3.y, x: i3 * r3.x, y: o2 * r3.y };
+      }(i2, r2);
     else {
       const t2 = { ...i2 };
-      if (x()) {
-        var s2, f2;
+      if (p()) {
+        var c2, u2;
         const o2 = n(e2);
-        t2.x -= (null == (s2 = o2.visualViewport) ? void 0 : s2.offsetLeft) || 0, t2.y -= (null == (f2 = o2.visualViewport) ? void 0 : f2.offsetTop) || 0;
+        t2.x -= (null == (c2 = o2.visualViewport) ? void 0 : c2.offsetLeft) || 0, t2.y -= (null == (u2 = o2.visualViewport) ? void 0 : u2.offsetTop) || 0;
       }
-      c2 = t2;
+      l2 = t2;
     }
-    return l$1(c2);
+    return l$1(l2);
   }
   function A(t2, e2) {
-    return a(t2) && "fixed" !== o(t2).position ? e2 ? e2(t2) : t2.offsetParent : null;
+    return s(t2) && "fixed" !== o(t2).position ? e2 ? e2(t2) : t2.offsetParent : null;
   }
   function H(t2, e2) {
     const i2 = n(t2);
-    if (!a(t2))
+    if (!s(t2))
       return i2;
-    let r2 = A(t2, e2);
-    for (; r2 && m(r2) && "static" === o(r2).position; )
-      r2 = A(r2, e2);
-    return r2 && ("html" === s(r2) || "body" === s(r2) && "static" === o(r2).position && !y(r2)) ? i2 : r2 || function(t3) {
+    let l2 = A(t2, e2);
+    for (; l2 && d(l2) && "static" === o(l2).position; )
+      l2 = A(l2, e2);
+    return l2 && ("html" === r(l2) || "body" === r(l2) && "static" === o(l2).position && !h(l2)) ? i2 : l2 || function(t3) {
       let e3 = F(t3);
-      for (; a(e3) && !w(e3); ) {
-        if (y(e3))
+      for (; s(e3) && !g(e3); ) {
+        if (h(e3))
           return e3;
         e3 = F(e3);
       }
@@ -8205,51 +8427,51 @@ var __publicField = (obj, key, value) => {
     }(t2) || i2;
   }
   function V(t2, e2, n2) {
-    const o2 = a(e2), i2 = R(e2), r2 = E(t2, true, "fixed" === n2, e2);
-    let l2 = { scrollLeft: 0, scrollTop: 0 };
-    const c2 = { x: 0, y: 0 };
+    const o2 = s(e2), i2 = T(e2), l2 = E(t2, true, "fixed" === n2, e2);
+    let c2 = { scrollLeft: 0, scrollTop: 0 };
+    const f2 = { x: 0, y: 0 };
     if (o2 || !o2 && "fixed" !== n2)
-      if (("body" !== s(e2) || g(i2)) && (l2 = T(e2)), a(e2)) {
+      if (("body" !== r(e2) || a(i2)) && (c2 = R(e2)), s(e2)) {
         const t3 = E(e2, true);
-        c2.x = t3.x + e2.clientLeft, c2.y = t3.y + e2.clientTop;
+        f2.x = t3.x + e2.clientLeft, f2.y = t3.y + e2.clientTop;
       } else
-        i2 && (c2.x = C(i2));
-    return { x: r2.left + l2.scrollLeft - c2.x, y: r2.top + l2.scrollTop - c2.y, width: r2.width, height: r2.height };
+        i2 && (f2.x = C(i2));
+    return { x: l2.left + c2.scrollLeft - f2.x, y: l2.top + c2.scrollTop - f2.y, width: l2.width, height: l2.height };
   }
   const O = { getClippingRect: function(t2) {
-    let { element: e2, boundary: n2, rootBoundary: l2, strategy: c2 } = t2;
-    const f2 = "clippingAncestors" === n2 ? function(t3, e3) {
+    let { element: e2, boundary: n2, rootBoundary: i2, strategy: l2 } = t2;
+    const c2 = "clippingAncestors" === n2 ? function(t3, e3) {
       const n3 = e3.get(t3);
       if (n3)
         return n3;
-      let i2 = D(t3).filter((t4) => d(t4) && "body" !== s(t4)), r2 = null;
-      const l3 = "fixed" === o(t3).position;
-      let c3 = l3 ? F(t3) : t3;
-      for (; d(c3) && !w(c3); ) {
-        const t4 = o(c3), e4 = y(c3);
-        "fixed" === t4.position ? r2 = null : (l3 ? e4 || r2 : e4 || "static" !== t4.position || !r2 || !["absolute", "fixed"].includes(r2.position)) ? r2 = t4 : i2 = i2.filter((t5) => t5 !== c3), c3 = F(c3);
+      let i3 = D(t3).filter((t4) => f(t4) && "body" !== r(t4)), l3 = null;
+      const c3 = "fixed" === o(t3).position;
+      let s3 = c3 ? F(t3) : t3;
+      for (; f(s3) && !g(s3); ) {
+        const t4 = o(s3), e4 = h(s3);
+        "fixed" === t4.position ? l3 = null : (c3 ? e4 || l3 : e4 || "static" !== t4.position || !l3 || !["absolute", "fixed"].includes(l3.position)) ? l3 = t4 : i3 = i3.filter((t5) => t5 !== s3), s3 = F(s3);
       }
-      return e3.set(t3, i2), i2;
-    }(e2, this._c) : [].concat(n2), u2 = [...f2, l2], a2 = u2[0], h2 = u2.reduce((t3, n3) => {
-      const o2 = S(e2, n3, c2);
-      return t3.top = r(o2.top, t3.top), t3.right = i(o2.right, t3.right), t3.bottom = i(o2.bottom, t3.bottom), t3.left = r(o2.left, t3.left), t3;
-    }, S(e2, a2, c2));
-    return { width: h2.right - h2.left, height: h2.bottom - h2.top, x: h2.left, y: h2.top };
+      return e3.set(t3, i3), i3;
+    }(e2, this._c) : [].concat(n2), s2 = [...c2, i2], u2 = s2[0], a2 = s2.reduce((t3, n3) => {
+      const o2 = S(e2, n3, l2);
+      return t3.top = y(o2.top, t3.top), t3.right = m(o2.right, t3.right), t3.bottom = m(o2.bottom, t3.bottom), t3.left = y(o2.left, t3.left), t3;
+    }, S(e2, u2, l2));
+    return { width: a2.right - a2.left, height: a2.bottom - a2.top, x: a2.left, y: a2.top };
   }, convertOffsetParentRelativeRectToViewportRelativeRect: function(t2) {
     let { rect: e2, offsetParent: n2, strategy: o2 } = t2;
-    const i2 = a(n2), r2 = R(n2);
-    if (n2 === r2)
+    const i2 = s(n2), l2 = T(n2);
+    if (n2 === l2)
       return e2;
-    let l2 = { scrollLeft: 0, scrollTop: 0 }, c2 = { x: 1, y: 1 };
-    const f2 = { x: 0, y: 0 };
-    if ((i2 || !i2 && "fixed" !== o2) && (("body" !== s(n2) || g(r2)) && (l2 = T(n2)), a(n2))) {
+    let c2 = { scrollLeft: 0, scrollTop: 0 }, f2 = { x: 1, y: 1 };
+    const u2 = { x: 0, y: 0 };
+    if ((i2 || !i2 && "fixed" !== o2) && (("body" !== r(n2) || a(l2)) && (c2 = R(n2)), s(n2))) {
       const t3 = E(n2);
-      c2 = L(n2), f2.x = t3.x + n2.clientLeft, f2.y = t3.y + n2.clientTop;
+      f2 = L(n2), u2.x = t3.x + n2.clientLeft, u2.y = t3.y + n2.clientTop;
     }
-    return { width: e2.width * c2.x, height: e2.height * c2.y, x: e2.x * c2.x - l2.scrollLeft * c2.x + f2.x, y: e2.y * c2.y - l2.scrollTop * c2.y + f2.y };
-  }, isElement: d, getDimensions: function(t2) {
-    return a(t2) ? c(t2) : t2.getBoundingClientRect();
-  }, getOffsetParent: H, getDocumentElement: R, getScale: L, async getElementRects(t2) {
+    return { width: e2.width * f2.x, height: e2.height * f2.y, x: e2.x * f2.x - c2.scrollLeft * f2.x + u2.x, y: e2.y * f2.y - c2.scrollTop * f2.y + u2.y };
+  }, isElement: f, getDimensions: function(t2) {
+    return w(t2);
+  }, getOffsetParent: H, getDocumentElement: T, getScale: L, async getElementRects(t2) {
     let { reference: e2, floating: n2, strategy: o2 } = t2;
     const i2 = this.getOffsetParent || H, r2 = this.getDimensions;
     return { reference: V(e2, await i2(n2), o2), floating: { x: 0, y: 0, ...await r2(n2) } };
@@ -9579,7 +9801,8 @@ var __publicField = (obj, key, value) => {
     disabled = false,
     offsetPixel = 8,
     backgroundColor = "rgba(104, 101, 101, 0.89)",
-    delay = false
+    delay = false,
+    border = false
   }) {
     useTheme();
     const [isOpen, setIsOpen] = React$1.useState(false);
@@ -9589,9 +9812,9 @@ var __publicField = (obj, key, value) => {
       onOpenChange: setIsOpen,
       placement,
       middleware: [
-        O$1(offsetPixel),
+        D$1(offsetPixel),
         b$1(),
-        D$1(),
+        k(),
         arrow({
           element: arrowRef
         })
@@ -9623,10 +9846,12 @@ var __publicField = (obj, key, value) => {
             top: y2 ?? 0,
             left: x2 ?? 0,
             backgroundColor,
+            // display: "flex",
             // backgroundColor: theme.colors.secondary,
             // width: "max-content",
             maxWidth: "400px",
             color: "white",
+            border: border ? "2px solid black" : void 0,
             borderRadius: 4,
             fontSize: 20,
             padding: 8,
@@ -9652,23 +9877,59 @@ var __publicField = (obj, key, value) => {
       ) })
     ] });
   }
-  const isFunction = (value) => typeof value === "function";
-  const isDev = false;
+  function __read(o2, n2) {
+    var m2 = typeof Symbol === "function" && o2[Symbol.iterator];
+    if (!m2)
+      return o2;
+    var i2 = m2.call(o2), r2, ar = [], e2;
+    try {
+      while ((n2 === void 0 || n2-- > 0) && !(r2 = i2.next()).done)
+        ar.push(r2.value);
+    } catch (error) {
+      e2 = { error };
+    } finally {
+      try {
+        if (r2 && !r2.done && (m2 = i2["return"]))
+          m2.call(i2);
+      } finally {
+        if (e2)
+          throw e2.error;
+      }
+    }
+    return ar;
+  }
+  function __spreadArray(to, from2, pack) {
+    if (pack || arguments.length === 2)
+      for (var i2 = 0, l2 = from2.length, ar; i2 < l2; i2++) {
+        if (ar || !(i2 in from2)) {
+          if (!ar)
+            ar = Array.prototype.slice.call(from2, 0, i2);
+          ar[i2] = from2[i2];
+        }
+      }
+    return to.concat(ar || Array.prototype.slice.call(from2));
+  }
+  var isFunction = function(value) {
+    return typeof value === "function";
+  };
+  var isDev = false;
   const isDev$1 = isDev;
   function useLatest(value) {
-    const ref = React$1.useRef(value);
+    var ref = React$1.useRef(value);
     ref.current = value;
     return ref;
   }
-  const useUnmount = (fn) => {
+  var useUnmount = function(fn) {
     if (isDev$1) {
       if (!isFunction(fn)) {
-        console.error(`useUnmount expected parameter is a function, got ${typeof fn}`);
+        console.error("useUnmount expected parameter is a function, got ".concat(typeof fn));
       }
     }
-    const fnRef = useLatest(fn);
-    React$1.useEffect(() => () => {
-      fnRef.current();
+    var fnRef = useLatest(fn);
+    React$1.useEffect(function() {
+      return function() {
+        fnRef.current();
+      };
     }, []);
   };
   const useUnmount$1 = useUnmount;
@@ -9807,13 +10068,13 @@ var __publicField = (obj, key, value) => {
     return debounced;
   }
   var debounce_1 = debounce$1;
-  const useMount = (fn) => {
+  var useMount = function(fn) {
     if (isDev$1) {
       if (!isFunction(fn)) {
-        console.error(`useMount: parameter \`fn\` expected to be a function, but got "${typeof fn}".`);
+        console.error('useMount: parameter `fn` expected to be a function, but got "'.concat(typeof fn, '".'));
       }
     }
-    React$1.useEffect(() => {
+    React$1.useEffect(function() {
       fn === null || fn === void 0 ? void 0 : fn();
     }, []);
   };
@@ -9822,15 +10083,21 @@ var __publicField = (obj, key, value) => {
     var _a2;
     if (isDev$1) {
       if (!isFunction(fn)) {
-        console.error(`useDebounceFn expected parameter is a function, got ${typeof fn}`);
+        console.error("useDebounceFn expected parameter is a function, got ".concat(typeof fn));
       }
     }
-    const fnRef = useLatest(fn);
-    const wait = (_a2 = options === null || options === void 0 ? void 0 : options.wait) !== null && _a2 !== void 0 ? _a2 : 1e3;
-    const debounced = React$1.useMemo(() => debounce_1((...args) => {
-      return fnRef.current(...args);
-    }, wait, options), []);
-    useUnmount$1(() => {
+    var fnRef = useLatest(fn);
+    var wait = (_a2 = options === null || options === void 0 ? void 0 : options.wait) !== null && _a2 !== void 0 ? _a2 : 1e3;
+    var debounced = React$1.useMemo(function() {
+      return debounce_1(function() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args[_i] = arguments[_i];
+        }
+        return fnRef.current.apply(fnRef, __spreadArray([], __read(args), false));
+      }, wait, options);
+    }, []);
+    useUnmount$1(function() {
       debounced.cancel();
     });
     return {
@@ -10327,7 +10594,7 @@ var __publicField = (obj, key, value) => {
   );
   function ConfigPanel() {
     const { sectionSettings, visibility } = useStore();
-    useTheme();
+    const theme2 = useTheme();
     const panel = React$1.useMemo(() => {
       return sectionSettings.map((sectionSetting, index2) => ({
         label: sectionSetting.title,
@@ -10405,9 +10672,17 @@ var __publicField = (obj, key, value) => {
                         onClick: () => {
                           store.setVisibility("config", false);
                         },
-                        children: "❌"
+                        children: /* @__PURE__ */ jsx(
+                          Close,
+                          {
+                            theme: "filled",
+                            size: "28",
+                            fill: theme2.colors.error,
+                            strokeWidth: 7
+                          }
+                        )
                       }
-                    ) })
+                    ) }, "config-panel-close-button")
                   ]
                 }
               ),
@@ -10460,7 +10735,7 @@ var __publicField = (obj, key, value) => {
           {
             id: "floating-ball",
             style: {
-              position: "absolute",
+              position: "fixed",
               top: 100,
               right: 100,
               zIndex: 101,
@@ -10506,6 +10781,1402 @@ var __publicField = (obj, key, value) => {
     );
   }
   const simplebar_min = "";
+  var __extends$2 = globalThis && globalThis.__extends || function() {
+    var extendStatics2 = function(d2, b2) {
+      extendStatics2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
+        d3.__proto__ = b3;
+      } || function(d3, b3) {
+        for (var p2 in b3)
+          if (Object.prototype.hasOwnProperty.call(b3, p2))
+            d3[p2] = b3[p2];
+      };
+      return extendStatics2(d2, b2);
+    };
+    return function(d2, b2) {
+      extendStatics2(d2, b2);
+      function __() {
+        this.constructor = d2;
+      }
+      d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
+    };
+  }();
+  var __assign$4 = globalThis && globalThis.__assign || function() {
+    __assign$4 = Object.assign || function(t2) {
+      for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+        s2 = arguments[i2];
+        for (var p2 in s2)
+          if (Object.prototype.hasOwnProperty.call(s2, p2))
+            t2[p2] = s2[p2];
+      }
+      return t2;
+    };
+    return __assign$4.apply(this, arguments);
+  };
+  var styles = {
+    top: {
+      width: "100%",
+      height: "10px",
+      top: "-5px",
+      left: "0px",
+      cursor: "row-resize"
+    },
+    right: {
+      width: "10px",
+      height: "100%",
+      top: "0px",
+      right: "-5px",
+      cursor: "col-resize"
+    },
+    bottom: {
+      width: "100%",
+      height: "10px",
+      bottom: "-5px",
+      left: "0px",
+      cursor: "row-resize"
+    },
+    left: {
+      width: "10px",
+      height: "100%",
+      top: "0px",
+      left: "-5px",
+      cursor: "col-resize"
+    },
+    topRight: {
+      width: "20px",
+      height: "20px",
+      position: "absolute",
+      right: "-10px",
+      top: "-10px",
+      cursor: "ne-resize"
+    },
+    bottomRight: {
+      width: "20px",
+      height: "20px",
+      position: "absolute",
+      right: "-10px",
+      bottom: "-10px",
+      cursor: "se-resize"
+    },
+    bottomLeft: {
+      width: "20px",
+      height: "20px",
+      position: "absolute",
+      left: "-10px",
+      bottom: "-10px",
+      cursor: "sw-resize"
+    },
+    topLeft: {
+      width: "20px",
+      height: "20px",
+      position: "absolute",
+      left: "-10px",
+      top: "-10px",
+      cursor: "nw-resize"
+    }
+  };
+  var Resizer = (
+    /** @class */
+    function(_super) {
+      __extends$2(Resizer2, _super);
+      function Resizer2() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.onMouseDown = function(e2) {
+          _this.props.onResizeStart(e2, _this.props.direction);
+        };
+        _this.onTouchStart = function(e2) {
+          _this.props.onResizeStart(e2, _this.props.direction);
+        };
+        return _this;
+      }
+      Resizer2.prototype.render = function() {
+        return React__namespace.createElement("div", { className: this.props.className || "", style: __assign$4(__assign$4({ position: "absolute", userSelect: "none" }, styles[this.props.direction]), this.props.replaceStyles || {}), onMouseDown: this.onMouseDown, onTouchStart: this.onTouchStart }, this.props.children);
+      };
+      return Resizer2;
+    }(React__namespace.PureComponent)
+  );
+  var srcExports = {};
+  var src = {
+    get exports() {
+      return srcExports;
+    },
+    set exports(v2) {
+      srcExports = v2;
+    }
+  };
+  function memoize(fn, options) {
+    var cache = options && options.cache ? options.cache : cacheDefault;
+    var serializer = options && options.serializer ? options.serializer : serializerDefault;
+    var strategy = options && options.strategy ? options.strategy : strategyDefault;
+    return strategy(fn, {
+      cache,
+      serializer
+    });
+  }
+  function isPrimitive(value) {
+    return value == null || typeof value === "number" || typeof value === "boolean";
+  }
+  function monadic(fn, cache, serializer, arg) {
+    var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
+    var computedValue = cache.get(cacheKey);
+    if (typeof computedValue === "undefined") {
+      computedValue = fn.call(this, arg);
+      cache.set(cacheKey, computedValue);
+    }
+    return computedValue;
+  }
+  function variadic(fn, cache, serializer) {
+    var args = Array.prototype.slice.call(arguments, 3);
+    var cacheKey = serializer(args);
+    var computedValue = cache.get(cacheKey);
+    if (typeof computedValue === "undefined") {
+      computedValue = fn.apply(this, args);
+      cache.set(cacheKey, computedValue);
+    }
+    return computedValue;
+  }
+  function assemble(fn, context, strategy, cache, serialize2) {
+    return strategy.bind(
+      context,
+      fn,
+      cache,
+      serialize2
+    );
+  }
+  function strategyDefault(fn, options) {
+    var strategy = fn.length === 1 ? monadic : variadic;
+    return assemble(
+      fn,
+      this,
+      strategy,
+      options.cache.create(),
+      options.serializer
+    );
+  }
+  function strategyVariadic(fn, options) {
+    var strategy = variadic;
+    return assemble(
+      fn,
+      this,
+      strategy,
+      options.cache.create(),
+      options.serializer
+    );
+  }
+  function strategyMonadic(fn, options) {
+    var strategy = monadic;
+    return assemble(
+      fn,
+      this,
+      strategy,
+      options.cache.create(),
+      options.serializer
+    );
+  }
+  function serializerDefault() {
+    return JSON.stringify(arguments);
+  }
+  function ObjectWithoutPrototypeCache() {
+    this.cache = /* @__PURE__ */ Object.create(null);
+  }
+  ObjectWithoutPrototypeCache.prototype.has = function(key) {
+    return key in this.cache;
+  };
+  ObjectWithoutPrototypeCache.prototype.get = function(key) {
+    return this.cache[key];
+  };
+  ObjectWithoutPrototypeCache.prototype.set = function(key, value) {
+    this.cache[key] = value;
+  };
+  var cacheDefault = {
+    create: function create() {
+      return new ObjectWithoutPrototypeCache();
+    }
+  };
+  src.exports = memoize;
+  srcExports.strategies = {
+    variadic: strategyVariadic,
+    monadic: strategyMonadic
+  };
+  var __extends$1 = globalThis && globalThis.__extends || function() {
+    var extendStatics2 = function(d2, b2) {
+      extendStatics2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
+        d3.__proto__ = b3;
+      } || function(d3, b3) {
+        for (var p2 in b3)
+          if (Object.prototype.hasOwnProperty.call(b3, p2))
+            d3[p2] = b3[p2];
+      };
+      return extendStatics2(d2, b2);
+    };
+    return function(d2, b2) {
+      extendStatics2(d2, b2);
+      function __() {
+        this.constructor = d2;
+      }
+      d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
+    };
+  }();
+  var __assign$3 = globalThis && globalThis.__assign || function() {
+    __assign$3 = Object.assign || function(t2) {
+      for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+        s2 = arguments[i2];
+        for (var p2 in s2)
+          if (Object.prototype.hasOwnProperty.call(s2, p2))
+            t2[p2] = s2[p2];
+      }
+      return t2;
+    };
+    return __assign$3.apply(this, arguments);
+  };
+  var DEFAULT_SIZE = {
+    width: "auto",
+    height: "auto"
+  };
+  var clamp = srcExports(function(n2, min, max) {
+    return Math.max(Math.min(n2, max), min);
+  });
+  var snap = srcExports(function(n2, size) {
+    return Math.round(n2 / size) * size;
+  });
+  var hasDirection = srcExports(function(dir, target) {
+    return new RegExp(dir, "i").test(target);
+  });
+  var isTouchEvent = function(event) {
+    return Boolean(event.touches && event.touches.length);
+  };
+  var isMouseEvent = function(event) {
+    return Boolean((event.clientX || event.clientX === 0) && (event.clientY || event.clientY === 0));
+  };
+  var findClosestSnap = srcExports(function(n2, snapArray, snapGap) {
+    if (snapGap === void 0) {
+      snapGap = 0;
+    }
+    var closestGapIndex = snapArray.reduce(function(prev2, curr, index2) {
+      return Math.abs(curr - n2) < Math.abs(snapArray[prev2] - n2) ? index2 : prev2;
+    }, 0);
+    var gap = Math.abs(snapArray[closestGapIndex] - n2);
+    return snapGap === 0 || gap < snapGap ? snapArray[closestGapIndex] : n2;
+  });
+  var endsWith = srcExports(function(str, searchStr) {
+    return str.substr(str.length - searchStr.length, searchStr.length) === searchStr;
+  });
+  var getStringSize = srcExports(function(n2) {
+    n2 = n2.toString();
+    if (n2 === "auto") {
+      return n2;
+    }
+    if (endsWith(n2, "px")) {
+      return n2;
+    }
+    if (endsWith(n2, "%")) {
+      return n2;
+    }
+    if (endsWith(n2, "vh")) {
+      return n2;
+    }
+    if (endsWith(n2, "vw")) {
+      return n2;
+    }
+    if (endsWith(n2, "vmax")) {
+      return n2;
+    }
+    if (endsWith(n2, "vmin")) {
+      return n2;
+    }
+    return n2 + "px";
+  });
+  var getPixelSize = function(size, parentSize, innerWidth2, innerHeight2) {
+    if (size && typeof size === "string") {
+      if (endsWith(size, "px")) {
+        return Number(size.replace("px", ""));
+      }
+      if (endsWith(size, "%")) {
+        var ratio = Number(size.replace("%", "")) / 100;
+        return parentSize * ratio;
+      }
+      if (endsWith(size, "vw")) {
+        var ratio = Number(size.replace("vw", "")) / 100;
+        return innerWidth2 * ratio;
+      }
+      if (endsWith(size, "vh")) {
+        var ratio = Number(size.replace("vh", "")) / 100;
+        return innerHeight2 * ratio;
+      }
+    }
+    return size;
+  };
+  var calculateNewMax = srcExports(function(parentSize, innerWidth2, innerHeight2, maxWidth, maxHeight, minWidth, minHeight) {
+    maxWidth = getPixelSize(maxWidth, parentSize.width, innerWidth2, innerHeight2);
+    maxHeight = getPixelSize(maxHeight, parentSize.height, innerWidth2, innerHeight2);
+    minWidth = getPixelSize(minWidth, parentSize.width, innerWidth2, innerHeight2);
+    minHeight = getPixelSize(minHeight, parentSize.height, innerWidth2, innerHeight2);
+    return {
+      maxWidth: typeof maxWidth === "undefined" ? void 0 : Number(maxWidth),
+      maxHeight: typeof maxHeight === "undefined" ? void 0 : Number(maxHeight),
+      minWidth: typeof minWidth === "undefined" ? void 0 : Number(minWidth),
+      minHeight: typeof minHeight === "undefined" ? void 0 : Number(minHeight)
+    };
+  });
+  var definedProps = [
+    "as",
+    "style",
+    "className",
+    "grid",
+    "snap",
+    "bounds",
+    "boundsByDirection",
+    "size",
+    "defaultSize",
+    "minWidth",
+    "minHeight",
+    "maxWidth",
+    "maxHeight",
+    "lockAspectRatio",
+    "lockAspectRatioExtraWidth",
+    "lockAspectRatioExtraHeight",
+    "enable",
+    "handleStyles",
+    "handleClasses",
+    "handleWrapperStyle",
+    "handleWrapperClass",
+    "children",
+    "onResizeStart",
+    "onResize",
+    "onResizeStop",
+    "handleComponent",
+    "scale",
+    "resizeRatio",
+    "snapGap"
+  ];
+  var baseClassName = "__resizable_base__";
+  var Resizable = (
+    /** @class */
+    function(_super) {
+      __extends$1(Resizable2, _super);
+      function Resizable2(props) {
+        var _this = _super.call(this, props) || this;
+        _this.ratio = 1;
+        _this.resizable = null;
+        _this.parentLeft = 0;
+        _this.parentTop = 0;
+        _this.resizableLeft = 0;
+        _this.resizableRight = 0;
+        _this.resizableTop = 0;
+        _this.resizableBottom = 0;
+        _this.targetLeft = 0;
+        _this.targetTop = 0;
+        _this.appendBase = function() {
+          if (!_this.resizable || !_this.window) {
+            return null;
+          }
+          var parent = _this.parentNode;
+          if (!parent) {
+            return null;
+          }
+          var element = _this.window.document.createElement("div");
+          element.style.width = "100%";
+          element.style.height = "100%";
+          element.style.position = "absolute";
+          element.style.transform = "scale(0, 0)";
+          element.style.left = "0";
+          element.style.flex = "0 0 100%";
+          if (element.classList) {
+            element.classList.add(baseClassName);
+          } else {
+            element.className += baseClassName;
+          }
+          parent.appendChild(element);
+          return element;
+        };
+        _this.removeBase = function(base) {
+          var parent = _this.parentNode;
+          if (!parent) {
+            return;
+          }
+          parent.removeChild(base);
+        };
+        _this.ref = function(c2) {
+          if (c2) {
+            _this.resizable = c2;
+          }
+        };
+        _this.state = {
+          isResizing: false,
+          width: typeof (_this.propsSize && _this.propsSize.width) === "undefined" ? "auto" : _this.propsSize && _this.propsSize.width,
+          height: typeof (_this.propsSize && _this.propsSize.height) === "undefined" ? "auto" : _this.propsSize && _this.propsSize.height,
+          direction: "right",
+          original: {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+          },
+          backgroundStyle: {
+            height: "100%",
+            width: "100%",
+            backgroundColor: "rgba(0,0,0,0)",
+            cursor: "auto",
+            opacity: 0,
+            position: "fixed",
+            zIndex: 9999,
+            top: "0",
+            left: "0",
+            bottom: "0",
+            right: "0"
+          },
+          flexBasis: void 0
+        };
+        _this.onResizeStart = _this.onResizeStart.bind(_this);
+        _this.onMouseMove = _this.onMouseMove.bind(_this);
+        _this.onMouseUp = _this.onMouseUp.bind(_this);
+        return _this;
+      }
+      Object.defineProperty(Resizable2.prototype, "parentNode", {
+        get: function() {
+          if (!this.resizable) {
+            return null;
+          }
+          return this.resizable.parentNode;
+        },
+        enumerable: false,
+        configurable: true
+      });
+      Object.defineProperty(Resizable2.prototype, "window", {
+        get: function() {
+          if (!this.resizable) {
+            return null;
+          }
+          if (!this.resizable.ownerDocument) {
+            return null;
+          }
+          return this.resizable.ownerDocument.defaultView;
+        },
+        enumerable: false,
+        configurable: true
+      });
+      Object.defineProperty(Resizable2.prototype, "propsSize", {
+        get: function() {
+          return this.props.size || this.props.defaultSize || DEFAULT_SIZE;
+        },
+        enumerable: false,
+        configurable: true
+      });
+      Object.defineProperty(Resizable2.prototype, "size", {
+        get: function() {
+          var width = 0;
+          var height = 0;
+          if (this.resizable && this.window) {
+            var orgWidth = this.resizable.offsetWidth;
+            var orgHeight = this.resizable.offsetHeight;
+            var orgPosition = this.resizable.style.position;
+            if (orgPosition !== "relative") {
+              this.resizable.style.position = "relative";
+            }
+            width = this.resizable.style.width !== "auto" ? this.resizable.offsetWidth : orgWidth;
+            height = this.resizable.style.height !== "auto" ? this.resizable.offsetHeight : orgHeight;
+            this.resizable.style.position = orgPosition;
+          }
+          return { width, height };
+        },
+        enumerable: false,
+        configurable: true
+      });
+      Object.defineProperty(Resizable2.prototype, "sizeStyle", {
+        get: function() {
+          var _this = this;
+          var size = this.props.size;
+          var getSize = function(key) {
+            if (typeof _this.state[key] === "undefined" || _this.state[key] === "auto") {
+              return "auto";
+            }
+            if (_this.propsSize && _this.propsSize[key] && endsWith(_this.propsSize[key].toString(), "%")) {
+              if (endsWith(_this.state[key].toString(), "%")) {
+                return _this.state[key].toString();
+              }
+              var parentSize = _this.getParentSize();
+              var value = Number(_this.state[key].toString().replace("px", ""));
+              var percent = value / parentSize[key] * 100;
+              return percent + "%";
+            }
+            return getStringSize(_this.state[key]);
+          };
+          var width = size && typeof size.width !== "undefined" && !this.state.isResizing ? getStringSize(size.width) : getSize("width");
+          var height = size && typeof size.height !== "undefined" && !this.state.isResizing ? getStringSize(size.height) : getSize("height");
+          return { width, height };
+        },
+        enumerable: false,
+        configurable: true
+      });
+      Resizable2.prototype.getParentSize = function() {
+        if (!this.parentNode) {
+          if (!this.window) {
+            return { width: 0, height: 0 };
+          }
+          return { width: this.window.innerWidth, height: this.window.innerHeight };
+        }
+        var base = this.appendBase();
+        if (!base) {
+          return { width: 0, height: 0 };
+        }
+        var wrapChanged = false;
+        var wrap = this.parentNode.style.flexWrap;
+        if (wrap !== "wrap") {
+          wrapChanged = true;
+          this.parentNode.style.flexWrap = "wrap";
+        }
+        base.style.position = "relative";
+        base.style.minWidth = "100%";
+        base.style.minHeight = "100%";
+        var size = {
+          width: base.offsetWidth,
+          height: base.offsetHeight
+        };
+        if (wrapChanged) {
+          this.parentNode.style.flexWrap = wrap;
+        }
+        this.removeBase(base);
+        return size;
+      };
+      Resizable2.prototype.bindEvents = function() {
+        if (this.window) {
+          this.window.addEventListener("mouseup", this.onMouseUp);
+          this.window.addEventListener("mousemove", this.onMouseMove);
+          this.window.addEventListener("mouseleave", this.onMouseUp);
+          this.window.addEventListener("touchmove", this.onMouseMove, {
+            capture: true,
+            passive: false
+          });
+          this.window.addEventListener("touchend", this.onMouseUp);
+        }
+      };
+      Resizable2.prototype.unbindEvents = function() {
+        if (this.window) {
+          this.window.removeEventListener("mouseup", this.onMouseUp);
+          this.window.removeEventListener("mousemove", this.onMouseMove);
+          this.window.removeEventListener("mouseleave", this.onMouseUp);
+          this.window.removeEventListener("touchmove", this.onMouseMove, true);
+          this.window.removeEventListener("touchend", this.onMouseUp);
+        }
+      };
+      Resizable2.prototype.componentDidMount = function() {
+        if (!this.resizable || !this.window) {
+          return;
+        }
+        var computedStyle = this.window.getComputedStyle(this.resizable);
+        this.setState({
+          width: this.state.width || this.size.width,
+          height: this.state.height || this.size.height,
+          flexBasis: computedStyle.flexBasis !== "auto" ? computedStyle.flexBasis : void 0
+        });
+      };
+      Resizable2.prototype.componentWillUnmount = function() {
+        if (this.window) {
+          this.unbindEvents();
+        }
+      };
+      Resizable2.prototype.createSizeForCssProperty = function(newSize, kind) {
+        var propsSize = this.propsSize && this.propsSize[kind];
+        return this.state[kind] === "auto" && this.state.original[kind] === newSize && (typeof propsSize === "undefined" || propsSize === "auto") ? "auto" : newSize;
+      };
+      Resizable2.prototype.calculateNewMaxFromBoundary = function(maxWidth, maxHeight) {
+        var boundsByDirection = this.props.boundsByDirection;
+        var direction = this.state.direction;
+        var widthByDirection = boundsByDirection && hasDirection("left", direction);
+        var heightByDirection = boundsByDirection && hasDirection("top", direction);
+        var boundWidth;
+        var boundHeight;
+        if (this.props.bounds === "parent") {
+          var parent_1 = this.parentNode;
+          if (parent_1) {
+            boundWidth = widthByDirection ? this.resizableRight - this.parentLeft : parent_1.offsetWidth + (this.parentLeft - this.resizableLeft);
+            boundHeight = heightByDirection ? this.resizableBottom - this.parentTop : parent_1.offsetHeight + (this.parentTop - this.resizableTop);
+          }
+        } else if (this.props.bounds === "window") {
+          if (this.window) {
+            boundWidth = widthByDirection ? this.resizableRight : this.window.innerWidth - this.resizableLeft;
+            boundHeight = heightByDirection ? this.resizableBottom : this.window.innerHeight - this.resizableTop;
+          }
+        } else if (this.props.bounds) {
+          boundWidth = widthByDirection ? this.resizableRight - this.targetLeft : this.props.bounds.offsetWidth + (this.targetLeft - this.resizableLeft);
+          boundHeight = heightByDirection ? this.resizableBottom - this.targetTop : this.props.bounds.offsetHeight + (this.targetTop - this.resizableTop);
+        }
+        if (boundWidth && Number.isFinite(boundWidth)) {
+          maxWidth = maxWidth && maxWidth < boundWidth ? maxWidth : boundWidth;
+        }
+        if (boundHeight && Number.isFinite(boundHeight)) {
+          maxHeight = maxHeight && maxHeight < boundHeight ? maxHeight : boundHeight;
+        }
+        return { maxWidth, maxHeight };
+      };
+      Resizable2.prototype.calculateNewSizeFromDirection = function(clientX, clientY) {
+        var scale = this.props.scale || 1;
+        var resizeRatio = this.props.resizeRatio || 1;
+        var _a2 = this.state, direction = _a2.direction, original = _a2.original;
+        var _b2 = this.props, lockAspectRatio = _b2.lockAspectRatio, lockAspectRatioExtraHeight = _b2.lockAspectRatioExtraHeight, lockAspectRatioExtraWidth = _b2.lockAspectRatioExtraWidth;
+        var newWidth = original.width;
+        var newHeight = original.height;
+        var extraHeight = lockAspectRatioExtraHeight || 0;
+        var extraWidth = lockAspectRatioExtraWidth || 0;
+        if (hasDirection("right", direction)) {
+          newWidth = original.width + (clientX - original.x) * resizeRatio / scale;
+          if (lockAspectRatio) {
+            newHeight = (newWidth - extraWidth) / this.ratio + extraHeight;
+          }
+        }
+        if (hasDirection("left", direction)) {
+          newWidth = original.width - (clientX - original.x) * resizeRatio / scale;
+          if (lockAspectRatio) {
+            newHeight = (newWidth - extraWidth) / this.ratio + extraHeight;
+          }
+        }
+        if (hasDirection("bottom", direction)) {
+          newHeight = original.height + (clientY - original.y) * resizeRatio / scale;
+          if (lockAspectRatio) {
+            newWidth = (newHeight - extraHeight) * this.ratio + extraWidth;
+          }
+        }
+        if (hasDirection("top", direction)) {
+          newHeight = original.height - (clientY - original.y) * resizeRatio / scale;
+          if (lockAspectRatio) {
+            newWidth = (newHeight - extraHeight) * this.ratio + extraWidth;
+          }
+        }
+        return { newWidth, newHeight };
+      };
+      Resizable2.prototype.calculateNewSizeFromAspectRatio = function(newWidth, newHeight, max, min) {
+        var _a2 = this.props, lockAspectRatio = _a2.lockAspectRatio, lockAspectRatioExtraHeight = _a2.lockAspectRatioExtraHeight, lockAspectRatioExtraWidth = _a2.lockAspectRatioExtraWidth;
+        var computedMinWidth = typeof min.width === "undefined" ? 10 : min.width;
+        var computedMaxWidth = typeof max.width === "undefined" || max.width < 0 ? newWidth : max.width;
+        var computedMinHeight = typeof min.height === "undefined" ? 10 : min.height;
+        var computedMaxHeight = typeof max.height === "undefined" || max.height < 0 ? newHeight : max.height;
+        var extraHeight = lockAspectRatioExtraHeight || 0;
+        var extraWidth = lockAspectRatioExtraWidth || 0;
+        if (lockAspectRatio) {
+          var extraMinWidth = (computedMinHeight - extraHeight) * this.ratio + extraWidth;
+          var extraMaxWidth = (computedMaxHeight - extraHeight) * this.ratio + extraWidth;
+          var extraMinHeight = (computedMinWidth - extraWidth) / this.ratio + extraHeight;
+          var extraMaxHeight = (computedMaxWidth - extraWidth) / this.ratio + extraHeight;
+          var lockedMinWidth = Math.max(computedMinWidth, extraMinWidth);
+          var lockedMaxWidth = Math.min(computedMaxWidth, extraMaxWidth);
+          var lockedMinHeight = Math.max(computedMinHeight, extraMinHeight);
+          var lockedMaxHeight = Math.min(computedMaxHeight, extraMaxHeight);
+          newWidth = clamp(newWidth, lockedMinWidth, lockedMaxWidth);
+          newHeight = clamp(newHeight, lockedMinHeight, lockedMaxHeight);
+        } else {
+          newWidth = clamp(newWidth, computedMinWidth, computedMaxWidth);
+          newHeight = clamp(newHeight, computedMinHeight, computedMaxHeight);
+        }
+        return { newWidth, newHeight };
+      };
+      Resizable2.prototype.setBoundingClientRect = function() {
+        if (this.props.bounds === "parent") {
+          var parent_2 = this.parentNode;
+          if (parent_2) {
+            var parentRect = parent_2.getBoundingClientRect();
+            this.parentLeft = parentRect.left;
+            this.parentTop = parentRect.top;
+          }
+        }
+        if (this.props.bounds && typeof this.props.bounds !== "string") {
+          var targetRect = this.props.bounds.getBoundingClientRect();
+          this.targetLeft = targetRect.left;
+          this.targetTop = targetRect.top;
+        }
+        if (this.resizable) {
+          var _a2 = this.resizable.getBoundingClientRect(), left = _a2.left, top_1 = _a2.top, right = _a2.right, bottom = _a2.bottom;
+          this.resizableLeft = left;
+          this.resizableRight = right;
+          this.resizableTop = top_1;
+          this.resizableBottom = bottom;
+        }
+      };
+      Resizable2.prototype.onResizeStart = function(event, direction) {
+        if (!this.resizable || !this.window) {
+          return;
+        }
+        var clientX = 0;
+        var clientY = 0;
+        if (event.nativeEvent && isMouseEvent(event.nativeEvent)) {
+          clientX = event.nativeEvent.clientX;
+          clientY = event.nativeEvent.clientY;
+        } else if (event.nativeEvent && isTouchEvent(event.nativeEvent)) {
+          clientX = event.nativeEvent.touches[0].clientX;
+          clientY = event.nativeEvent.touches[0].clientY;
+        }
+        if (this.props.onResizeStart) {
+          if (this.resizable) {
+            var startResize = this.props.onResizeStart(event, direction, this.resizable);
+            if (startResize === false) {
+              return;
+            }
+          }
+        }
+        if (this.props.size) {
+          if (typeof this.props.size.height !== "undefined" && this.props.size.height !== this.state.height) {
+            this.setState({ height: this.props.size.height });
+          }
+          if (typeof this.props.size.width !== "undefined" && this.props.size.width !== this.state.width) {
+            this.setState({ width: this.props.size.width });
+          }
+        }
+        this.ratio = typeof this.props.lockAspectRatio === "number" ? this.props.lockAspectRatio : this.size.width / this.size.height;
+        var flexBasis;
+        var computedStyle = this.window.getComputedStyle(this.resizable);
+        if (computedStyle.flexBasis !== "auto") {
+          var parent_3 = this.parentNode;
+          if (parent_3) {
+            var dir = this.window.getComputedStyle(parent_3).flexDirection;
+            this.flexDir = dir.startsWith("row") ? "row" : "column";
+            flexBasis = computedStyle.flexBasis;
+          }
+        }
+        this.setBoundingClientRect();
+        this.bindEvents();
+        var state = {
+          original: {
+            x: clientX,
+            y: clientY,
+            width: this.size.width,
+            height: this.size.height
+          },
+          isResizing: true,
+          backgroundStyle: __assign$3(__assign$3({}, this.state.backgroundStyle), { cursor: this.window.getComputedStyle(event.target).cursor || "auto" }),
+          direction,
+          flexBasis
+        };
+        this.setState(state);
+      };
+      Resizable2.prototype.onMouseMove = function(event) {
+        if (!this.state.isResizing || !this.resizable || !this.window) {
+          return;
+        }
+        if (this.window.TouchEvent && isTouchEvent(event)) {
+          try {
+            event.preventDefault();
+            event.stopPropagation();
+          } catch (e2) {
+          }
+        }
+        var _a2 = this.props, maxWidth = _a2.maxWidth, maxHeight = _a2.maxHeight, minWidth = _a2.minWidth, minHeight = _a2.minHeight;
+        var clientX = isTouchEvent(event) ? event.touches[0].clientX : event.clientX;
+        var clientY = isTouchEvent(event) ? event.touches[0].clientY : event.clientY;
+        var _b2 = this.state, direction = _b2.direction, original = _b2.original, width = _b2.width, height = _b2.height;
+        var parentSize = this.getParentSize();
+        var max = calculateNewMax(parentSize, this.window.innerWidth, this.window.innerHeight, maxWidth, maxHeight, minWidth, minHeight);
+        maxWidth = max.maxWidth;
+        maxHeight = max.maxHeight;
+        minWidth = max.minWidth;
+        minHeight = max.minHeight;
+        var _c2 = this.calculateNewSizeFromDirection(clientX, clientY), newHeight = _c2.newHeight, newWidth = _c2.newWidth;
+        var boundaryMax = this.calculateNewMaxFromBoundary(maxWidth, maxHeight);
+        if (this.props.snap && this.props.snap.x) {
+          newWidth = findClosestSnap(newWidth, this.props.snap.x, this.props.snapGap);
+        }
+        if (this.props.snap && this.props.snap.y) {
+          newHeight = findClosestSnap(newHeight, this.props.snap.y, this.props.snapGap);
+        }
+        var newSize = this.calculateNewSizeFromAspectRatio(newWidth, newHeight, { width: boundaryMax.maxWidth, height: boundaryMax.maxHeight }, { width: minWidth, height: minHeight });
+        newWidth = newSize.newWidth;
+        newHeight = newSize.newHeight;
+        if (this.props.grid) {
+          var newGridWidth = snap(newWidth, this.props.grid[0]);
+          var newGridHeight = snap(newHeight, this.props.grid[1]);
+          var gap = this.props.snapGap || 0;
+          newWidth = gap === 0 || Math.abs(newGridWidth - newWidth) <= gap ? newGridWidth : newWidth;
+          newHeight = gap === 0 || Math.abs(newGridHeight - newHeight) <= gap ? newGridHeight : newHeight;
+        }
+        var delta = {
+          width: newWidth - original.width,
+          height: newHeight - original.height
+        };
+        if (width && typeof width === "string") {
+          if (endsWith(width, "%")) {
+            var percent = newWidth / parentSize.width * 100;
+            newWidth = percent + "%";
+          } else if (endsWith(width, "vw")) {
+            var vw = newWidth / this.window.innerWidth * 100;
+            newWidth = vw + "vw";
+          } else if (endsWith(width, "vh")) {
+            var vh = newWidth / this.window.innerHeight * 100;
+            newWidth = vh + "vh";
+          }
+        }
+        if (height && typeof height === "string") {
+          if (endsWith(height, "%")) {
+            var percent = newHeight / parentSize.height * 100;
+            newHeight = percent + "%";
+          } else if (endsWith(height, "vw")) {
+            var vw = newHeight / this.window.innerWidth * 100;
+            newHeight = vw + "vw";
+          } else if (endsWith(height, "vh")) {
+            var vh = newHeight / this.window.innerHeight * 100;
+            newHeight = vh + "vh";
+          }
+        }
+        var newState = {
+          width: this.createSizeForCssProperty(newWidth, "width"),
+          height: this.createSizeForCssProperty(newHeight, "height")
+        };
+        if (this.flexDir === "row") {
+          newState.flexBasis = newState.width;
+        } else if (this.flexDir === "column") {
+          newState.flexBasis = newState.height;
+        }
+        this.setState(newState);
+        if (this.props.onResize) {
+          this.props.onResize(event, direction, this.resizable, delta);
+        }
+      };
+      Resizable2.prototype.onMouseUp = function(event) {
+        var _a2 = this.state, isResizing = _a2.isResizing, direction = _a2.direction, original = _a2.original;
+        if (!isResizing || !this.resizable) {
+          return;
+        }
+        var delta = {
+          width: this.size.width - original.width,
+          height: this.size.height - original.height
+        };
+        if (this.props.onResizeStop) {
+          this.props.onResizeStop(event, direction, this.resizable, delta);
+        }
+        if (this.props.size) {
+          this.setState(this.props.size);
+        }
+        this.unbindEvents();
+        this.setState({
+          isResizing: false,
+          backgroundStyle: __assign$3(__assign$3({}, this.state.backgroundStyle), { cursor: "auto" })
+        });
+      };
+      Resizable2.prototype.updateSize = function(size) {
+        this.setState({ width: size.width, height: size.height });
+      };
+      Resizable2.prototype.renderResizer = function() {
+        var _this = this;
+        var _a2 = this.props, enable = _a2.enable, handleStyles = _a2.handleStyles, handleClasses = _a2.handleClasses, handleWrapperStyle = _a2.handleWrapperStyle, handleWrapperClass = _a2.handleWrapperClass, handleComponent = _a2.handleComponent;
+        if (!enable) {
+          return null;
+        }
+        var resizers = Object.keys(enable).map(function(dir) {
+          if (enable[dir] !== false) {
+            return React__namespace.createElement(Resizer, { key: dir, direction: dir, onResizeStart: _this.onResizeStart, replaceStyles: handleStyles && handleStyles[dir], className: handleClasses && handleClasses[dir] }, handleComponent && handleComponent[dir] ? handleComponent[dir] : null);
+          }
+          return null;
+        });
+        return React__namespace.createElement("div", { className: handleWrapperClass, style: handleWrapperStyle }, resizers);
+      };
+      Resizable2.prototype.render = function() {
+        var _this = this;
+        var extendsProps = Object.keys(this.props).reduce(function(acc, key) {
+          if (definedProps.indexOf(key) !== -1) {
+            return acc;
+          }
+          acc[key] = _this.props[key];
+          return acc;
+        }, {});
+        var style = __assign$3(__assign$3(__assign$3({ position: "relative", userSelect: this.state.isResizing ? "none" : "auto" }, this.props.style), this.sizeStyle), { maxWidth: this.props.maxWidth, maxHeight: this.props.maxHeight, minWidth: this.props.minWidth, minHeight: this.props.minHeight, boxSizing: "border-box", flexShrink: 0 });
+        if (this.state.flexBasis) {
+          style.flexBasis = this.state.flexBasis;
+        }
+        var Wrapper = this.props.as || "div";
+        return React__namespace.createElement(
+          Wrapper,
+          __assign$3({ ref: this.ref, style, className: this.props.className }, extendsProps),
+          this.state.isResizing && React__namespace.createElement("div", { style: this.state.backgroundStyle }),
+          this.props.children,
+          this.renderResizer()
+        );
+      };
+      Resizable2.defaultProps = {
+        as: "div",
+        onResizeStart: function() {
+        },
+        onResize: function() {
+        },
+        onResizeStop: function() {
+        },
+        enable: {
+          top: true,
+          right: true,
+          bottom: true,
+          left: true,
+          topRight: true,
+          bottomRight: true,
+          bottomLeft: true,
+          topLeft: true
+        },
+        style: {},
+        grid: [1, 1],
+        lockAspectRatio: false,
+        lockAspectRatioExtraWidth: 0,
+        lockAspectRatioExtraHeight: 0,
+        scale: 1,
+        resizeRatio: 1,
+        snapGap: 0
+      };
+      return Resizable2;
+    }(React__namespace.PureComponent)
+  );
+  /*! *****************************************************************************
+  	Copyright (c) Microsoft Corporation. All rights reserved.
+  	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+  	this file except in compliance with the License. You may obtain a copy of the
+  	License at http://www.apache.org/licenses/LICENSE-2.0
+  
+  	THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  	KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+  	WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+  	MERCHANTABLITY OR NON-INFRINGEMENT.
+  
+  	See the Apache Version 2.0 License for specific language governing permissions
+  	and limitations under the License.
+  	***************************************************************************** */
+  var extendStatics = function(d2, b2) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
+      d3.__proto__ = b3;
+    } || function(d3, b3) {
+      for (var p2 in b3)
+        if (b3.hasOwnProperty(p2))
+          d3[p2] = b3[p2];
+    };
+    return extendStatics(d2, b2);
+  };
+  function __extends(d2, b2) {
+    extendStatics(d2, b2);
+    function __() {
+      this.constructor = d2;
+    }
+    d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
+  }
+  var __assign$2 = function() {
+    __assign$2 = Object.assign || function __assign2(t2) {
+      for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+        s2 = arguments[i2];
+        for (var p2 in s2)
+          if (Object.prototype.hasOwnProperty.call(s2, p2))
+            t2[p2] = s2[p2];
+      }
+      return t2;
+    };
+    return __assign$2.apply(this, arguments);
+  };
+  function __rest$1(s2, e2) {
+    var t2 = {};
+    for (var p2 in s2)
+      if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0)
+        t2[p2] = s2[p2];
+    if (s2 != null && typeof Object.getOwnPropertySymbols === "function")
+      for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2]))
+          t2[p2[i2]] = s2[p2[i2]];
+      }
+    return t2;
+  }
+  var Draggable = cjsExports;
+  var resizableStyle = {
+    width: "auto",
+    height: "auto",
+    display: "inline-block",
+    position: "absolute",
+    top: 0,
+    left: 0
+  };
+  var getEnableResizingByFlag = function(flag) {
+    return {
+      bottom: flag,
+      bottomLeft: flag,
+      bottomRight: flag,
+      left: flag,
+      right: flag,
+      top: flag,
+      topLeft: flag,
+      topRight: flag
+    };
+  };
+  var Rnd = (
+    /** @class */
+    function(_super) {
+      __extends(Rnd2, _super);
+      function Rnd2(props) {
+        var _this = _super.call(this, props) || this;
+        _this.resizingPosition = { x: 0, y: 0 };
+        _this.offsetFromParent = { left: 0, top: 0 };
+        _this.resizableElement = { current: null };
+        _this.originalPosition = { x: 0, y: 0 };
+        _this.refDraggable = function(c2) {
+          if (!c2)
+            return;
+          _this.draggable = c2;
+        };
+        _this.refResizable = function(c2) {
+          if (!c2)
+            return;
+          _this.resizable = c2;
+          _this.resizableElement.current = c2.resizable;
+        };
+        _this.state = {
+          resizing: false,
+          bounds: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+          maxWidth: props.maxWidth,
+          maxHeight: props.maxHeight
+        };
+        _this.onResizeStart = _this.onResizeStart.bind(_this);
+        _this.onResize = _this.onResize.bind(_this);
+        _this.onResizeStop = _this.onResizeStop.bind(_this);
+        _this.onDragStart = _this.onDragStart.bind(_this);
+        _this.onDrag = _this.onDrag.bind(_this);
+        _this.onDragStop = _this.onDragStop.bind(_this);
+        _this.getMaxSizesFromProps = _this.getMaxSizesFromProps.bind(_this);
+        return _this;
+      }
+      Rnd2.prototype.componentDidMount = function() {
+        this.updateOffsetFromParent();
+        var _a2 = this.offsetFromParent, left = _a2.left, top2 = _a2.top;
+        var _b2 = this.getDraggablePosition(), x2 = _b2.x, y2 = _b2.y;
+        this.draggable.setState({
+          x: x2 - left,
+          y: y2 - top2
+        });
+        this.forceUpdate();
+      };
+      Rnd2.prototype.getDraggablePosition = function() {
+        var _a2 = this.draggable.state, x2 = _a2.x, y2 = _a2.y;
+        return { x: x2, y: y2 };
+      };
+      Rnd2.prototype.getParent = function() {
+        return this.resizable && this.resizable.parentNode;
+      };
+      Rnd2.prototype.getParentSize = function() {
+        return this.resizable.getParentSize();
+      };
+      Rnd2.prototype.getMaxSizesFromProps = function() {
+        var maxWidth = typeof this.props.maxWidth === "undefined" ? Number.MAX_SAFE_INTEGER : this.props.maxWidth;
+        var maxHeight = typeof this.props.maxHeight === "undefined" ? Number.MAX_SAFE_INTEGER : this.props.maxHeight;
+        return { maxWidth, maxHeight };
+      };
+      Rnd2.prototype.getSelfElement = function() {
+        return this.resizable && this.resizable.resizable;
+      };
+      Rnd2.prototype.getOffsetHeight = function(boundary) {
+        var scale = this.props.scale;
+        switch (this.props.bounds) {
+          case "window":
+            return window.innerHeight / scale;
+          case "body":
+            return document.body.offsetHeight / scale;
+          default:
+            return boundary.offsetHeight;
+        }
+      };
+      Rnd2.prototype.getOffsetWidth = function(boundary) {
+        var scale = this.props.scale;
+        switch (this.props.bounds) {
+          case "window":
+            return window.innerWidth / scale;
+          case "body":
+            return document.body.offsetWidth / scale;
+          default:
+            return boundary.offsetWidth;
+        }
+      };
+      Rnd2.prototype.onDragStart = function(e2, data) {
+        if (this.props.onDragStart) {
+          this.props.onDragStart(e2, data);
+        }
+        var pos = this.getDraggablePosition();
+        this.originalPosition = pos;
+        if (!this.props.bounds)
+          return;
+        var parent = this.getParent();
+        var scale = this.props.scale;
+        var boundary;
+        if (this.props.bounds === "parent") {
+          boundary = parent;
+        } else if (this.props.bounds === "body") {
+          var parentRect_1 = parent.getBoundingClientRect();
+          var parentLeft_1 = parentRect_1.left;
+          var parentTop_1 = parentRect_1.top;
+          var bodyRect = document.body.getBoundingClientRect();
+          var left_1 = -(parentLeft_1 - parent.offsetLeft * scale - bodyRect.left) / scale;
+          var top_1 = -(parentTop_1 - parent.offsetTop * scale - bodyRect.top) / scale;
+          var right = (document.body.offsetWidth - this.resizable.size.width * scale) / scale + left_1;
+          var bottom = (document.body.offsetHeight - this.resizable.size.height * scale) / scale + top_1;
+          return this.setState({ bounds: { top: top_1, right, bottom, left: left_1 } });
+        } else if (this.props.bounds === "window") {
+          if (!this.resizable)
+            return;
+          var parentRect_2 = parent.getBoundingClientRect();
+          var parentLeft_2 = parentRect_2.left;
+          var parentTop_2 = parentRect_2.top;
+          var left_2 = -(parentLeft_2 - parent.offsetLeft * scale) / scale;
+          var top_2 = -(parentTop_2 - parent.offsetTop * scale) / scale;
+          var right = (window.innerWidth - this.resizable.size.width * scale) / scale + left_2;
+          var bottom = (window.innerHeight - this.resizable.size.height * scale) / scale + top_2;
+          return this.setState({ bounds: { top: top_2, right, bottom, left: left_2 } });
+        } else if (typeof this.props.bounds === "string") {
+          boundary = document.querySelector(this.props.bounds);
+        } else if (this.props.bounds instanceof HTMLElement) {
+          boundary = this.props.bounds;
+        }
+        if (!(boundary instanceof HTMLElement) || !(parent instanceof HTMLElement)) {
+          return;
+        }
+        var boundaryRect = boundary.getBoundingClientRect();
+        var boundaryLeft = boundaryRect.left;
+        var boundaryTop = boundaryRect.top;
+        var parentRect = parent.getBoundingClientRect();
+        var parentLeft = parentRect.left;
+        var parentTop = parentRect.top;
+        var left = (boundaryLeft - parentLeft) / scale;
+        var top2 = boundaryTop - parentTop;
+        if (!this.resizable)
+          return;
+        this.updateOffsetFromParent();
+        var offset = this.offsetFromParent;
+        this.setState({
+          bounds: {
+            top: top2 - offset.top,
+            right: left + (boundary.offsetWidth - this.resizable.size.width) - offset.left / scale,
+            bottom: top2 + (boundary.offsetHeight - this.resizable.size.height) - offset.top,
+            left: left - offset.left / scale
+          }
+        });
+      };
+      Rnd2.prototype.onDrag = function(e2, data) {
+        if (!this.props.onDrag)
+          return;
+        var _a2 = this.offsetFromParent, left = _a2.left, top2 = _a2.top;
+        if (!this.props.dragAxis || this.props.dragAxis === "both") {
+          return this.props.onDrag(e2, __assign$2(__assign$2({}, data), { x: data.x - left, y: data.y - top2 }));
+        } else if (this.props.dragAxis === "x") {
+          return this.props.onDrag(e2, __assign$2(__assign$2({}, data), { x: data.x + left, y: this.originalPosition.y + top2, deltaY: 0 }));
+        } else if (this.props.dragAxis === "y") {
+          return this.props.onDrag(e2, __assign$2(__assign$2({}, data), { x: this.originalPosition.x + left, y: data.y + top2, deltaX: 0 }));
+        }
+      };
+      Rnd2.prototype.onDragStop = function(e2, data) {
+        if (!this.props.onDragStop)
+          return;
+        var _a2 = this.offsetFromParent, left = _a2.left, top2 = _a2.top;
+        if (!this.props.dragAxis || this.props.dragAxis === "both") {
+          return this.props.onDragStop(e2, __assign$2(__assign$2({}, data), { x: data.x + left, y: data.y + top2 }));
+        } else if (this.props.dragAxis === "x") {
+          return this.props.onDragStop(e2, __assign$2(__assign$2({}, data), { x: data.x + left, y: this.originalPosition.y + top2, deltaY: 0 }));
+        } else if (this.props.dragAxis === "y") {
+          return this.props.onDragStop(e2, __assign$2(__assign$2({}, data), { x: this.originalPosition.x + left, y: data.y + top2, deltaX: 0 }));
+        }
+      };
+      Rnd2.prototype.onResizeStart = function(e2, dir, elementRef) {
+        e2.stopPropagation();
+        this.setState({
+          resizing: true
+        });
+        var scale = this.props.scale;
+        var offset = this.offsetFromParent;
+        var pos = this.getDraggablePosition();
+        this.resizingPosition = { x: pos.x + offset.left, y: pos.y + offset.top };
+        this.originalPosition = pos;
+        if (this.props.bounds) {
+          var parent_1 = this.getParent();
+          var boundary = void 0;
+          if (this.props.bounds === "parent") {
+            boundary = parent_1;
+          } else if (this.props.bounds === "body") {
+            boundary = document.body;
+          } else if (this.props.bounds === "window") {
+            boundary = window;
+          } else if (typeof this.props.bounds === "string") {
+            boundary = document.querySelector(this.props.bounds);
+          } else if (this.props.bounds instanceof HTMLElement) {
+            boundary = this.props.bounds;
+          }
+          var self_1 = this.getSelfElement();
+          if (self_1 instanceof Element && (boundary instanceof HTMLElement || boundary === window) && parent_1 instanceof HTMLElement) {
+            var _a2 = this.getMaxSizesFromProps(), maxWidth = _a2.maxWidth, maxHeight = _a2.maxHeight;
+            var parentSize = this.getParentSize();
+            if (maxWidth && typeof maxWidth === "string") {
+              if (maxWidth.endsWith("%")) {
+                var ratio = Number(maxWidth.replace("%", "")) / 100;
+                maxWidth = parentSize.width * ratio;
+              } else if (maxWidth.endsWith("px")) {
+                maxWidth = Number(maxWidth.replace("px", ""));
+              }
+            }
+            if (maxHeight && typeof maxHeight === "string") {
+              if (maxHeight.endsWith("%")) {
+                var ratio = Number(maxHeight.replace("%", "")) / 100;
+                maxHeight = parentSize.width * ratio;
+              } else if (maxHeight.endsWith("px")) {
+                maxHeight = Number(maxHeight.replace("px", ""));
+              }
+            }
+            var selfRect = self_1.getBoundingClientRect();
+            var selfLeft = selfRect.left;
+            var selfTop = selfRect.top;
+            var boundaryRect = this.props.bounds === "window" ? { left: 0, top: 0 } : boundary.getBoundingClientRect();
+            var boundaryLeft = boundaryRect.left;
+            var boundaryTop = boundaryRect.top;
+            var offsetWidth = this.getOffsetWidth(boundary);
+            var offsetHeight = this.getOffsetHeight(boundary);
+            var hasLeft = dir.toLowerCase().endsWith("left");
+            var hasRight = dir.toLowerCase().endsWith("right");
+            var hasTop = dir.startsWith("top");
+            var hasBottom = dir.startsWith("bottom");
+            if ((hasLeft || hasTop) && this.resizable) {
+              var max = (selfLeft - boundaryLeft) / scale + this.resizable.size.width;
+              this.setState({ maxWidth: max > Number(maxWidth) ? maxWidth : max });
+            }
+            if (hasRight || this.props.lockAspectRatio && !hasLeft && !hasTop) {
+              var max = offsetWidth + (boundaryLeft - selfLeft) / scale;
+              this.setState({ maxWidth: max > Number(maxWidth) ? maxWidth : max });
+            }
+            if ((hasTop || hasLeft) && this.resizable) {
+              var max = (selfTop - boundaryTop) / scale + this.resizable.size.height;
+              this.setState({
+                maxHeight: max > Number(maxHeight) ? maxHeight : max
+              });
+            }
+            if (hasBottom || this.props.lockAspectRatio && !hasTop && !hasLeft) {
+              var max = offsetHeight + (boundaryTop - selfTop) / scale;
+              this.setState({
+                maxHeight: max > Number(maxHeight) ? maxHeight : max
+              });
+            }
+          }
+        } else {
+          this.setState({
+            maxWidth: this.props.maxWidth,
+            maxHeight: this.props.maxHeight
+          });
+        }
+        if (this.props.onResizeStart) {
+          this.props.onResizeStart(e2, dir, elementRef);
+        }
+      };
+      Rnd2.prototype.onResize = function(e2, direction, elementRef, delta) {
+        var newPos = { x: this.originalPosition.x, y: this.originalPosition.y };
+        var left = -delta.width;
+        var top2 = -delta.height;
+        var directions = ["top", "left", "topLeft", "bottomLeft", "topRight"];
+        if (directions.indexOf(direction) !== -1) {
+          if (direction === "bottomLeft") {
+            newPos.x += left;
+          } else if (direction === "topRight") {
+            newPos.y += top2;
+          } else {
+            newPos.x += left;
+            newPos.y += top2;
+          }
+        }
+        if (newPos.x !== this.draggable.state.x || newPos.y !== this.draggable.state.y) {
+          this.draggable.setState(newPos);
+        }
+        this.updateOffsetFromParent();
+        var offset = this.offsetFromParent;
+        var x2 = this.getDraggablePosition().x + offset.left;
+        var y2 = this.getDraggablePosition().y + offset.top;
+        this.resizingPosition = { x: x2, y: y2 };
+        if (!this.props.onResize)
+          return;
+        this.props.onResize(e2, direction, elementRef, delta, {
+          x: x2,
+          y: y2
+        });
+      };
+      Rnd2.prototype.onResizeStop = function(e2, direction, elementRef, delta) {
+        this.setState({
+          resizing: false
+        });
+        var _a2 = this.getMaxSizesFromProps(), maxWidth = _a2.maxWidth, maxHeight = _a2.maxHeight;
+        this.setState({ maxWidth, maxHeight });
+        if (this.props.onResizeStop) {
+          this.props.onResizeStop(e2, direction, elementRef, delta, this.resizingPosition);
+        }
+      };
+      Rnd2.prototype.updateSize = function(size) {
+        if (!this.resizable)
+          return;
+        this.resizable.updateSize({ width: size.width, height: size.height });
+      };
+      Rnd2.prototype.updatePosition = function(position2) {
+        this.draggable.setState(position2);
+      };
+      Rnd2.prototype.updateOffsetFromParent = function() {
+        var scale = this.props.scale;
+        var parent = this.getParent();
+        var self2 = this.getSelfElement();
+        if (!parent || self2 === null) {
+          return {
+            top: 0,
+            left: 0
+          };
+        }
+        var parentRect = parent.getBoundingClientRect();
+        var parentLeft = parentRect.left;
+        var parentTop = parentRect.top;
+        var selfRect = self2.getBoundingClientRect();
+        var position2 = this.getDraggablePosition();
+        var scrollLeft = parent.scrollLeft;
+        var scrollTop = parent.scrollTop;
+        this.offsetFromParent = {
+          left: selfRect.left - parentLeft + scrollLeft - position2.x * scale,
+          top: selfRect.top - parentTop + scrollTop - position2.y * scale
+        };
+      };
+      Rnd2.prototype.render = function() {
+        var _a2 = this.props, disableDragging = _a2.disableDragging, style = _a2.style, dragHandleClassName = _a2.dragHandleClassName, position2 = _a2.position, onMouseDown = _a2.onMouseDown, onMouseUp = _a2.onMouseUp, dragAxis = _a2.dragAxis, dragGrid = _a2.dragGrid, bounds = _a2.bounds, enableUserSelectHack = _a2.enableUserSelectHack, cancel = _a2.cancel, children = _a2.children;
+        _a2.onResizeStart;
+        _a2.onResize;
+        _a2.onResizeStop;
+        _a2.onDragStart;
+        _a2.onDrag;
+        _a2.onDragStop;
+        var resizeHandleStyles = _a2.resizeHandleStyles, resizeHandleClasses = _a2.resizeHandleClasses, resizeHandleComponent = _a2.resizeHandleComponent, enableResizing = _a2.enableResizing, resizeGrid = _a2.resizeGrid, resizeHandleWrapperClass = _a2.resizeHandleWrapperClass, resizeHandleWrapperStyle = _a2.resizeHandleWrapperStyle, scale = _a2.scale, allowAnyClick = _a2.allowAnyClick, resizableProps = __rest$1(_a2, ["disableDragging", "style", "dragHandleClassName", "position", "onMouseDown", "onMouseUp", "dragAxis", "dragGrid", "bounds", "enableUserSelectHack", "cancel", "children", "onResizeStart", "onResize", "onResizeStop", "onDragStart", "onDrag", "onDragStop", "resizeHandleStyles", "resizeHandleClasses", "resizeHandleComponent", "enableResizing", "resizeGrid", "resizeHandleWrapperClass", "resizeHandleWrapperStyle", "scale", "allowAnyClick"]);
+        var defaultValue = this.props.default ? __assign$2({}, this.props.default) : void 0;
+        delete resizableProps.default;
+        var cursorStyle = disableDragging || dragHandleClassName ? { cursor: "auto" } : { cursor: "move" };
+        var innerStyle = __assign$2(__assign$2(__assign$2({}, resizableStyle), cursorStyle), style);
+        var _b2 = this.offsetFromParent, left = _b2.left, top2 = _b2.top;
+        var draggablePosition;
+        if (position2) {
+          draggablePosition = {
+            x: position2.x - left,
+            y: position2.y - top2
+          };
+        }
+        var pos = this.state.resizing ? void 0 : draggablePosition;
+        var dragAxisOrUndefined = this.state.resizing ? "both" : dragAxis;
+        return React$1.createElement(
+          Draggable,
+          { ref: this.refDraggable, handle: dragHandleClassName ? ".".concat(dragHandleClassName) : void 0, defaultPosition: defaultValue, onMouseDown, onMouseUp, onStart: this.onDragStart, onDrag: this.onDrag, onStop: this.onDragStop, axis: dragAxisOrUndefined, disabled: disableDragging, grid: dragGrid, bounds: bounds ? this.state.bounds : void 0, position: pos, enableUserSelectHack, cancel, scale, allowAnyClick, nodeRef: this.resizableElement },
+          React$1.createElement(Resizable, __assign$2({}, resizableProps, { ref: this.refResizable, defaultSize: defaultValue, size: this.props.size, enable: typeof enableResizing === "boolean" ? getEnableResizingByFlag(enableResizing) : enableResizing, onResizeStart: this.onResizeStart, onResize: this.onResize, onResizeStop: this.onResizeStop, style: innerStyle, minWidth: this.props.minWidth, minHeight: this.props.minHeight, maxWidth: this.state.resizing ? this.state.maxWidth : this.props.maxWidth, maxHeight: this.state.resizing ? this.state.maxHeight : this.props.maxHeight, grid: resizeGrid, handleWrapperClass: resizeHandleWrapperClass, handleWrapperStyle: resizeHandleWrapperStyle, lockAspectRatio: this.props.lockAspectRatio, lockAspectRatioExtraWidth: this.props.lockAspectRatioExtraWidth, lockAspectRatioExtraHeight: this.props.lockAspectRatioExtraHeight, handleStyles: resizeHandleStyles, handleClasses: resizeHandleClasses, handleComponent: resizeHandleComponent, scale: this.props.scale }), children)
+        );
+      };
+      Rnd2.defaultProps = {
+        maxWidth: Number.MAX_SAFE_INTEGER,
+        maxHeight: Number.MAX_SAFE_INTEGER,
+        scale: 1,
+        onResizeStart: function() {
+        },
+        onResize: function() {
+        },
+        onResizeStop: function() {
+        },
+        onDragStart: function() {
+        },
+        onDrag: function() {
+        },
+        onDragStop: function() {
+        }
+      };
+      return Rnd2;
+    }(React$1.PureComponent)
+  );
   var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
   const freeGlobal$1 = freeGlobal;
   var freeSelf = typeof self == "object" && self && self.Object === Object && self;
@@ -10791,12 +12462,12 @@ var __publicField = (obj, key, value) => {
   }
   var helpers = /* @__PURE__ */ Object.freeze({
     __proto__: null,
-    addClasses: addClasses$1,
-    classNamesToQuery: classNamesToQuery$1,
-    getElementDocument: getElementDocument$1,
     getElementWindow: getElementWindow$1,
+    getElementDocument: getElementDocument$1,
     getOptions: getOptions$1,
-    removeClasses: removeClasses$1
+    addClasses: addClasses$1,
+    removeClasses: removeClasses$1,
+    classNamesToQuery: classNamesToQuery$1
   });
   var getElementWindow = getElementWindow$1, getElementDocument = getElementDocument$1, getOptions = getOptions$1, addClasses = addClasses$1, removeClasses = removeClasses$1, classNamesToQuery = classNamesToQuery$1;
   var SimpleBarCore = (
@@ -11553,26 +13224,85 @@ var __publicField = (obj, key, value) => {
     );
   });
   SimpleBar.displayName = "SimpleBar";
-  const InlineTag = newStyled(it.span)({
-    marginRight: 4,
-    // border: "1px dashed black",
-    borderRadius: 4,
-    padding: "2px 4px",
-    // lineHeight: "1.5em",
-    height: "24px",
-    position: "relative",
-    userSelect: "none"
+  const Info = IconWrapper("info", true, function(props) {
+    return /* @__PURE__ */ React$1.createElement("svg", {
+      width: props.size,
+      height: props.size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /* @__PURE__ */ React$1.createElement("path", {
+      d: "M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z",
+      fill: props.colors[1],
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinejoin: props.strokeLinejoin
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      fillRule: "evenodd",
+      clipRule: "evenodd",
+      d: "M24 11C25.3807 11 26.5 12.1193 26.5 13.5C26.5 14.8807 25.3807 16 24 16C22.6193 16 21.5 14.8807 21.5 13.5C21.5 12.1193 22.6193 11 24 11Z",
+      fill: props.colors[2]
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M24.5 34V20H23.5H22.5",
+      stroke: props.colors[2],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap,
+      strokeLinejoin: props.strokeLinejoin
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M21 34H28",
+      stroke: props.colors[2],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap,
+      strokeLinejoin: props.strokeLinejoin
+    }));
   });
-  function useSlideIn() {
-    const spring = J({
-      from: { opacity: 1, left: "-100%" },
-      to: { opacity: 1, left: "0%" },
-      config: {
-        ...mt.gentle
-      }
-    });
-    return spring;
-  }
+  const SettingTwo = IconWrapper("setting-two", false, function(props) {
+    return /* @__PURE__ */ React$1.createElement("svg", {
+      width: props.size,
+      height: props.size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /* @__PURE__ */ React$1.createElement("path", {
+      d: "M18.2838 43.1713C14.9327 42.1736 11.9498 40.3213 9.58787 37.867C10.469 36.8227 11 35.4734 11 34.0001C11 30.6864 8.31371 28.0001 5 28.0001C4.79955 28.0001 4.60139 28.01 4.40599 28.0292C4.13979 26.7277 4 25.3803 4 24.0001C4 21.9095 4.32077 19.8938 4.91579 17.9995C4.94381 17.9999 4.97188 18.0001 5 18.0001C8.31371 18.0001 11 15.3138 11 12.0001C11 11.0488 10.7786 10.1493 10.3846 9.35011C12.6975 7.1995 15.5205 5.59002 18.6521 4.72314C19.6444 6.66819 21.6667 8.00013 24 8.00013C26.3333 8.00013 28.3556 6.66819 29.3479 4.72314C32.4795 5.59002 35.3025 7.1995 37.6154 9.35011C37.2214 10.1493 37 11.0488 37 12.0001C37 15.3138 39.6863 18.0001 43 18.0001C43.0281 18.0001 43.0562 17.9999 43.0842 17.9995C43.6792 19.8938 44 21.9095 44 24.0001C44 25.3803 43.8602 26.7277 43.594 28.0292C43.3986 28.01 43.2005 28.0001 43 28.0001C39.6863 28.0001 37 30.6864 37 34.0001C37 35.4734 37.531 36.8227 38.4121 37.867C36.0502 40.3213 33.0673 42.1736 29.7162 43.1713C28.9428 40.752 26.676 39.0001 24 39.0001C21.324 39.0001 19.0572 40.752 18.2838 43.1713Z",
+      fill: props.colors[1],
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinejoin: props.strokeLinejoin
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M24 31C27.866 31 31 27.866 31 24C31 20.134 27.866 17 24 17C20.134 17 17 20.134 17 24C17 27.866 20.134 31 24 31Z",
+      fill: props.colors[3],
+      stroke: props.colors[2],
+      strokeWidth: props.strokeWidth,
+      strokeLinejoin: props.strokeLinejoin
+    }));
+  });
+  const GithubOne = IconWrapper("github-one", true, function(props) {
+    return /* @__PURE__ */ React$1.createElement("svg", {
+      width: props.size,
+      height: props.size,
+      viewBox: "0 0 48 48",
+      fill: "none"
+    }, /* @__PURE__ */ React$1.createElement("path", {
+      d: "M29.3444 30.4765C31.7481 29.977 33.9292 29.1108 35.6247 27.8391C38.5202 25.6676 40 22.3136 40 18.9999C40 16.6752 39.1187 14.505 37.5929 12.6668C36.7427 11.6425 39.2295 3.99989 37.02 5.02919C34.8105 6.05848 31.5708 8.33679 29.8726 7.83398C28.0545 7.29565 26.0733 6.99989 24 6.99989C22.1992 6.99989 20.4679 7.22301 18.8526 7.6344C16.5046 8.23237 14.2591 5.99989 12 5.02919C9.74086 4.05848 10.9736 11.9632 10.3026 12.7944C8.84119 14.6051 8 16.7288 8 18.9999C8 22.3136 9.79086 25.6676 12.6863 27.8391C14.6151 29.2857 17.034 30.2076 19.7401 30.6619",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M19.7397 30.6619C18.5812 31.937 18.002 33.1478 18.002 34.2944C18.002 35.441 18.002 38.3464 18.002 43.0106",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M29.3446 30.4766C30.4423 31.9174 30.9912 33.211 30.9912 34.3576C30.9912 35.5042 30.9912 38.3885 30.9912 43.0107",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap
+    }), /* @__PURE__ */ React$1.createElement("path", {
+      d: "M6 31.2155C6.89887 31.3254 7.56554 31.7387 8 32.4554C8.65169 33.5303 11.0742 37.518 13.8251 37.518C15.6591 37.518 17.0515 37.518 18.0024 37.518",
+      stroke: props.colors[0],
+      strokeWidth: props.strokeWidth,
+      strokeLinecap: props.strokeLinecap
+    }));
+  });
   const ButtonContainer = newStyled.span(
     {
       display: "inline-block",
@@ -11629,6 +13359,27 @@ var __publicField = (obj, key, value) => {
       }
     );
   }
+  const InlineTag = newStyled(it.span)({
+    marginRight: 4,
+    // border: "1px dashed black",
+    borderRadius: 4,
+    padding: "2px 4px",
+    // lineHeight: "24px",
+    // lineHeight: "1.5em",
+    height: "24px",
+    position: "relative",
+    userSelect: "none"
+  });
+  function useSlideIn() {
+    const spring = J({
+      from: { opacity: 1, left: "-100%" },
+      to: { opacity: 1, left: "0%" },
+      config: {
+        ...mt.gentle
+      }
+    });
+    return spring;
+  }
   const InfoRecordContainer = newStyled(it.span)(
     {
       lineHeight: "24px",
@@ -11645,6 +13396,8 @@ var __publicField = (obj, key, value) => {
       "a:hover": {
         // borderBottom: `${theme.colors.active} 2px solid`,
         pointer: "cursor"
+        // transform: "scale(1.1)",
+        // transition: "transform 500ms",
       }
     })
   );
@@ -11694,6 +13447,145 @@ var __publicField = (obj, key, value) => {
                 display: isHover ? "flex" : "none"
               },
               children: record.action && record.action.map(({ children, ...restProps }, index2) => /* @__PURE__ */ jsx(Button, { ...restProps, children }, index2))
+            }
+          )
+        ]
+      }
+    );
+  }
+  const ScaleIt = newStyled.div({
+    "&:hover": {
+      transform: "scale(1.2)",
+      transition: "transform 500ms",
+      cursor: "pointer"
+    }
+  });
+  const About = React$1.memo(function() {
+    const theme2 = useTheme();
+    const [versionInfo, setVersionInfo] = React$1.useState([]);
+    React$1.useEffect(() => {
+      getValue("VERSION_INFO", []).then((messages) => {
+        setVersionInfo(messages);
+        logger.debug("成功设置about页面的版本信息");
+      });
+    }, []);
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        style: {
+          // border: "2px solid black",
+          width: 380,
+          color: "black",
+          // height: 300,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        },
+        children: [
+          /* @__PURE__ */ jsxs(
+            "div",
+            {
+              style: {
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+                width: "100%",
+                margin: "8px 0px"
+              },
+              children: [
+                /* @__PURE__ */ jsx(ScaleIt, { children: /* @__PURE__ */ jsx(GithubOne, { theme: "filled", size: "24", fill: theme2.colors.active }) }),
+                /* @__PURE__ */ jsx(Button, { disabled: true, children: "使用引导" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxs("div", { children: [
+            "版本 ",
+            /* @__PURE__ */ jsx("span", { style: { marginLeft: 24 }, children: metadata.projects.welearn.version })
+          ] }),
+          /* @__PURE__ */ jsxs(
+            "div",
+            {
+              style: {
+                margin: "8px 0px"
+              },
+              children: [
+                "Made with ❤️ by",
+                /* @__PURE__ */ jsx(
+                  ScaleIt,
+                  {
+                    style: {
+                      display: "inline-block",
+                      color: theme2.colors.active,
+                      fontSize: 20,
+                      marginLeft: 8
+                    },
+                    onClick: () => {
+                      window.open("https://github.com/SSmJaE", "_blank");
+                    },
+                    children: "SSmJaE"
+                  }
+                )
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "div",
+            {
+              style: {
+                width: "100%",
+                borderTop: "2px solid black",
+                marginTop: 8
+              },
+              children: versionInfo.length !== 0 && versionInfo.map((message) => /* @__PURE__ */ jsx(
+                InfoRecordContainer,
+                {
+                  style: {
+                    display: "block",
+                    marginBottom: 4
+                  },
+                  dangerouslySetInnerHTML: {
+                    __html: `${message}`
+                  }
+                }
+              ))
+            }
+          )
+        ]
+      }
+    );
+  });
+  function ErrorRecord({ record }) {
+    const spring = useSlideIn();
+    const theme2 = useTheme();
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        style: {
+          position: "relative",
+          lineHeight: "24px"
+        },
+        children: [
+          /* @__PURE__ */ jsx(
+            InlineTag,
+            {
+              style: {
+                backgroundColor: theme2.colors.error,
+                color: "white",
+                ...spring
+              },
+              children: "异常"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            it.span,
+            {
+              style: {
+                lineHeight: "24px",
+                position: "relative",
+                ...spring
+              },
+              children: record.content.message
             }
           )
         ]
@@ -11823,7 +13715,8 @@ var __publicField = (obj, key, value) => {
               style: {
                 ...spring,
                 backgroundColor: theme2.colors.active,
-                color: "white"
+                color: "white",
+                fontFamily: "monospace"
               },
               children: record.content.order
             }
@@ -11873,43 +13766,6 @@ var __publicField = (obj, key, value) => {
                 /* @__PURE__ */ jsx(SolveButton, { content: record.content }),
                 /* @__PURE__ */ jsx(CopyButton, { answerText: record.content.answerText })
               ]
-            }
-          )
-        ]
-      }
-    );
-  }
-  function ErrorRecord({ record }) {
-    const spring = useSlideIn();
-    const theme2 = useTheme();
-    return /* @__PURE__ */ jsxs(
-      "div",
-      {
-        style: {
-          position: "relative",
-          lineHeight: "24px"
-        },
-        children: [
-          /* @__PURE__ */ jsx(
-            InlineTag,
-            {
-              style: {
-                backgroundColor: theme2.colors.error,
-                color: "white",
-                ...spring
-              },
-              children: "异常"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            it.span,
-            {
-              style: {
-                lineHeight: "24px",
-                position: "relative",
-                ...spring
-              },
-              children: record.content.message
             }
           )
         ]
@@ -11969,7 +13825,7 @@ var __publicField = (obj, key, value) => {
     } = useStore();
     const appTitle = React$1.useMemo(() => getAppTitle(), []);
     const [isDragging, setIsDragging] = React$1.useState(false);
-    useTheme();
+    const theme2 = useTheme();
     const [spring, api] = J(
       () => ({
         opacity: visibility.log ? 1 : 0,
@@ -11996,92 +13852,158 @@ var __publicField = (obj, key, value) => {
       }
     }, [visibility.log]);
     return /* @__PURE__ */ jsx(
-      cjsExports,
+      Rnd,
       {
-        handle: "#log-panel-menu-bar",
+        default: {
+          x: 100,
+          y: 100,
+          width: 600,
+          height: 100
+        },
+        minWidth: 350,
+        maxWidth: 600,
+        minHeight: 100,
+        maxHeight: 600,
+        bounds: "window",
         cancel: "#log-panel-menu-buttons",
-        bounds: "body",
-        onStart: () => {
+        dragHandleClassName: "log-panel-menu-bar",
+        onDragStart: () => {
           setIsDragging(true);
         },
-        onStop: (e2, data) => {
+        onDragStop: () => {
           setIsDragging(false);
+        },
+        resizeGrid: [20, 20],
+        enableResizing: {
+          top: false,
+          right: true,
+          bottom: false,
+          left: true,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false
         },
         children: /* @__PURE__ */ jsxs(
           it.div,
           {
             style: {
-              // 页面可能很长，所以这里使用 fixed 定位
-              position: "fixed",
-              top: 100,
-              left: 100,
               zIndex: 99,
-              // minWidth: 300,
-              // maxWidth: 500,
-              width: 600,
+              width: "100%",
               maxHeight: 600,
               background: "rgba(255, 255, 255, 0.95)",
               border: "black 2px solid",
               borderRadius: 10,
               boxShadow: "0 11px 15px -7px rgba(0, 0, 0, 0.2),0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12)",
-              // display: visibility.log ? "flex" : "none",
               display: display ? "flex" : "none",
               flexDirection: "column",
               lineHeight: "24px !important",
               ...spring
             },
             children: [
-              /* @__PURE__ */ jsxs(MenuBar, { id: "log-panel-menu-bar", isDragging, children: [
-                /* @__PURE__ */ jsx(
-                  "div",
-                  {
-                    style: {
-                      fontSize: 24
-                    },
-                    children: appTitle
-                  }
-                ),
-                /* @__PURE__ */ jsxs(
-                  "div",
-                  {
-                    id: "log-panel-menu-buttons",
-                    style: {
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    },
-                    children: [
-                      /* @__PURE__ */ jsx(PopOver, { content: "打开设置面板", children: /* @__PURE__ */ jsx(
-                        MenuButton,
-                        {
-                          onClick: () => {
-                            store.setVisibility("config", !visibility.config);
-                          },
-                          style: {
-                            lineHeight: "normal"
-                          },
-                          children: "⚙️"
-                        }
-                      ) }),
-                      /* @__PURE__ */ jsx(PopOver, { content: "最小化当前窗口", children: /* @__PURE__ */ jsx(
-                        MenuButton,
-                        {
-                          onClick: () => {
-                            store.setVisibility("log", false);
-                            store.setVisibility("floating", true);
-                          },
-                          style: {
-                            lineHeight: "normal",
-                            marginLeft: 4
-                          },
-                          children: "❌"
-                        }
-                      ) })
-                    ]
-                  }
-                )
-              ] }),
+              /* @__PURE__ */ jsxs(
+                MenuBar,
+                {
+                  id: "log-panel-menu-bar",
+                  className: "log-panel-menu-bar",
+                  isDragging,
+                  children: [
+                    /* @__PURE__ */ jsx(
+                      "div",
+                      {
+                        style: {
+                          fontSize: 24
+                        },
+                        children: appTitle
+                      }
+                    ),
+                    /* @__PURE__ */ jsxs(
+                      "div",
+                      {
+                        id: "log-panel-menu-buttons",
+                        style: {
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        },
+                        children: [
+                          /* @__PURE__ */ jsx(
+                            PopOver,
+                            {
+                              content: /* @__PURE__ */ jsx(About, {}),
+                              delay: true,
+                              backgroundColor: "rgba(255, 255, 255, 0.95)",
+                              placement: "right",
+                              border: true,
+                              children: /* @__PURE__ */ jsx(MenuButton, { children: /* @__PURE__ */ jsx(
+                                Info,
+                                {
+                                  theme: "filled",
+                                  size: "28",
+                                  fill: theme2.colors.active,
+                                  strokeWidth: 5
+                                }
+                              ) })
+                            },
+                            "about"
+                          ),
+                          /* @__PURE__ */ jsx(
+                            PopOver,
+                            {
+                              content: `${visibility.config ? "关闭" : "打开"}设置面板`,
+                              children: /* @__PURE__ */ jsx(
+                                MenuButton,
+                                {
+                                  onClick: () => {
+                                    store.setVisibility("config", !visibility.config);
+                                  },
+                                  style: {
+                                    lineHeight: "normal",
+                                    marginLeft: 4
+                                  },
+                                  children: /* @__PURE__ */ jsx(
+                                    SettingTwo,
+                                    {
+                                      theme: "multi-color",
+                                      size: "28",
+                                      fill: ["#333", "#E6E6E6", "#000000", "#ffffff"],
+                                      strokeWidth: 3
+                                    }
+                                  )
+                                }
+                              )
+                            },
+                            "config"
+                          ),
+                          /* @__PURE__ */ jsx(PopOver, { content: "最小化当前窗口", children: /* @__PURE__ */ jsx(
+                            MenuButton,
+                            {
+                              onClick: () => {
+                                store.setVisibility("log", false);
+                                store.setVisibility("floating", true);
+                              },
+                              style: {
+                                lineHeight: "normal",
+                                marginLeft: 4
+                              },
+                              children: /* @__PURE__ */ jsx(
+                                Close,
+                                {
+                                  theme: "filled",
+                                  size: "28",
+                                  fill: theme2.colors.error,
+                                  strokeWidth: 7
+                                }
+                              )
+                            }
+                          ) }, "minimize")
+                        ]
+                      }
+                    )
+                  ]
+                }
+              ),
               /* @__PURE__ */ jsxs(
                 SimpleBar,
                 {
@@ -12165,10 +14087,14 @@ var __publicField = (obj, key, value) => {
         Global,
         {
           styles: css`
-                    #ecos-helper {
+                    #eocs-helper {
                         all: initial;
                         font-family: 华文新魏 !important;
                         line-height: normal !important;
+                        /* 页面可能很长，所以这里使用 fixed 定位 */
+                        position: fixed;
+                        top: 0;
+                        left: 0;
                     }
                 `
         }
@@ -12205,7 +14131,7 @@ var __publicField = (obj, key, value) => {
       logger.debug("already initialized");
       return;
     }
-    client.createRoot(
+    createRoot(
       (() => {
         const app = document.createElement("div");
         app.id = EXTENSION_ID;
@@ -12222,7 +14148,7 @@ var __publicField = (obj, key, value) => {
   })();
   var monkeyWindow = window;
   var GM = /* @__PURE__ */ (() => monkeyWindow.GM)();
-  var unsafeWindow = /* @__PURE__ */ (() => {
+  var unsafeWindow$1 = /* @__PURE__ */ (() => {
     return monkeyWindow.unsafeWindow;
   })();
   var GM_info = /* @__PURE__ */ (() => monkeyWindow.GM_info)();
@@ -12275,6 +14201,6 @@ var __publicField = (obj, key, value) => {
     GM_unregisterMenuCommand,
     GM_xmlhttpRequest,
     monkeyWindow,
-    unsafeWindow
+    unsafeWindow: unsafeWindow$1
   }, Symbol.toStringTag, { value: "Module" }));
 })(React, ReactDOM);
