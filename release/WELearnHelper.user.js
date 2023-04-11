@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.4
+// @version      1.0.5
 // @author       SSmJaE
 // @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成
 // @license      GPL-3.0
@@ -726,7 +726,7 @@ var __publicField = (obj, key, value) => {
       return this.log({ type: "error", id, content, extra, action });
     }
     hr() {
-      return this.log({ type: "hr", content: "" });
+      this.info({ content: "即将切换题型" });
     }
     debug(...content) {
       console.log(`[eocs-helper]`, ...content);
@@ -1136,7 +1136,7 @@ var __publicField = (obj, key, value) => {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.4",
+      version: "1.0.5",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
@@ -1875,12 +1875,26 @@ var __publicField = (obj, key, value) => {
         return returnJson.data;
       }
     }
-    static async collectAll(taskId, domString, isSchoolTest) {
+    static async collectAll({
+      task_id,
+      dom_string,
+      part_index,
+      typical,
+      is_school_test,
+      tt_id,
+      sheet_id,
+      stt_id
+    }) {
       const response = await request.post("/collect/", {
         body: {
-          task_id: taskId,
-          dom_string: domString,
-          is_school_test: isSchoolTest
+          task_id,
+          dom_string,
+          part_index,
+          typical,
+          is_school_test,
+          tt_id,
+          sheet_id,
+          stt_id
         }
       });
       const returnJson = await response.json();
@@ -1964,6 +1978,16 @@ var __publicField = (obj, key, value) => {
       taskId
     };
   }
+  function getPartIndex() {
+    for (const [index2, element] of document.querySelectorAll("#ulParts > li").entries()) {
+      if (element.classList.contains("active")) {
+        return index2 + 1;
+      }
+    }
+    {
+      throw new Error("无法获取PartIndex");
+    }
+  }
   function getQuestionIndex(questionItemDiv) {
     const indexOfQuestions = [];
     for (const element of questionItemDiv.querySelectorAll('span[id^="question_"]')) {
@@ -2019,19 +2043,19 @@ var __publicField = (obj, key, value) => {
     store.clearLogs(1);
     const { isSchoolTest, taskId } = getTaskId();
     if (isFinished()) {
-      const domString = document.querySelector(".tab-content").outerHTML;
-      await WELearnAPI.collectAll(taskId, domString, isSchoolTest);
-    } else {
-      const questionItemDivNodes = document.querySelectorAll(".itemDiv");
       try {
+        const domString = document.querySelector(".tab-content").outerHTML;
+        const questionItemDivNodes = document.querySelectorAll(".itemDiv");
         const html_string = document.head.innerHTML;
         const tt_id = /ttid\s*:\s*(-?\d*)/.exec(html_string);
         const sheet_id = /sheetid\s*:\s*(-?\d*)/.exec(html_string);
         const stt_id = /sttid\s*:\s*(-?\d*)/.exec(html_string);
-        console.log();
-        await WELearnAPI.queryByTaskId({
+        await WELearnAPI.collectAll({
+          dom_string: domString,
           typical: !!questionItemDivNodes.length,
           is_school_test: isSchoolTest,
+          part_index: getPartIndex() || null,
+          task_id: taskId,
           tt_id: tt_id ? tt_id[1] : null,
           sheet_id: sheet_id ? sheet_id[1] : null,
           stt_id: stt_id ? stt_id[1] : null
@@ -2039,6 +2063,8 @@ var __publicField = (obj, key, value) => {
       } catch (e2) {
         logger.debug(e2);
       }
+    } else {
+      const questionItemDivNodes = document.querySelectorAll(".itemDiv");
       for (const [index2, questionItemDiv] of questionItemDivNodes.entries()) {
         try {
           await querySingleQuestion(questionItemDiv);
@@ -2765,7 +2791,7 @@ var __publicField = (obj, key, value) => {
         }
       });
       answer.element.tagName;
-      await sleep(2e3);
+      await sleep(CONSTANT.QUERY_INTERVAL);
     }
   }
   async function determineCourseType(iframeUrl) {
@@ -14095,6 +14121,7 @@ var __publicField = (obj, key, value) => {
                         position: fixed;
                         top: 0;
                         left: 0;
+                        z-index: 99;
                     }
                 `
         }
