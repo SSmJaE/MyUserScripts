@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WELearn网课助手
 // @namespace    https://github.com/SSmJaE/WELearnHelper
-// @version      1.0.5
+// @version      1.1.0
 // @author       SSmJaE
 // @description  显示WE Learn随行课堂题目答案；支持班级测试；自动答题；刷时长；基于生成式AI(ChatGPT)的答案生成
 // @license      GPL-3.0
@@ -9,6 +9,7 @@
 // @homepage     https://www.github.com/SSmJaE/
 // @match        *://course.sflep.com/*
 // @match        *://welearn.sflep.com/*
+// @match        *://wetest.sflep.com/*
 // @match        *://courseappserver.sflep.com/*
 // @match        *://centercourseware.sflep.com/*
 // @require      https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js
@@ -1136,10 +1137,11 @@ var __publicField = (obj, key, value) => {
     welearn: {
       title: "随行课堂网课助手",
       name: "WELearn网课助手",
-      version: "1.0.5",
+      version: "1.1.0",
       matches: [
         "*://course.sflep.com/*",
         "*://welearn.sflep.com/*",
+        "*://wetest.sflep.com/*",
         "*://courseappserver.sflep.com/*",
         "*://centercourseware.sflep.com/*"
       ],
@@ -1962,16 +1964,20 @@ var __publicField = (obj, key, value) => {
     perSession("HAS_GET_COURSE_CATALOG")
   ], WELearnAPI, "getCourseCatalog", 1);
   function isFinished() {
-    return document.querySelector("#aSubmit").style.display == "none" ? true : false;
+    return !document.querySelector("#spSubmit");
   }
   function getTaskId() {
     let isSchoolTest = false;
-    let taskId;
-    if (location.href.includes("schooltest")) {
-      isSchoolTest = true;
-      taskId = /schooltestid=(\d*)/.exec(location.href)[1];
-    } else {
-      taskId = /taskid=(\d*)/.exec(location.href)[1];
+    let taskId = null;
+    try {
+      if (location.href.includes("schooltest")) {
+        isSchoolTest = true;
+        taskId = /schooltestid=(\d*)/.exec(location.href)[1];
+      } else {
+        taskId = /testId=(\d*)/.exec(location.href)[1];
+      }
+    } catch {
+      logger.debug("testId获取失败");
     }
     return {
       isSchoolTest,
@@ -2011,10 +2017,17 @@ var __publicField = (obj, key, value) => {
       const replayButton = {
         children: "播放音频",
         onClick: () => {
-          const mainAudio = questionItemDiv.querySelector('a[href^="javascript:PlaySound"]');
-          const mainAudioFile = /'(.*?)'/.exec(mainAudio.getAttribute("href"))[1];
-          logger.debug(mainAudioFile);
-          PlaySound(mainAudioFile);
+          const mainAudio = questionItemDiv.querySelector('a[id*="btnPlay"]');
+          const questionId = /btnPlay_(.*)/.exec(mainAudio.id)[1];
+          let mainAudioFile = null;
+          const match2 = /"(.*?.mp3)"/.exec(mainAudio.getAttribute("href"));
+          if (match2) {
+            mainAudioFile = match2[1];
+          } else {
+            mainAudioFile = mainAudio.getAttribute("data-soundsrc");
+          }
+          logger.debug(mainAudioFile, questionId);
+          PlaySound(mainAudioFile, questionId);
         }
       };
       logger.question({
@@ -2076,38 +2089,39 @@ var __publicField = (obj, key, value) => {
   }
   function hackPlaySound() {
     (unsafeWindow || window).PlaySound = (src2, id) => {
-      var count2 = $("#hdPlay_" + id).val();
-      if (count2 <= 0)
-        return;
-      if (soundfile == "") {
-        soundfile = resPath + "ItemRes/sound/" + src2;
-        createSoundPlayer();
-      } else {
-        soundfile = resPath + "ItemRes/sound/" + src2;
-        jwplayer("soundplayer").load([{ file: soundfile }]);
+      if (soundPlayer) {
+        soundPlayer.stop();
+        try {
+          jwplayer("soundplayer").remove();
+        } catch (e2) {
+        }
       }
-      jwplayer("soundplayer").onBufferFull(function() {
-        clearTimeout(bufferingTimer);
-        var sp = $("#btnPlay_" + id);
-        sp.html('<span class=" fa fa-play-circle play_symble">无限次播放机会</span>');
-        sp.removeClass("loading");
+      currentSoundId = id;
+      const soundfile = testEnv.resPath + "sound/" + src2;
+      soundPlayer = jwplayer("soundplayer").setup({
+        flashplayer: "script/jwplayer.flash.swf?c=" + Math.random(),
+        file: soundfile,
+        height: 0,
+        width: 0,
+        primary: "html5"
       });
-      $("#btnPlay_" + id).val("正在加载");
-      bufferingTimer = setTimeout("PlayerExpireCheck('" + id + "', 0)", 1e3);
-      $("#btnPlay_" + id).addClass("loading");
-      jwplayer("soundplayer").play();
+      soundPlayer.play();
     };
   }
   let isPageReady = false;
   let elapsedTime = 0;
+  const MAX_WAIT_TIME = 1e4;
   function checkPageReady() {
-    const element = document.querySelector("#aSubmit");
+    const element = document.querySelector("#spTimer");
     if (element) {
       isPageReady = true;
     }
   }
   async function watcher() {
-    while (!isPageReady || elapsedTime > 1e4) {
+    while (elapsedTime < MAX_WAIT_TIME) {
+      if (isPageReady) {
+        break;
+      }
       await sleep(200);
       elapsedTime += 200;
       checkPageReady();
@@ -2121,11 +2135,11 @@ var __publicField = (obj, key, value) => {
     const recordId = `${Math.random()}`;
     logger.info({
       id: recordId,
-      content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + "<br />❗❗❗测试的每一个Part，都需要点击一次",
+      content: (finished ? "检测到当前位于解析页面，点击本条消息右侧的上传按钮，以收录答案" : "检测到当前位于测试页面，点击本条消息右侧的查询按钮，以开始查询") + `<br />❗❗❗即使有多个part，也只需要点击一次，会自动按顺序${finished ? "上传" : "查询"}所有part的题目`,
       extra: void 0,
       action: [
         {
-          children: `${finished ? "上传" : "查询"}当前Part`,
+          children: `${finished ? "上传" : "查询"}答案`,
           disabled: 5e3,
           onClick() {
             getAnswers();
@@ -2138,7 +2152,7 @@ var __publicField = (obj, key, value) => {
       logger.debug("已开启无限听力");
     }
   }
-  if (location.href.includes(".sflep.com/test/")) {
+  if (location.href.includes(".sflep.com/test/") || location.href.includes("wetest.sflep.com/Test")) {
     (async () => {
       await watcher();
     })();
@@ -9828,6 +9842,7 @@ var __publicField = (obj, key, value) => {
     offsetPixel = 8,
     backgroundColor = "rgba(104, 101, 101, 0.89)",
     delay = false,
+    openDelay = false,
     border = false
   }) {
     useTheme();
@@ -9848,7 +9863,7 @@ var __publicField = (obj, key, value) => {
     });
     const hover = useHover(context, {
       delay: {
-        // open: 200,
+        open: openDelay ? 500 : void 0,
         close: delay ? 250 : void 0
       }
     });
@@ -13958,6 +13973,7 @@ var __publicField = (obj, key, value) => {
                             PopOver,
                             {
                               content: /* @__PURE__ */ jsx(About, {}),
+                              openDelay: true,
                               delay: true,
                               backgroundColor: "rgba(255, 255, 255, 0.95)",
                               placement: "right",
@@ -14139,8 +14155,10 @@ var __publicField = (obj, key, value) => {
     //基准页面
     "centercourseware.sflep.com",
     //练习答题页面，子页面
-    ".sflep.com/test/"
+    ".sflep.com/test/",
     //考试答题页面
+    "wetest.sflep.com/Test"
+    // 新url，内容未变
   ];
   function initialize() {
     let isAvailable = false;
